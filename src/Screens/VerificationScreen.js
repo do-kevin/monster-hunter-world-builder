@@ -1,8 +1,7 @@
-import React, {Component} from 'react';
-import { parse } from 'query-string';
+import React, { Component } from "react";
+import { parse } from "query-string";
 
 class VerificationScreen extends Component {
-
   componentDidMount() {
     const { location } = this.props;
     const parsed = parse(location.search);
@@ -13,9 +12,9 @@ class VerificationScreen extends Component {
     console.log(user_id);
   }
 
-  render () {
+  render() {
     return (
-      <div style={{color: 'white', fontSize: '72px'}}>Confirmation Page</div>
+      <div style={{ color: "white", fontSize: "72px" }}>Confirmation Page</div>
     );
   }
 }
