@@ -3,7 +3,6 @@ import { registerEmail } from './RegistrationAPI';
 import { Formik } from 'formik';
 
 class LoginModal extends Component {
-
 	render() {
 		return (
 			<div>
@@ -12,11 +11,23 @@ class LoginModal extends Component {
 					<Formik
 						initialValues={{ email: '', firstName: '', lastName: '' }}
 						onSubmit={(values) => registerEmail(values.email)}
-					>
-						{({ values, handleSubmit, handleChange, isSubmitting }) => (
+						validate={({ firstName, lastName, email }) => {
+							let errors = {};
+							if (!firstName) {
+								errors.firstName = <span className='loginContainer__form__errorMessage'>{' '}required</span>;
+							} else if (!lastName) {
+								errors.lastName = <span className='loginContainer__form__errorMessage'>{' '}required</span>;
+							} else if (!email) {
+								errors.email = <span className='loginContainer__form__errorMessage'>{' '}required</span>;
+							} else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
+								errors.email = <span className='loginContainer__form__errorMessage'>{' '}invalid email</span>;
+							}
+							return errors;
+						}}
+						render={({ values, handleSubmit, handleChange, isSubmitting, errors }) => (
 							<form className="loginContainer__form" onSubmit={handleSubmit}>
 								<div style={{ textAlign: 'left' }}>
-									<label>First name</label>
+									<label>First name {errors.firstName}</label>
 									<input
 										type="text"
 										name="firstName"
@@ -26,7 +37,7 @@ class LoginModal extends Component {
 									/>
 								</div>
 								<div style={{ textAlign: 'left' }}>
-									<label>Last name</label>
+									<label>Last name {errors.lastName}</label>
 									<input
 										type="text"
 										name="lastName"
@@ -36,7 +47,7 @@ class LoginModal extends Component {
 									/>
 								</div>
 								<div style={{ textAlign: 'left' }}>
-									<label>Email</label>
+									<label>Email {errors.email}</label>
 									<input
 										type="email"
 										name="email"
@@ -54,7 +65,7 @@ class LoginModal extends Component {
 								</button>
 							</form>
 						)}
-					</Formik>
+					/>
 				</main>
 			</div>
 		);
