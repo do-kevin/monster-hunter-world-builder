@@ -4,9 +4,9 @@ import {
   Route,
   Switch
 } from 'react-router-dom';
-import LandingPage from './Misc/LandingPage';
-import NotFound from './Misc/NotFound';
-import VerificationScreen from './LoginSignup/VerificationScreen';
+import LandingPage from 'Misc/LandingPage';
+import NotFound from 'Misc/NotFound';
+import VerificationScreen from 'LoginSignup/VerificationScreen';
 
 class App extends Component {
 

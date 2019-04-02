@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { registerEmail } from './RegistrationAPI';
+import { registerEmail } from 'LoginSignup/RegistrationAPI';
 import { Formik } from 'formik';
 
 class LoginModal extends Component {
