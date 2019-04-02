@@ -2,9 +2,13 @@
   "name": "basic-cms-company",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3000/",
   "dependencies": {
+    "@material-ui/core": "^3.9.3",
     "axios": "^0.18.0",
+    "classnames": "^2.2.6",
     "formik": "^1.5.1",
+    "http-proxy-middleware": "^0.19.1",
     "node-sass": "^4.11.0",
     "query-string": "^6.4.2",
     "react": "^16.8.6",
