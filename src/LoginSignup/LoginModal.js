@@ -3,13 +3,6 @@ import { registerEmail } from './RegistrationAPI';
 import { Formik } from 'formik';
 
 class LoginModal extends Component {
-	state = {
-		email: ''
-	};
-
-	createUser = () => {
-		return registerEmail(this.state.email);
-	};
 
 	render() {
 		return (
@@ -17,23 +10,41 @@ class LoginModal extends Component {
 				<main className="loginContainer">
 					<h1>Sign Up</h1>
 					<Formik
-						initialValues={{ email: '' }}
-						onSubmit={(values) => {
-							this.setState(() => ({
-								email: values.email
-							}));
-							return registerEmail(this.state.email);
-						}}
+						initialValues={{ email: '', firstName: '', lastName: '' }}
+						onSubmit={(values) => registerEmail(values.email)}
 					>
 						{({ values, handleSubmit, handleChange, isSubmitting }) => (
 							<form className="loginContainer__form" onSubmit={handleSubmit}>
-								<input
-									type="email"
-									name="email"
-									onChange={handleChange}
-									value={values.email}
-									className="loginContainer__form__input"
-								/>
+								<div style={{ textAlign: 'left' }}>
+									<label>First name</label>
+									<input
+										type="text"
+										name="firstName"
+										onChange={handleChange}
+										value={values.firstName}
+										className="loginContainer__form__input"
+									/>
+								</div>
+								<div style={{ textAlign: 'left' }}>
+									<label>Last name</label>
+									<input
+										type="text"
+										name="lastName"
+										onChange={handleChange}
+										value={values.lastName}
+										className="loginContainer__form__input"
+									/>
+								</div>
+								<div style={{ textAlign: 'left' }}>
+									<label>Email</label>
+									<input
+										type="email"
+										name="email"
+										onChange={handleChange}
+										value={values.email}
+										className="loginContainer__form__input"
+									/>
+								</div>
 								<button
 									type="submit"
 									disabled={isSubmitting}
