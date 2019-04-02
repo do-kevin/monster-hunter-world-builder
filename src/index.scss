@@ -32,7 +32,7 @@ body {
   @extend .flexCenter;
   flex-direction: column;
   border-radius: 7px;
-  height: 400px;
+  height: 450px;
   width: 520px;
   margin: 13% auto 0;
   background: $night1;
@@ -79,7 +79,8 @@ body {
       height: 30px;
       width: 300px;
       font-size: 16px;
-      margin-bottom: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
       font-weight: 500;
       padding: 6px 11px;
       border-radius: 5px;
@@ -89,6 +90,15 @@ body {
         outline: none;
         border: 3px solid $purple;
       }
+    }
+
+    &__errorMessage {
+      background: hsl(0, 97%, 40%);
+      padding: 3px 9px;
+      border-radius: 15px;
+      color: hsl(0, 97%, 95%);
+      font-weight: 700;
+      font-size: 14px;
     }
   }
 }
