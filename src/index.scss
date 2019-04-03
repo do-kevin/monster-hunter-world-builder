@@ -1,0 +1,96 @@
+* {
+	font-family: Lato, Roboto, Ubuntu, sans-serif;
+}
+
+$night0: hsl(137, 8%, 17%);
+$night1: hsl(137, 5%, 88%);
+
+$grey0: hsl(0, 0%, 98%);
+$grey1: hsl(175, 5%, 75%);
+
+$purple: hsl(240, 100%, 76%);
+$purple2: hsl(240, 100%, 66%);
+
+$aqua0: hsl(175, 100%, 20%);
+$aqua1: hsl(175, 100%, 25%);
+$aqua2: hsl(175, 100%, 15%);
+
+$danger0: hsl(355, 70%, 46%);
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $night0;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginContainer {
+  &__form {
+    text-align: center;
+
+    &__input {
+      @extend .flexCenter;
+      height: 30px;
+      width: 300px;
+      font-size: 16px;
+      margin: 5px auto 17px;
+      font-weight: 500;
+      padding: 6px 11px;
+      border-radius: 5px;
+      border: 3px solid $grey1;
+      transition: border-color 175ms ease-in-out;
+      &:focus {
+        outline: none;
+        border: 3px solid $purple;
+      }
+    }
+
+    &__errorMessage {
+      background: $danger0;
+      padding: 3px 9px;
+      border-radius: 15px;
+      color: hsl(0, 97%, 95%);
+      font-weight: 700;
+      font-size: 14px;
+      transition: background-color 170ms linear;
+    }
+  }
+}
+
+.NotFound {
+  @extend .flexCenter;
+  border-radius: 7px;
+  padding: 50px 75px;
+  max-width: 1200px;
+  text-align: center;
+  margin: 15% auto;
+  background: $grey1;
+
+  &__section {
+    line-height: 1;
+
+    &__p1, &__p2, &__p3 {
+      margin: 0;
+    }
+    &__p1 {
+      color: $danger0;
+      font-size: 120px;
+    }
+    &__p2 {
+      font-size: 144px;
+    }
+    &__p3 {
+      font-size: 72px;
+    }
+  }
+}
