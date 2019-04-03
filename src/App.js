@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Login from "Screens/Login";
-import NotFound from "Screens/NotFound";
-import Verification from "Screens/Verification";
+import LoginRegistration from 'Screens/LoginRegistration';
+import NotFound from 'Screens/NotFound';
+import Verification from 'Screens/Verification';
 
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
   typography: {
@@ -13,32 +13,30 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: "hsl(175, 100%, 20%)"
+      main: 'hsl(175, 100%, 20%)',
     },
     secondary: {
-      main: "hsl(240, 100%, 76%)"
-    }
-  }
+      main: 'hsl(240, 100%, 76%)',
+    },
+  },
 });
 
-class App extends Component {
-  render() {
-    return (
-      <MuiThemeProvider theme={theme}>
-        <Router>
-          <Switch>
-            <Route exact path="/" component={Login} />
-            <Route
-              exact
-              path="/account_verification"
-              component={Verification}
-            />
-            <Route component={NotFound} />
-          </Switch>
-        </Router>
-      </MuiThemeProvider>
-    );
-  }
+function App() {
+  return (
+    <MuiThemeProvider theme={theme}>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={LoginRegistration} />
+          <Route
+            exact
+            path="/account_verification"
+            component={Verification}
+          />
+          <Route component={NotFound} />
+        </Switch>
+      </Router>
+    </MuiThemeProvider>
+  );
 }
 
 export default App;
