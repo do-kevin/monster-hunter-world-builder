@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { parse } from "query-string";
+import { verifyEmail } from "Services/RegistrationAPI";
 
 class VerificationScreen extends Component {
   componentDidMount() {
@@ -8,13 +9,14 @@ class VerificationScreen extends Component {
 
     const { token, user_id } = parsed;
 
-    console.log(token);
-    console.log(user_id);
+    console.log(parsed);
+    verifyEmail(user_id, token);
   }
 
   render() {
     return (
       <div style={{ color: "white", fontSize: "72px" }}>Confirmation Page</div>
+      
     );
   }
 }
