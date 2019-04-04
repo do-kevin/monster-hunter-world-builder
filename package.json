@@ -6,8 +6,9 @@
 	"dependencies": {
 		"@material-ui/core": "^3.9.3",
 		"axios": "^0.18.0",
-		"classnames": "^2.2.6",
+		"bluebird": "^3.5.4",
 		"formik": "^1.5.1",
+		"inflection": "^1.12.0",
 		"node-sass": "^4.11.0",
 		"prop-types": "^15.7.2",
 		"query-string": "^6.4.2",

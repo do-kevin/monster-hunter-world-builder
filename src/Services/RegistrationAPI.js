@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 import axios from 'axios';
+import queryString from 'query-string';
 
 const defaultConfig = {
-  header: {
+  headers: {
     'Content-Type': 'application/json',
   },
 };
@@ -20,15 +21,15 @@ async function registerEmail(userEmail = '') {
 
 async function verifyEmail(userId = '', userToken = '') {
   const axiosConfig = {
-    header: {
+    headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   };
 
   try {
-    const response = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/users/${userId}/verify/`, {
+    const response = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/users/${userId}/verify/`, queryString.stringify({
       confirmation_token: userToken,
-    }, axiosConfig);
+    }), axiosConfig);
     return response.data;
   } catch (error) {
     return error;
@@ -36,12 +37,6 @@ async function verifyEmail(userId = '', userToken = '') {
 }
 
 async function setPassword(userId = '', authToken = '', newPassword = '') {
-  console.log({
-    'User Id': userId,
-    Authentication: authToken,
-    'Password set': newPassword,
-  });
-
   const postData = {
     password: newPassword,
   };
@@ -74,7 +69,7 @@ async function createProfile(userId = '', authToken = '', firstName = '', lastNa
   };
 
   const axiosConfig = {
-    header: {
+    headers: {
       Authorization: `Token ${authToken}`,
       'Content-Type': 'application/json',
     },
@@ -82,8 +77,6 @@ async function createProfile(userId = '', authToken = '', firstName = '', lastNa
 
   try {
     const response = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/user_profiles/`, postData, axiosConfig);
-
-    console.log(response);
     return response;
   } catch (error) {
     return error;

@@ -2,83 +2,91 @@
 /* eslint-disable no-console */
 import React, { Component } from 'react';
 import { parse } from 'query-string';
-import { Grid, Paper, withStyles } from '@material-ui/core';
+import {
+  Grid, withStyles, CircularProgress,
+} from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { verifyEmail } from 'Services/RegistrationAPI';
 import PropTypes from 'prop-types';
+import CenterPaper from 'components/layout/CenterPaper';
+import * as Promise from 'bluebird';
 
-const styles = () => ({
+const styles = theme => ({
   root: {
     padding: '10vh 10vw',
     marginTop: '15vh',
+  },
+  progress: {
+    margin: theme.spacing.unit * 2,
   },
 });
 
 class Verification extends Component {
   static propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.shape({
+      root: PropTypes.string.isRequired,
+      progress: PropTypes.string.isRequired,
+    }).isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+      search: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   state = {
-    isVerified: '',
     isRequesting: true,
     isRedirecting: false,
     profileToken: '',
     profileId: '',
   };
 
-  componentDidMount() {
-    // eslint-disable-next-line react/prop-types
+  async componentDidMount() {
     const { location } = this.props;
     const parsed = parse(location.search);
+    const { token, user_id } = parsed; // eslint-disable-line camelcase
 
-    // eslint-disable-next-line camelcase
-    const { token, user_id } = parsed;
+    const result = await verifyEmail(user_id, token);
 
-    console.log(parsed);
-    verifyEmail(user_id, token)
-      .then((data) => {
-        const { status } = data;
-        const userToken = data.token;
-
-        if (status === 'verified') {
-          this.setState({
-            isRequesting: false,
-            profileToken: userToken,
-            profileId: user_id,
-          });
-          return (setTimeout(() => this.setState({
-            isRedirecting: true,
-          }), 10000));
-        }
-
-        return this.setState(() => ({ isVerified: status }));
+    if (result.status === 'verified') {
+      this.setState({
+        isRequesting: false,
       });
+      Promise.delay(4000).then(() => {
+        this.setState({
+          profileId: user_id,
+        });
+      });
+      Promise.delay(7000).then(() => {
+        this.setState({
+          profileToken: result.token,
+        });
+      });
+      Promise.delay(10000).then(() => {
+        this.setState({
+          isRedirecting: true,
+        });
+      });
+    }
   }
 
   render() {
     const {
-      isVerified, isRequesting, isRedirecting, profileToken, profileId,
+      isRedirecting, profileToken, profileId,
     } = this.state;
     const { classes } = this.props;
 
-    // eslint-disable-next-line one-var
-    let prompt,
-      loading;
+    let loading;
 
-    if (isVerified === 'verified') {
-      prompt = (
-        <section>
-          <h1>Verified</h1>
-        </section>
-      );
+    if (!isRedirecting) {
+      loading = 'Please wait while we verify your email.';
     }
 
-    if (isRequesting) {
-      loading = <h6>Loading</h6>;
-    } else {
-      loading = <p>Your email has been verified. Redirecting you in 10 seconds.</p>;
+    if (profileId) {
+      loading = 'Retrieving email information. Please wait.';
+    }
+
+    if (profileToken) {
+      loading = 'Email processed. Redirecting you in three seconds.';
     }
 
     if (isRedirecting) {
@@ -86,20 +94,17 @@ class Verification extends Component {
     }
 
     return (
-      <Grid
-        container
-        spacing={24}
-        justify="center"
-        alignItems="center"
-        direction="column"
-      >
+      <CenterPaper>
         <Grid item>
-          <Paper className={classes.root}>
-            {prompt}
-            {loading}
-          </Paper>
+          <h3>{loading}</h3>
+          <div style={{ margin: 'auto', width: '74px' }}>
+            <CircularProgress
+              className={classes.progress}
+              color="secondary"
+            />
+          </div>
         </Grid>
-      </Grid>
+      </CenterPaper>
     );
   }
 }

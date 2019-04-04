@@ -35,26 +35,6 @@ body {
 
 .formikChild {
   &__form {
-    text-align: center;
-
-    &__input {
-      @extend .flexCenter;
-      height: 30px;
-      width: 300px;
-      font-size: 16px;
-      margin: 5px auto 15px;
-      font-weight: 500;
-      padding: 6px 11px;
-      border-radius: 5px;
-      border: 3px solid $grey1;
-      transition: border-color 175ms ease-in-out;
-      &:focus {
-        outline: none;
-        border: 3px solid $purple;
-        background-color: hsla(240, 100%, 76%, 0.06);
-      }
-    }
-
     &__errorMessage {
       background: $danger0;
       padding: 3px 9px;
@@ -69,22 +49,6 @@ body {
       color: $danger0;
       ul {
         list-style-type: none;
-      }
-    }
-
-    &__switch-btn {
-      margin: 7px auto 0;
-      font-size: 14px;
-      cursor: pointer;
-      font-weight: 600;
-      border: none;
-      padding: 0;
-      &:hover, &:active {
-        color: $purple2;
-        text-decoration: underline;
-      }
-      &:focus {
-        outline: none;
       }
     }
   }
