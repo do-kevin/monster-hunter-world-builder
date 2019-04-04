@@ -1,25 +1,20 @@
-// Create PR
+$night0: hsl(137, 8%, 17%);
+$night1: hsl(137, 5%, 88%);
+$grey0: hsl(0, 0%, 98%);
+$grey1: hsl(175, 5%, 75%);
+$purple: hsl(240, 100%, 76%);
+$purple2: hsl(240, 100%, 66%);
+$aqua0: hsl(175, 100%, 20%);
+$aqua1: hsl(175, 100%, 25%);
+$aqua2: hsl(175, 100%, 15%);
+$danger0: hsl(355, 70%, 46%);
 
 * {
 	font-family: Lato, Roboto, Ubuntu, sans-serif;
 }
 
-$night0: hsl(137, 8%, 17%);
-$night1: hsl(137, 5%, 88%);
-
-$grey0: hsl(0, 0%, 98%);
-$grey1: hsl(175, 5%, 75%);
-
-$purple: hsl(240, 100%, 76%);
-$purple2: hsl(240, 100%, 66%);
-
-$aqua0: hsl(175, 100%, 20%);
-$aqua1: hsl(175, 100%, 25%);
-$aqua2: hsl(175, 100%, 15%);
-
-$danger0: hsl(355, 70%, 46%);
-
 body {
+  width: 100%;
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -36,7 +31,7 @@ body {
   align-items: center;
 }
 
-.loginContainer {
+.formikChild {
   &__form {
     text-align: center;
 
@@ -45,7 +40,7 @@ body {
       height: 30px;
       width: 300px;
       font-size: 16px;
-      margin: 5px auto 17px;
+      margin: 5px auto 15px;
       font-weight: 500;
       padding: 6px 11px;
       border-radius: 5px;
@@ -65,6 +60,22 @@ body {
       font-weight: 700;
       font-size: 14px;
       transition: background-color 170ms linear;
+    }
+
+    &__switch-btn {
+      margin: 7px auto;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      border: none;
+      padding: 0;
+      &:hover, &:active {
+        color: $purple2;
+        text-decoration: underline;
+      }
+      &:focus {
+        outline: none;
+      }
     }
   }
 }
