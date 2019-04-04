@@ -1,11 +1,17 @@
 /* eslint-disable no-console */
 import axios from 'axios';
 
+const defaultConfig = {
+  header: {
+    'Content-Type': 'application/json',
+  },
+};
+
 async function registerEmail(userEmail = '') {
   try {
     const response = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/users/`, {
       email: userEmail,
-    });
+    }, defaultConfig);
     return response;
   } catch (error) {
     return error;
@@ -13,21 +19,70 @@ async function registerEmail(userEmail = '') {
 }
 
 async function verifyEmail(userId = '', userToken = '') {
+  const axiosConfig = {
+    header: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  };
+
   try {
     const response = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/users/${userId}/verify/`, {
       confirmation_token: userToken,
-    });
+    }, axiosConfig);
     return response.data;
   } catch (error) {
     return error;
   }
 }
 
-async function setPassword(userId = '', newPassword = '') {
+async function setPassword(userId = '', authToken = '', newPassword = '') {
+  console.log({
+    'User Id': userId,
+    Authentication: authToken,
+    'Password set': newPassword,
+  });
+
+  const postData = {
+    password: newPassword,
+  };
+
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Token ${authToken}`,
+    },
+  };
+
   try {
-    const response = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/users/${userId}/set_password/`, {
-      password: newPassword,
-    });
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_SERVER_URL}/users/${userId}/set_password/`, postData, axiosConfig,
+    );
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+}
+
+// eslint-disable-next-line no-unused-vars
+async function createProfile(userId = '', authToken = '', firstName = '', lastName = '', birthDate = '', phoneNum = '') {
+  const postData = {
+    user: 1,
+    first_name: firstName,
+    last_name: lastName,
+    birth_date: birthDate,
+    phone_number: phoneNum,
+  };
+
+  const axiosConfig = {
+    header: {
+      Authorization: `Token ${authToken}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/user_profiles/`, postData, axiosConfig);
+
     console.log(response);
     return response;
   } catch (error) {
@@ -39,8 +94,7 @@ async function resetPassword(userEmail = '') {
   try {
     const response = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/users/request_reset_password/`, {
       email: userEmail,
-    });
-    console.log(response);
+    }, defaultConfig);
     return response;
   } catch (error) {
     return error;
@@ -52,7 +106,7 @@ async function userLogin(userEmail = '', userPwd = '') {
     const response = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/login/`, {
       email: userEmail,
       password: userPwd,
-    });
+    }, defaultConfig);
     console.log(response);
     return response;
   } catch (error) {
@@ -62,5 +116,5 @@ async function userLogin(userEmail = '', userPwd = '') {
 
 
 export {
-  registerEmail, verifyEmail, setPassword, resetPassword, userLogin,
+  registerEmail, verifyEmail, setPassword, resetPassword, userLogin, createProfile,
 };

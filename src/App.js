@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LoginRegistration from 'Screens/LoginRegistration';
 import NotFound from 'Screens/NotFound';
 import Verification from 'Screens/Verification';
-import CreateAccount from 'Screens/CreateAccount';
+import ConfirmPassword from 'Screens/ConfirmPassword';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -33,7 +33,7 @@ function App() {
             path="/account_verification"
             component={Verification}
           />
-          <Route path="/create-account/:profileId/:profileToken" component={CreateAccount} />
+          <Route path="/confirm-password/:profileId/:profileToken" component={ConfirmPassword} />
           <Route component={NotFound} />
         </Switch>
       </Router>

@@ -1,3 +1,6 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-console */
+/* eslint-disable react/prop-types */
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable react/require-default-props */
 import React, { Component } from 'react';
@@ -8,7 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, Paper, Button } from '@material-ui/core';
 import { Formik } from 'formik';
 
-import { userLogin } from 'Services/RegistrationAPI';
+import { setPassword } from 'Services/RegistrationAPI';
 
 const styles = theme => ({
   root: {
@@ -25,16 +28,26 @@ const styles = theme => ({
   },
 });
 
-class LoginForm extends Component {
+class ConfirmPassword extends Component {
   static propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
     classes: PropTypes.object.isRequired,
-    changeForm: PropTypes.func.isRequired,
-    changeToReset: PropTypes.func.isRequired,
   };
 
   render() {
-    const { classes, changeForm, changeToReset } = this.props;
+    const { classes, match } = this.props;
+    const { params } = match;
+    const { profileId, profileToken } = params;
+
+    console.log({ profileId, profileToken });
+
+    // const validationSchema = Yup.object().shape({
+    //   password: Yup
+    //     .string()
+    //     .required()
+    //     .min(8, 'Passeword is too short.'),
+    // });
+
     return (
       <Grid
         container
@@ -46,22 +59,28 @@ class LoginForm extends Component {
       >
         <Grid item>
           <Paper className={classes.paper}>
-            <h1>Sign In</h1>
             <Formik
-              initialValues={{ email: '', password: '' }}
-              onSubmit={values => userLogin(values.email, values.password)}
-              validate={({ email, password }) => {
+              initialValues={{
+                password: '',
+              }}
+              onSubmit={values => setPassword(profileId, profileToken, values.password)}
+              validate={({ password }) => {
                 const errors = {};
-                if (!email) {
-                  errors.email = (
+                if (!password) {
+                  errors.password = (
                     <span className="formikChild__form__errorMessage">
                       required
                     </span>
                   );
-                } else if (!password) {
+                } else if (!(new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')).test(password)) {
                   errors.password = (
-                    <span className="formikChild__form__errorMessage">
-                      required
+                    <span className="formikChild__form__errorMessage2">
+                      <ul>
+                        <li>At least 1 alphabetical character.</li>
+                        <li>At least 1 special character.</li>
+                        <li>At least 1 numeric character.</li>
+                        <li>At least 8 characters long.</li>
+                      </ul>
                     </span>
                   );
                 }
@@ -71,24 +90,10 @@ class LoginForm extends Component {
                 values,
                 handleSubmit,
                 handleChange,
+                isSubmitting,
                 errors,
               }) => (
                 <form onSubmit={handleSubmit}>
-                  <div style={{ textAlign: 'left' }}>
-                    <label htmlFor="email">
-                      Email
-                      {' '}
-                      {errors.email}
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      onChange={handleChange}
-                      value={values.email}
-                      className="formikChild__form__input"
-                    />
-                  </div>
                   <div style={{ textAlign: 'left' }}>
                     <label htmlFor="password">
                       Password
@@ -109,28 +114,11 @@ class LoginForm extends Component {
                       className={classNames(classes.CustomBtn)}
                       color="primary"
                       type="submit"
+                      disabled={isSubmitting}
                       variant="contained"
                     >
-                      LOGIN
+                      SET PASSWORD
                     </Button>
-                    <Grid item>
-                      <button
-                        className="formikChild__form__switch-btn"
-                        onClick={changeForm}
-                        type="button"
-                      >
-                        Don&apos;t have an account? Sign up
-                      </button>
-                    </Grid>
-                    <Grid item>
-                      <button
-                        className="formikChild__form__switch-btn"
-                        onClick={changeToReset}
-                        type="button"
-                      >
-                        Reset password
-                      </button>
-                    </Grid>
                   </Grid>
                 </form>
               )}
@@ -142,4 +130,4 @@ class LoginForm extends Component {
   }
 }
 
-export default withStyles(styles)(LoginForm);
+export default withStyles(styles)(ConfirmPassword);

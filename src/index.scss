@@ -51,6 +51,7 @@ body {
       &:focus {
         outline: none;
         border: 3px solid $purple;
+        background-color: hsla(240, 100%, 76%, 0.06);
       }
     }
 
@@ -62,6 +63,13 @@ body {
       font-weight: 700;
       font-size: 14px;
       transition: background-color 170ms linear;
+    }
+
+    &__errorMessage2 {
+      color: $danger0;
+      ul {
+        list-style-type: none;
+      }
     }
 
     &__switch-btn {

@@ -46,11 +46,11 @@ class Verification extends Component {
           this.setState({
             isRequesting: false,
             profileToken: userToken,
-            profileId: user_id
+            profileId: user_id,
           });
           return (setTimeout(() => this.setState({
             isRedirecting: true,
-          }), 25000));
+          }), 10000));
         }
 
         return this.setState(() => ({ isVerified: status }));
@@ -78,11 +78,11 @@ class Verification extends Component {
     if (isRequesting) {
       loading = <h6>Loading</h6>;
     } else {
-      loading = <p>Your email has been verified. Redirecting you in 25 seconds.</p>;
+      loading = <p>Your email has been verified. Redirecting you in 10 seconds.</p>;
     }
 
     if (isRedirecting) {
-      return <Redirect to={`/create-account/${profileId}/${profileToken}`} />;
+      return <Redirect to={`/confirm-password/${profileId}/${profileToken}`} />;
     }
 
     return (
