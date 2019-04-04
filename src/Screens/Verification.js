@@ -25,6 +25,7 @@ class Verification extends Component {
     isRequesting: true,
     isRedirecting: false,
     profileToken: '',
+    profileId: '',
   };
 
   componentDidMount() {
@@ -45,6 +46,7 @@ class Verification extends Component {
           this.setState({
             isRequesting: false,
             profileToken: userToken,
+            profileId: user_id
           });
           return (setTimeout(() => this.setState({
             isRedirecting: true,
@@ -56,7 +58,9 @@ class Verification extends Component {
   }
 
   render() {
-    const { isVerified, isRequesting, isRedirecting } = this.state;
+    const {
+      isVerified, isRequesting, isRedirecting, profileToken, profileId,
+    } = this.state;
     const { classes } = this.props;
 
     // eslint-disable-next-line one-var
@@ -78,7 +82,7 @@ class Verification extends Component {
     }
 
     if (isRedirecting) {
-      return <Redirect to="/create-account" />;
+      return <Redirect to={`/create-account/${profileId}/${profileToken}`} />;
     }
 
     return (

@@ -33,7 +33,7 @@ function App() {
             path="/account_verification"
             component={Verification}
           />
-          <Route path="/create-account" component={CreateAccount} />
+          <Route path="/create-account/:profileId/:profileToken" component={CreateAccount} />
           <Route component={NotFound} />
         </Switch>
       </Router>
