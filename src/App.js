@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LoginRegistration from 'Screens/LoginRegistration';
 import NotFound from 'Screens/NotFound';
 import Verification from 'Screens/Verification';
+import CreateAccount from 'Screens/CreateAccount';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -32,6 +33,7 @@ function App() {
             path="/account_verification"
             component={Verification}
           />
+          <Route path="/create-account" component={CreateAccount} />
           <Route component={NotFound} />
         </Switch>
       </Router>

@@ -2,11 +2,24 @@
 /* eslint-disable no-console */
 import React, { Component } from 'react';
 import { parse } from 'query-string';
-import Grid from '@material-ui/core/Grid';
+import { Grid, Paper, withStyles } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { verifyEmail } from 'Services/RegistrationAPI';
+import PropTypes from 'prop-types';
+
+const styles = () => ({
+  root: {
+    padding: '10vh 10vw',
+    marginTop: '15vh',
+  },
+});
 
 class Verification extends Component {
+  static propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+    classes: PropTypes.object.isRequired,
+  };
+
   state = {
     isVerified: '',
     isRequesting: true,
@@ -44,6 +57,7 @@ class Verification extends Component {
 
   render() {
     const { isVerified, isRequesting, isRedirecting } = this.state;
+    const { classes } = this.props;
 
     // eslint-disable-next-line one-var
     let prompt,
@@ -64,9 +78,8 @@ class Verification extends Component {
     }
 
     if (isRedirecting) {
-      return <Redirect to="/" />;
+      return <Redirect to="/create-account" />;
     }
-
 
     return (
       <Grid
@@ -77,18 +90,14 @@ class Verification extends Component {
         direction="column"
       >
         <Grid item>
-          <div style={{
-            color: 'white', fontSize: '72px', margin: 'auto', width: '700px',
-          }}
-          >
-            Confirmation Page
+          <Paper className={classes.root}>
             {prompt}
             {loading}
-          </div>
+          </Paper>
         </Grid>
       </Grid>
     );
   }
 }
 
-export default Verification;
+export default withStyles(styles)(Verification);

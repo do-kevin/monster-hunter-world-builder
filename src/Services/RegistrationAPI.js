@@ -47,7 +47,20 @@ async function resetPassword(userEmail = '') {
   }
 }
 
+async function userLogin(userEmail = '', userPwd = '') {
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_API_SERVER_URL}/login/`, {
+      email: userEmail,
+      password: userPwd,
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    return error;
+  }
+}
+
 
 export {
-  registerEmail, verifyEmail, setPassword, resetPassword,
+  registerEmail, verifyEmail, setPassword, resetPassword, userLogin,
 };
