@@ -17,6 +17,10 @@ const styles = () => ({
 });
 
 function NotFound(props) {
+  NotFound.propTypes = {
+    classes: PropTypes.objectOf(PropTypes.object),
+  };
+
   const { classes } = props;
 
   return (
@@ -31,7 +35,6 @@ function NotFound(props) {
             color="primary"
             variant="contained"
             size="large"
-            disableUnderline="true"
           >
 Go back
           </Button>
@@ -40,9 +43,5 @@ Go back
     </div>
   );
 }
-
-NotFound.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.object),
-};
 
 export default withStyles(styles)(NotFound);
