@@ -6,6 +6,7 @@ import {
   Grid, withStyles, CircularProgress,
 } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
+import { AuthContext } from 'components/AuthContext';
 import { verifyEmail } from 'Services/RegistrationAPI';
 import PropTypes from 'prop-types';
 import CenterPaper from 'components/layout/CenterPaper';
@@ -33,19 +34,26 @@ class Verification extends Component {
     }).isRequired,
   };
 
+  static contextType = AuthContext;
+
   state = {
     isRequesting: true,
     isRedirecting: false,
-    profileToken: '',
-    profileId: '',
+    profileToken: false,
+    profileId: false,
+    firstToken: '',
   };
 
   async componentDidMount() {
+    console.log(this.props);
     const { location } = this.props;
     const parsed = parse(location.search);
     const { token, user_id } = parsed; // eslint-disable-line camelcase
+    this.setState({ firstToken: token });
 
     const result = await verifyEmail(user_id, token);
+
+    const { setProfileId, setUserId } = this.context;
 
     if (result.status === 'verified') {
       this.setState({
@@ -53,13 +61,15 @@ class Verification extends Component {
       });
       Promise.delay(4000).then(() => {
         this.setState({
-          profileId: user_id,
+          profileId: true,
         });
+        setUserId(user_id);
       });
       Promise.delay(7000).then(() => {
         this.setState({
-          profileToken: result.token,
+          profileToken: true,
         });
+        setProfileId(result.token);
       });
       Promise.delay(10000).then(() => {
         this.setState({
@@ -71,7 +81,7 @@ class Verification extends Component {
 
   render() {
     const {
-      isRedirecting, profileToken, profileId,
+      isRedirecting, profileToken, profileId, firstToken,
     } = this.state;
     const { classes } = this.props;
 
@@ -90,18 +100,20 @@ class Verification extends Component {
     }
 
     if (isRedirecting) {
-      return <Redirect to={`/confirm-password/${profileId}/${profileToken}`} />;
+      return <Redirect to={`/confirm-password/${firstToken}`} />;
     }
 
     return (
       <CenterPaper>
         <Grid item>
-          <h3>{loading}</h3>
-          <div style={{ margin: 'auto', width: '74px' }}>
-            <CircularProgress
-              className={classes.progress}
-              color="secondary"
-            />
+          <div>
+            <h3>{loading}</h3>
+            <div style={{ margin: 'auto', width: '74px' }}>
+              <CircularProgress
+                className={classes.progress}
+                color="secondary"
+              />
+            </div>
           </div>
         </Grid>
       </CenterPaper>

@@ -37,7 +37,7 @@ class App extends React.Component {
                 path="/account_verification"
                 component={Verification}
               />
-              <Route path="/confirm-password/:profileId/:profileToken" component={ConfirmPassword} />
+              <Route path="/confirm-password/:initToken" component={ConfirmPassword} />
               <Route component={NotFound} />
             </Switch>
           </Router>
