@@ -59,22 +59,19 @@ class Verification extends Component {
       this.setState({
         isRequesting: false,
       });
-      Promise.delay(4000).then(() => {
-        this.setState({
-          profileId: true,
-        });
-        setUserId(user_id);
+      await Promise.delay(4000);
+      this.setState({
+        profileId: true,
       });
-      Promise.delay(7000).then(() => {
-        this.setState({
-          profileToken: true,
-        });
-        setProfileId(result.token);
+      setUserId(user_id);
+      await Promise.delay(7000);
+      this.setState({
+        profileToken: true,
       });
-      Promise.delay(10000).then(() => {
-        this.setState({
-          isRedirecting: true,
-        });
+      setProfileId(result.token);
+      await Promise.delay(10000);
+      this.setState({
+        isRedirecting: true,
       });
     }
   }

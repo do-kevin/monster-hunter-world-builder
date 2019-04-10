@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   withStyles, Grid, Button,
 } from '@material-ui/core';
@@ -27,6 +28,17 @@ class LoginRegistration extends Component {
     showRegistration: false,
     signUpResult: '',
     resetResult: '',
+  }
+
+  componentDidMount() {
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'GETPROFILE',
+    //   payload: {
+    //     first_name: 'Kevin',
+    //     last_name: 'Do',
+    //   },
+    // });
   }
 
   toggleForm = (formType = '') => {
@@ -80,6 +92,7 @@ class LoginRegistration extends Component {
             >
                   Reset password
             </Button>
+            {this.props.userProfile.first_name}
           </Grid>
         </InputForms>
       );
@@ -153,4 +166,12 @@ class LoginRegistration extends Component {
   }
 }
 
-export default withStyles(styles)(LoginRegistration);
+const componentWithStyles = withStyles(styles)(LoginRegistration);
+
+function mapStateToProps(state) {
+  return {
+    userProfile: state.userProfile,
+  };
+}
+
+export default connect(mapStateToProps)(componentWithStyles);

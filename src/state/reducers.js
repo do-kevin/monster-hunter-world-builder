@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
+import { default as userProfile } from './userProfileReducer'; // eslint-disable-line import/no-named-default
 
-const reducer = combineReducers({
-  
+const reducers = combineReducers({
+  userProfile,
 });
 
-export default reducer;
+export default reducers;
