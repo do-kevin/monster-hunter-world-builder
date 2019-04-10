@@ -2,11 +2,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import LoginRegistration from 'Screens/LoginRegistration';
 import { AuthProvider } from 'components/AuthContext';
-import NotFound from 'Screens/NotFound';
-import Verification from 'Screens/Verification';
-import ConfirmPassword from 'Screens/ConfirmPassword';
+import DynamicImport from 'components/DynamicImport';
+import Loading from 'components/Loading';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -23,6 +21,54 @@ const theme = createMuiTheme({
     },
   },
 });
+
+const LoginRegistration = props => (
+  <DynamicImport load={() => import('Screens/LoginRegistration')}>
+    {
+      Component => (Component === null
+        ? (
+          <Loading />
+        )
+        : <Component {...props} />)
+    }
+  </DynamicImport>
+);
+
+const Verification = props => (
+  <DynamicImport load={() => import('Screens/Verification')}>
+    {
+      Component => (Component === null
+        ? (
+          <Loading />
+        )
+        : <Component {...props} />)
+    }
+  </DynamicImport>
+);
+
+const ConfirmPassword = props => (
+  <DynamicImport load={() => import('Screens/ConfirmPassword')}>
+    {
+      Component => (Component === null
+        ? (
+          <Loading />
+        )
+        : <Component {...props} />)
+    }
+  </DynamicImport>
+);
+
+const NotFound = props => (
+  <DynamicImport load={() => import('Screens/NotFound')}>
+    {
+      Component => (Component === null
+        ? (
+          <Loading />
+        )
+        : <Component {...props} />)
+    }
+  </DynamicImport>
+);
 
 class App extends React.Component {
   render() {

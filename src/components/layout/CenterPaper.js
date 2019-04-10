@@ -1,7 +1,6 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { Grid, Paper } from '@material-ui/core';
+import { withStyles, Grid, Paper } from '@material-ui/core/';
 import PropTypes from 'prop-types';
 
 const styles = theme => ({

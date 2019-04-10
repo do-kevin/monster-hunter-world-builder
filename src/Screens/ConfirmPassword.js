@@ -7,6 +7,7 @@ import {
   Grid, Button, TextField,
 } from '@material-ui/core';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 import { Link } from 'react-router-dom';
 import { setPassword } from 'Services/RegistrationAPI';
@@ -24,6 +25,13 @@ const styles = () => ({
     fontWeight: '600',
     color: 'hsl(0, 0%, 0%)',
   },
+});
+
+const pwdValidationSchema = Yup.object().shape({
+  password: Yup.string()
+    .min(8, 'Your password must be at least eight characters long.')
+    .matches(new RegExp('^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})'),
+      'Your password must contain an uppercase, lowercase, numeric, and a special character.')
 });
 
 class ConfirmPassword extends Component {
@@ -56,13 +64,7 @@ class ConfirmPassword extends Component {
                   setPasswordReq: response.message,
                 });
               }}
-              validate={({ password }) => {
-                const errors = {};
-                if (!password) {
-                  errors.password = true;
-                }
-                return errors;
-              }}
+              validationSchema={pwdValidationSchema}
               render={({
                 values,
                 handleSubmit,
@@ -72,6 +74,7 @@ class ConfirmPassword extends Component {
               }) => (
                 <form onSubmit={handleSubmit}>
                   <h1>Create password</h1>
+                  {errors.password}
                   <TextField
                     id="password"
                     label="Password"
