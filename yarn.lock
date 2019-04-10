@@ -6817,6 +6817,11 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
 
+multi-nprogress@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/multi-nprogress/-/multi-nprogress-0.3.3.tgz#66631eea1f8db2bb9db795dd52219ada8b98fcb3"
+  integrity sha512-jFZaDXhrm/7dc/WQ/5bin3ohyas9OqCV6mn7K2YcfeQqe3laxbWuOO2u/2L27tUrdlq6cJdxx63PyG37cPRmdA==
+
 multicast-dns-service-types@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/multicast-dns-service-types/-/multicast-dns-service-types-1.1.0.tgz#899f11d9686e5e05cb91b35d5f0e63b773cfc901"

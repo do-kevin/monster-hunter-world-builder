@@ -12,7 +12,7 @@ const styles = () => ({});
 function InputForm(props) {
   const {
     children, initialValues, submitBtnLabel, onSubmit, validate, passwordField,
-    CustomBtnCn, classes, textFieldType, header, resultText,
+    CustomBtnCn, classes, textFieldType, header, resultText, disableSubmitBtn,
   } = props;
 
   return (
@@ -23,7 +23,9 @@ function InputForm(props) {
         initialValues={initialValues}
         onSubmit={onSubmit}
         validate={validate}
-        render={({ values, handleSubmit, handleChange }) => (
+        render={({
+          values, handleSubmit, handleChange, isSubmitting,
+        }) => (
           <form onSubmit={handleSubmit}>
             <TextField
               id={textFieldType}
@@ -58,7 +60,17 @@ function InputForm(props) {
                 : null
             }
             <Grid item>
-              <Button className={CustomBtnCn} color="primary" type="submit" variant="contained">
+              <Button
+                className={CustomBtnCn}
+                color="primary"
+                disabled={
+                  disableSubmitBtn === 'true'
+                    ? isSubmitting
+                    : false
+                }
+                type="submit"
+                variant="contained"
+              >
                 {submitBtnLabel}
               </Button>
               {children}

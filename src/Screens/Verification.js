@@ -11,6 +11,7 @@ import { verifyEmail } from 'Services/RegistrationAPI';
 import PropTypes from 'prop-types';
 import CenterPaper from 'components/layout/CenterPaper';
 import * as Promise from 'bluebird';
+import NProgress from 'multi-nprogress';
 
 const styles = theme => ({
   root: {
@@ -45,10 +46,13 @@ class Verification extends Component {
   };
 
   async componentDidMount() {
-    console.log(this.props);
     const { location } = this.props;
     const parsed = parse(location.search);
     const { token, user_id } = parsed; // eslint-disable-line camelcase
+
+    const nprogress = NProgress();
+    nprogress.configure({ showSpinner: false });
+    nprogress.set(0.0);
     this.setState({ firstToken: token });
 
     const result = await verifyEmail(user_id, token);
@@ -56,6 +60,7 @@ class Verification extends Component {
     const { setProfileId, setUserId } = this.context;
 
     if (result.status === 'verified') {
+      nprogress.set(0.25);
       this.setState({
         isRequesting: false,
       });
@@ -63,16 +68,19 @@ class Verification extends Component {
       this.setState({
         profileId: true,
       });
+      nprogress.set(0.50);
       setUserId(user_id);
       await Promise.delay(7000);
       this.setState({
         profileToken: true,
       });
+      nprogress.set(0.75);
       setProfileId(result.token);
       await Promise.delay(10000);
       this.setState({
         isRedirecting: true,
       });
+      nprogress.set(1.0);
     }
   }
 

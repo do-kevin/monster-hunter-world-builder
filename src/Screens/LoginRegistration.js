@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  withStyles, Grid, Button,
+  withStyles, Grid, Button, Snackbar, SnackbarContent,
 } from '@material-ui/core';
 import CenterPaper from 'components/layout/CenterPaper';
 import { userLogin, registerEmail, resetPassword } from 'Services/RegistrationAPI';
@@ -19,6 +19,9 @@ const styles = () => ({
     fontWeight: '600',
     color: 'hsl(0, 0%, 0%)',
   },
+  danger: {
+    backgroundColor: 'hsl(355, 70%, 46%)',
+  },
 });
 
 class LoginRegistration extends Component {
@@ -28,6 +31,7 @@ class LoginRegistration extends Component {
     showRegistration: false,
     signUpResult: '',
     resetResult: '',
+    error: '', // eslint-disable-line react/no-unused-state
   }
 
   componentDidMount() {
@@ -51,7 +55,7 @@ class LoginRegistration extends Component {
 
   render() {
     const {
-      showLogin, showReset, showRegistration, signUpResult, resetResult,
+      showLogin, showReset, showRegistration, signUpResult, resetResult, error,
     } = this.state;
     const { classes } = this.props; // eslint-disable-line react/prop-types
     const { CustomTxtBtn, CustomBtn } = classes;
@@ -62,7 +66,17 @@ class LoginRegistration extends Component {
         <InputForms
           header="Sign in"
           initialValues={{ email: '', password: '' }}
-          onSubmit={values => userLogin(values.email, values.password)}
+          onSubmit={
+            async (values) => {
+              const response = await userLogin(values.email, values.password);
+
+              if (response === 'Code 401: Invalid email or password.') {
+                this.setState({ error: response }); // eslint-disable-line react/no-unused-state
+              } else {
+                this.setState({ error: null });
+              }
+            }
+          }
           CustomBtnCn={CustomBtn}
           submitBtnLabel="Login"
           textFieldType="email"
@@ -92,7 +106,6 @@ class LoginRegistration extends Component {
             >
                   Reset password
             </Button>
-            {this.props.userProfile.first_name}
           </Grid>
         </InputForms>
       );
@@ -104,6 +117,7 @@ class LoginRegistration extends Component {
             <h3 style={{ color: 'hsl(175, 100%, 25%)' }}>{signUpResult ? `${signUpResult} account. Please check inbox.` : null}</h3>
           }
           initialValues={{ email: '' }}
+          disableSubmitBtn="true"
           onSubmit={async (values) => {
             const response = await registerEmail(values.email);
             this.setState({ signUpResult: response.statusText });
@@ -136,7 +150,11 @@ class LoginRegistration extends Component {
           initialValues={{ email: '' }}
           onSubmit={async (values) => {
             const response = await resetPassword(values.email);
-            this.setState({ resetResult: response.data.message });
+            if (response !== 'This account does not exist.') {
+              this.setState({ resetResult: response.data.message, error: null });
+            } else {
+              this.setState({ error: response });
+            }
           }}
           CustomBtnCn={CustomBtn}
           submitBtnLabel="Confirm email"
@@ -161,6 +179,24 @@ class LoginRegistration extends Component {
     return (
       <CenterPaper>
         {renderForm}
+        {
+          error
+            ? (
+              <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                open="true"
+                ContentProps={{
+                  'aria-describedby': 'message-id',
+                }}
+              >
+                <SnackbarContent
+                  className={classes.danger}
+                  message={<span id="message-id">{error}</span>}
+                />
+              </Snackbar>
+            )
+            : null
+        }
       </CenterPaper>
     );
   }
