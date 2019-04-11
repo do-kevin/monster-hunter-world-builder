@@ -1,36 +1,45 @@
 {
-  "name": "basic-cms-company",
-  "version": "0.1.0",
-  "private": true,
-  "proxy": "http://localhost:3000/",
-  "dependencies": {
-    "@material-ui/core": "^3.9.3",
-    "axios": "^0.18.0",
-    "classnames": "^2.2.6",
-    "formik": "^1.5.1",
-    "http-proxy-middleware": "^0.19.1",
-    "node-sass": "^4.11.0",
-    "query-string": "^6.4.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+	"name": "basic-cms-company",
+	"version": "0.1.0",
+	"private": true,
+	"proxy": "http://localhost:3000/",
+	"dependencies": {
+		"@material-ui/core": "^3.9.3",
+		"axios": "^0.18.0",
+		"bluebird": "^3.5.4",
+		"formik": "^1.5.1",
+		"inflection": "^1.12.0",
+		"multi-nprogress": "^0.3.3",
+		"node-sass": "^4.11.0",
+		"prop-types": "^15.7.2",
+		"query-string": "^6.4.2",
+		"react": "^16.8.6",
+		"react-dom": "^16.8.6",
+		"react-redux": "^7.0.1",
+		"react-router-dom": "^5.0.0",
+		"react-scripts": "2.1.8",
+		"redux": "^4.0.1",
+		"yup": "^0.27.0"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"lint": "eslint src"
+	},
+	"browserslist": [
+		">0.2%",
+		"not dead",
+		"not ie <= 11",
+		"not op_mini all"
+	],
+	"devDependencies": {
+		"babel-eslint": "9.0.0",
+		"eslint": "5.12.0",
+		"eslint-config-airbnb": "^17.1.0",
+		"eslint-plugin-import": "^2.14.0",
+		"eslint-plugin-jsx-a11y": "^6.1.1",
+		"eslint-plugin-react": "^7.12.4"
+	}
 }
