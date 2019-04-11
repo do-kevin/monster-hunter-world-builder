@@ -120,7 +120,11 @@ class LoginRegistration extends Component {
           disableSubmitBtn="true"
           onSubmit={async (values) => {
             const response = await registerEmail(values.email);
-            this.setState({ signUpResult: response.statusText });
+            if (response !== 'Error 400 (Bad request).') {
+              this.setState({ signUpResult: response.statusText });
+            } else {
+              this.setState({ error: response });
+            }
           }}
           CustomBtnCn={CustomBtn}
           submitBtnLabel="Register Email"
@@ -184,7 +188,7 @@ class LoginRegistration extends Component {
             ? (
               <Snackbar
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                open="true"
+                open
                 ContentProps={{
                   'aria-describedby': 'message-id',
                 }}

@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { parse } from 'query-string';
 import {
-  Grid, withStyles, CircularProgress,
+  Grid, withStyles, CircularProgress, Snackbar, SnackbarContent,
 } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { AuthContext } from 'components/AuthContext';
@@ -20,6 +20,9 @@ const styles = theme => ({
   },
   progress: {
     margin: theme.spacing.unit * 2,
+  },
+  danger: {
+    backgroundColor: 'hsl(355, 70%, 46%)',
   },
 });
 
@@ -43,6 +46,7 @@ class Verification extends Component {
     profileToken: false,
     profileId: false,
     firstToken: '',
+    error: '',
   };
 
   async componentDidMount() {
@@ -81,12 +85,16 @@ class Verification extends Component {
         isRedirecting: true,
       });
       nprogress.set(1.0);
+    } else {
+      this.setState({
+        error: result,
+      });
     }
   }
 
   render() {
     const {
-      isRedirecting, profileToken, profileId, firstToken,
+      isRedirecting, profileToken, profileId, firstToken, error,
     } = this.state;
     const { classes } = this.props;
 
@@ -101,7 +109,7 @@ class Verification extends Component {
     }
 
     if (profileToken) {
-      loading = 'Email processed. Redirecting you in three seconds.';
+      loading = 'Email processed. Redirecting you in a moment.';
     }
 
     if (isRedirecting) {
@@ -121,6 +129,24 @@ class Verification extends Component {
             </div>
           </div>
         </Grid>
+        {
+          error
+            ? (
+              <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                open
+                ContentProps={{
+                  'aria-describedby': 'message-id',
+                }}
+              >
+                <SnackbarContent
+                  className={classes.danger}
+                  message={<span id="message-id">{error}</span>}
+                />
+              </Snackbar>
+            )
+            : null
+        }
       </CenterPaper>
     );
   }
