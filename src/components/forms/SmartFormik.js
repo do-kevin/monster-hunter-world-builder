@@ -9,7 +9,7 @@ import inflection from 'inflection';
 
 const styles = () => ({});
 
-function InputForm(props) {
+function SmartFormik(props) {
   const {
     children, initialValues, submitBtnLabel, onSubmit, validate, passwordField,
     CustomBtnCn, classes, textFieldType, header, resultText, disableSubmitBtn,
@@ -82,4 +82,4 @@ function InputForm(props) {
   );
 }
 
-export default withStyles(styles)(InputForm);
+export default withStyles(styles)(SmartFormik);

@@ -1,7 +1,6 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
 import { Link } from 'react-router-dom';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import { Button, withStyles } from '@material-ui/core';
@@ -31,7 +30,7 @@ function NotFound(props) {
         <p className="NotFound__section__p3">There&apos;s nothing here.</p>
         <Link to="/">
           <Button
-            className={classNames(classes.NotFoundBtn)}
+            className={classes.NotFoundBtn}
             color="primary"
             variant="contained"
             size="large"

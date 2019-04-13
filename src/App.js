@@ -1,12 +1,13 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
-import { AuthProvider } from 'components/AuthContext';
+import { PrivateRoute } from 'Authentication/PrivateRoute';
+import { AuthProvider } from 'Authentication/AuthContext';
+
 import DynamicImport from 'components/DynamicImport';
 import Loading from 'components/Loading';
-
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
   typography: {
@@ -58,6 +59,30 @@ const ConfirmPassword = props => (
   </DynamicImport>
 );
 
+const ProfileCreation = props => (
+  <DynamicImport load={() => import('Screens/ProfileCreation')}>
+    {
+      Component => (Component === null
+        ? (
+          <Loading />
+        )
+        : <Component {...props} />)
+    }
+  </DynamicImport>
+);
+
+const Dashboard = props => (
+  <DynamicImport load={() => import('Screens/Dashboard')}>
+    {
+      Component => (Component === null
+        ? (
+          <Loading />
+        )
+        : <Component {...props} />)
+    }
+  </DynamicImport>
+);
+
 const NotFound = props => (
   <DynamicImport load={() => import('Screens/NotFound')}>
     {
@@ -82,6 +107,16 @@ class App extends React.Component {
                 exact
                 path="/account_verification"
                 component={Verification}
+              />
+              <PrivateRoute
+                exact
+                path="/create_profile"
+                component={ProfileCreation}
+              />
+              <PrivateRoute
+                exact
+                path="/dashboard"
+                component={Dashboard}
               />
               <Route path="/confirm-password/:initToken" component={ConfirmPassword} />
               <Route component={NotFound} />
