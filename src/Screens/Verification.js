@@ -1,17 +1,20 @@
 /* eslint-disable react/no-unused-state */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import { parse } from 'query-string';
 import {
   Grid, withStyles, CircularProgress, Snackbar, SnackbarContent,
 } from '@material-ui/core';
-import { Redirect } from 'react-router-dom';
-import { AuthContext } from 'components/AuthContext';
-import { verifyEmail } from 'Services/RegistrationAPI';
-import PropTypes from 'prop-types';
-import CenterPaper from 'components/layout/CenterPaper';
 import * as Promise from 'bluebird';
 import NProgress from 'multi-nprogress';
+
+import { AuthContext } from 'Authentication/AuthContext';
+
+import { verifyEmail } from 'Services/RegistrationAPI';
+
+import CenterPaper from 'components/layout/CenterPaper';
 
 const styles = theme => ({
   root: {
@@ -43,8 +46,8 @@ class Verification extends Component {
   state = {
     isRequesting: true,
     isRedirecting: false,
-    profileToken: false,
-    profileId: false,
+    gotProfileToken: false,
+    gotProfileId: false,
     firstToken: '',
     error: '',
   };
@@ -61,7 +64,7 @@ class Verification extends Component {
 
     const result = await verifyEmail(user_id, token);
 
-    const { setProfileId, setUserId } = this.context;
+    const { setProfileToken, setUserId } = this.context;
 
     if (result.status === 'verified') {
       nprogress.set(0.25);
@@ -70,16 +73,16 @@ class Verification extends Component {
       });
       await Promise.delay(4000);
       this.setState({
-        profileId: true,
+        gotProfileId: true,
       });
       nprogress.set(0.50);
       setUserId(user_id);
       await Promise.delay(7000);
       this.setState({
-        profileToken: true,
+        gotProfileToken: true,
       });
       nprogress.set(0.75);
-      setProfileId(result.token);
+      setProfileToken(result.token);
       await Promise.delay(10000);
       this.setState({
         isRedirecting: true,
@@ -94,7 +97,7 @@ class Verification extends Component {
 
   render() {
     const {
-      isRedirecting, profileToken, profileId, firstToken, error,
+      isRedirecting, gotProfileToken, gotProfileId, firstToken, error,
     } = this.state;
     const { classes } = this.props;
 
@@ -104,11 +107,11 @@ class Verification extends Component {
       loading = 'Please wait while we verify your email.';
     }
 
-    if (profileId) {
+    if (gotProfileId) {
       loading = 'Retrieving email information. Please wait.';
     }
 
-    if (profileToken) {
+    if (gotProfileToken) {
       loading = 'Email processed. Redirecting you in a moment.';
     }
 

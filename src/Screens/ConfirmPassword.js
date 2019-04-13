@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-import { withStyles } from '@material-ui/core/styles';
-import { AuthConsumer } from 'components/AuthContext';
+import { Link } from 'react-router-dom';
 import {
-  Grid, Button, TextField,
+  Grid, Button, TextField, withStyles,
 } from '@material-ui/core';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { Link } from 'react-router-dom';
+import { AuthConsumer } from 'Authentication/AuthContext';
+
 import { setPassword } from 'Services/RegistrationAPI';
 import CenterPaper from 'components/layout/CenterPaper';
 
@@ -58,8 +57,8 @@ class ConfirmPassword extends Component {
                 password: '',
               }}
               onSubmit={async (values) => {
-                const { userId, profileId } = value;
-                const response = await setPassword(userId, profileId, values.password);
+                const { userId, profileToken } = value;
+                const response = await setPassword(userId, profileToken, values.password);
                 this.setState({
                   setPasswordReq: response.message,
                 });

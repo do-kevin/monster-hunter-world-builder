@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import {
   withStyles, Grid, Button, Snackbar, SnackbarContent,
 } from '@material-ui/core';
+
+import { AuthContext } from 'Authentication/AuthContext';
+import auth from 'Authentication/auth';
+
 import CenterPaper from 'components/layout/CenterPaper';
 import { userLogin, registerEmail, resetPassword } from 'Services/RegistrationAPI';
-import InputForms from 'components/forms/InputForms';
+import SmartFormik from 'components/forms/SmartFormik';
 
 const styles = () => ({
   CustomBtn: {
@@ -25,6 +28,8 @@ const styles = () => ({
 });
 
 class LoginRegistration extends Component {
+  static contextType = AuthContext;
+
   state = {
     showLogin: true,
     showReset: false,
@@ -32,17 +37,6 @@ class LoginRegistration extends Component {
     signUpResult: '',
     resetResult: '',
     error: '', // eslint-disable-line react/no-unused-state
-  }
-
-  componentDidMount() {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'GETPROFILE',
-    //   payload: {
-    //     first_name: 'Kevin',
-    //     last_name: 'Do',
-    //   },
-    // });
   }
 
   toggleForm = (formType = '') => {
@@ -57,13 +51,17 @@ class LoginRegistration extends Component {
     const {
       showLogin, showReset, showRegistration, signUpResult, resetResult, error,
     } = this.state;
-    const { classes } = this.props; // eslint-disable-line react/prop-types
+    const { classes, history } = this.props; // eslint-disable-line react/prop-types
     const { CustomTxtBtn, CustomBtn } = classes;
+    const {
+      setProfileToken, setUserId,
+    } = this.context;
+
     let renderForm;
 
     if (showLogin) {
       renderForm = (
-        <InputForms
+        <SmartFormik
           header="Sign in"
           initialValues={{ email: '', password: '' }}
           onSubmit={
@@ -72,8 +70,15 @@ class LoginRegistration extends Component {
 
               if (response === 'Code 401: Invalid email or password.') {
                 this.setState({ error: response }); // eslint-disable-line react/no-unused-state
-              } else {
+              } else if (response.status === 200) {
+                setProfileToken(response.data.token);
+                setUserId(response.data.user_id);
                 this.setState({ error: null });
+                console.log(this.context);
+                auth.login(() => {
+                  history.push('/create_profile'); // eslint-disable-line react/destructuring-assignment
+                });
+                auth.isAuthenticated();
               }
             }
           }
@@ -107,11 +112,11 @@ class LoginRegistration extends Component {
                   Reset password
             </Button>
           </Grid>
-        </InputForms>
+        </SmartFormik>
       );
     } else if (showRegistration) {
       renderForm = (
-        <InputForms
+        <SmartFormik
           header="Sign up"
           resultText={
             <h3 style={{ color: 'hsl(175, 100%, 25%)' }}>{signUpResult ? `${signUpResult} account. Please check inbox.` : null}</h3>
@@ -142,11 +147,11 @@ class LoginRegistration extends Component {
                 Already have an account? Sign in
             </Button>
           </Grid>
-        </InputForms>
+        </SmartFormik>
       );
     } else if (showReset) {
       renderForm = (
-        <InputForms
+        <SmartFormik
           resultText={
             <h3 style={{ color: 'hsl(175, 100%, 25%)' }}>{resetResult}</h3>
           }
@@ -176,7 +181,7 @@ class LoginRegistration extends Component {
               Already have an account? Sign in
             </Button>
           </Grid>
-        </InputForms>
+        </SmartFormik>
       );
     }
 
@@ -206,12 +211,4 @@ class LoginRegistration extends Component {
   }
 }
 
-const componentWithStyles = withStyles(styles)(LoginRegistration);
-
-function mapStateToProps(state) {
-  return {
-    userProfile: state.userProfile,
-  };
-}
-
-export default connect(mapStateToProps)(componentWithStyles);
+export default withStyles(styles)(LoginRegistration);

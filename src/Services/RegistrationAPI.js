@@ -97,6 +97,23 @@ async function createProfile(userId = '', authToken = '', firstName = '', lastNa
   }
 }
 
+async function getProfile(userId, authToken = '') {
+  const authConfig = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Token ${authToken}`,
+    },
+  };
+
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_API_SERVER_URL}/user_profiles/${userId}/`, authConfig);
+    return response;
+  } catch (err) {
+    console.error(err);
+    return 'Not found';
+  }
+}
+
 async function resetPassword(userEmail = '') {
   const nprogress = NProgress();
   nprogress.set(0.0);
@@ -130,5 +147,5 @@ async function userLogin(userEmail = '', userPwd = '') {
 
 
 export {
-  registerEmail, verifyEmail, setPassword, resetPassword, userLogin, createProfile,
+  registerEmail, verifyEmail, setPassword, resetPassword, userLogin, createProfile, getProfile,
 };
