@@ -8,7 +8,7 @@ import {
   Grid, withStyles, CircularProgress, Snackbar, SnackbarContent,
 } from '@material-ui/core';
 import * as Promise from 'bluebird';
-import NProgress from 'multi-nprogress';
+import api from 'Services/Api';
 
 import { AuthContext } from 'Authentication/AuthContext';
 
@@ -55,43 +55,35 @@ class Verification extends Component {
   async componentDidMount() {
     const { location } = this.props;
     const parsed = parse(location.search);
-    const { token, user_id } = parsed; // eslint-disable-line camelcase
-
-    const nprogress = NProgress();
-    nprogress.configure({ showSpinner: false });
-    nprogress.set(0.0);
+    const { token, user_id } = parsed;
     this.setState({ firstToken: token });
-
-    const result = await verifyEmail(user_id, token);
 
     const { setProfileToken, setUserId } = this.context;
 
-    if (result.status === 'verified') {
-      nprogress.set(0.25);
+    await api.urlencodedInstance();
+    const result = await verifyEmail(user_id, token);
+
+    if (result.status === 200) {
       this.setState({
         isRequesting: false,
       });
+      api.authInstance(result.data.token);
       await Promise.delay(4000);
       this.setState({
         gotProfileId: true,
       });
-      nprogress.set(0.50);
       setUserId(user_id);
       await Promise.delay(7000);
       this.setState({
         gotProfileToken: true,
       });
-      nprogress.set(0.75);
-      setProfileToken(result.token);
+      setProfileToken(result.data.token);
       await Promise.delay(10000);
       this.setState({
         isRedirecting: true,
       });
-      nprogress.set(1.0);
     } else {
-      this.setState({
-        error: result,
-      });
+      this.setState({ error: result });
     }
   }
 

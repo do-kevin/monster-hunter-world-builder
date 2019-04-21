@@ -21,7 +21,7 @@ class AuthProvider extends Component {
   }
 
   render() {
-    const { children } = this.props; // eslint-disable-line react/prop-types
+    const { children } = this.props;
 
     return (
       <AuthContext.Provider value={this.state}>

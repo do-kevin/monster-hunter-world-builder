@@ -4,6 +4,7 @@ import {
 } from '@material-ui/core';
 
 import { AuthContext } from 'Authentication/AuthContext';
+import api from 'Services/Api';
 import auth from 'Authentication/auth';
 
 import CenterPaper from 'components/layout/CenterPaper';
@@ -36,7 +37,11 @@ class LoginRegistration extends Component {
     showRegistration: false,
     signUpResult: '',
     resetResult: '',
-    error: '', // eslint-disable-line react/no-unused-state
+    error: '',
+  }
+
+  async componentDidMount() {
+    await api.defaultInstance();
   }
 
   toggleForm = (formType = '') => {
@@ -51,7 +56,7 @@ class LoginRegistration extends Component {
     const {
       showLogin, showReset, showRegistration, signUpResult, resetResult, error,
     } = this.state;
-    const { classes, history } = this.props; // eslint-disable-line react/prop-types
+    const { classes, history } = this.props;
     const { CustomTxtBtn, CustomBtn } = classes;
     const {
       setProfileToken, setUserId,
@@ -67,18 +72,17 @@ class LoginRegistration extends Component {
           onSubmit={
             async (values) => {
               const response = await userLogin(values.email, values.password);
+              console.log(response);
 
-              if (response === 'Code 401: Invalid email or password.') {
-                this.setState({ error: response }); // eslint-disable-line react/no-unused-state
-              } else if (response.status === 200) {
+              if (response.status === 200) {
                 setProfileToken(response.data.token);
                 setUserId(response.data.user_id);
                 this.setState({ error: null });
-                console.log(this.context);
-                auth.login(() => {
-                  history.push('/create_profile'); // eslint-disable-line react/destructuring-assignment
+                auth.login(() => { // api.login() not working
+                  history.push('/create_profile');
                 });
-                auth.isAuthenticated();
+              } else {
+                this.setState({ error: response });
               }
             }
           }
@@ -125,7 +129,8 @@ class LoginRegistration extends Component {
           disableSubmitBtn="true"
           onSubmit={async (values) => {
             const response = await registerEmail(values.email);
-            if (response !== 'Error 400 (Bad request).') {
+            console.log(response);
+            if (response.status === 201) {
               this.setState({ signUpResult: response.statusText });
             } else {
               this.setState({ error: response });

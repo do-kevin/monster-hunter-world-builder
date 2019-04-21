@@ -30,7 +30,7 @@ const pwdValidationSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, 'Your password must be at least eight characters long.')
     .matches(new RegExp('^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})'),
-      'Your password must contain an uppercase, lowercase, numeric, and a special character.')
+      'Your password must contain an uppercase, lowercase, numeric, and a special character.'),
 });
 
 class ConfirmPassword extends Component {
@@ -45,7 +45,7 @@ class ConfirmPassword extends Component {
   }
 
   render() {
-    const { classes } = this.props; // eslint-disable-line react/prop-types
+    const { classes } = this.props;
     const { setPasswordReq } = this.state;
 
     return (
@@ -57,11 +57,13 @@ class ConfirmPassword extends Component {
                 password: '',
               }}
               onSubmit={async (values) => {
-                const { userId, profileToken } = value;
-                const response = await setPassword(userId, profileToken, values.password);
-                this.setState({
-                  setPasswordReq: response.message,
-                });
+                const { userId } = value;
+                const response = await setPassword(userId, values.password);
+                if (response.status === 200) {
+                  this.setState({
+                    setPasswordReq: response.data.message,
+                  });
+                }
               }}
               validationSchema={pwdValidationSchema}
               render={({
