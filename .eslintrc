@@ -32,6 +32,7 @@
 		],
 		"react/prop-types": "off",
 		"no-console": "off",
-		"camelcase": "off"
+		"camelcase": "off",
+		"quotes": 0
 	}
 }

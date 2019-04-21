@@ -3,14 +3,12 @@ class Auth {
     this.authenticated = false;
   }
 
-  login(callback) {
+  setAuthenticated() {
     this.authenticated = true;
-    callback();
   }
 
-  logout(callback) {
+  setNotAuthenticated() {
     this.authenticated = false;
-    callback();
   }
 
   isAuthenticated() {

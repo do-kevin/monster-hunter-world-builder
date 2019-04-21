@@ -1,11 +1,9 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/prefer-stateless-function */
-import React from 'react';
+import React from "react";
 import {
   Grid, Button, TextField, withStyles,
-} from '@material-ui/core';
-import { Formik } from 'formik';
-import inflection from 'inflection';
+} from "@material-ui/core";
+import { Formik } from "formik";
+import inflection from "inflection";
 
 const styles = () => ({});
 
@@ -31,7 +29,7 @@ function SmartFormik(props) {
               id={textFieldType}
               label={inflection.capitalize(textFieldType)}
               className={classes.TextField}
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               type={textFieldType}
               name={textFieldType}
               autoComplete={textFieldType}
@@ -47,7 +45,7 @@ function SmartFormik(props) {
                     id="password"
                     label="Password"
                     className={classes.TextField}
-                    style={{ width: '100%' }}
+                    style={{ width: "100%" }}
                     type="password"
                     name="password"
                     autoComplete="password"
@@ -64,7 +62,7 @@ function SmartFormik(props) {
                 className={CustomBtnCn}
                 color="primary"
                 disabled={
-                  disableSubmitBtn === 'true'
+                  disableSubmitBtn === "true"
                     ? isSubmitting
                     : false
                 }

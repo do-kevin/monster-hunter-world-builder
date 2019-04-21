@@ -1,14 +1,14 @@
 /* eslint-disable react/prefer-stateless-function */
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   TextField, withStyles, Button, Grid,
-} from '@material-ui/core';
-import { Formik } from 'formik';
+} from "@material-ui/core";
+import { Formik } from "formik";
 
-import { createProfile, getProfile } from 'Services/RegistrationAPI';
-import { AuthContext } from 'Authentication/AuthContext';
+import { createProfile, getProfile } from "Services/Auth/RegistrationApi";
+import { AuthContext } from "Services/Auth/AuthContext";
 
-import CenterPaper from 'components/layout/CenterPaper';
+import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({});
 
@@ -21,7 +21,7 @@ class ProfileCreation extends Component {
 
     const response = await getProfile(userId, profileToken);
     if (response.status === 200) {
-      history.push('/dashboard');
+      history.push("/dashboard");
     }
   }
 
@@ -32,29 +32,33 @@ class ProfileCreation extends Component {
       <CenterPaper>
         <Formik
           initialValues={{
-            fname: '', lname: '', birthdate: '', phonenum: '',
+            fname: "",
+            lname: "",
+            birthdate: "",
+            phonenum: "",
           }}
-          onSubmit={
-              (values) => {
-                const {
-                  fname, lname, birthdate, phonenum,
-                } = values;
+          onSubmit={(values) => {
+            const {
+              fname, lname, birthdate, phonenum,
+            } = values;
 
-                createProfile(userId, profileToken, fname, lname, birthdate, phonenum);
-              }
-            }
+            createProfile(
+              userId,
+              profileToken,
+              fname,
+              lname,
+              birthdate,
+              phonenum,
+            );
+          }}
         >
-          {({
-            values,
-            handleChange,
-            handleSubmit,
-          }) => (
+          {({ values, handleChange, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
               <TextField
                 id="fname"
                 label="First name"
                 className={classes.TextField}
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 type="text"
                 name="fname"
                 autoComplete="fname"
@@ -67,7 +71,7 @@ class ProfileCreation extends Component {
                 id="lname"
                 label="Last name"
                 className={classes.TextField}
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 type="text"
                 name="lname"
                 autoComplete="lname"
@@ -80,7 +84,7 @@ class ProfileCreation extends Component {
                 id="birthdate"
                 label="Birthday"
                 className={classes.TextField}
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 type="date"
                 name="birthdate"
                 autoComplete="birthdate"
@@ -94,7 +98,7 @@ class ProfileCreation extends Component {
                 id="phonenum"
                 label="Phone number"
                 className={classes.TextField}
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 type="text"
                 name="phonenum"
                 autoComplete="phonenum"
@@ -103,12 +107,8 @@ class ProfileCreation extends Component {
                 margin="normal"
               />
               <Grid item>
-                <Button
-                  color="primary"
-                  type="submit"
-                  variant="contained"
-                >
-                    Submit
+                <Button color="primary" type="submit" variant="contained">
+                  Submit
                 </Button>
               </Grid>
             </form>

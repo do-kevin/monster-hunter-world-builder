@@ -1,17 +1,17 @@
 /* eslint-disable react/require-default-props */
-import React from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-import { Button, withStyles } from '@material-ui/core';
+import { Button, withStyles } from "@material-ui/core";
 
 const styles = () => ({
   NotFoundBtn: {
-    width: '200px',
-    display: 'inline-block',
-    textDecoration: 'none',
-    marginTop: '10px',
-    fontWeight: '600',
+    width: "200px",
+    display: "inline-block",
+    textDecoration: "none",
+    marginTop: "10px",
+    fontWeight: "600",
   },
 });
 
@@ -35,7 +35,7 @@ function NotFound(props) {
             variant="contained"
             size="large"
           >
-Go back
+            Go back
           </Button>
         </Link>
       </section>
