@@ -102,7 +102,12 @@ class App extends React.Component {
         <MuiThemeProvider theme={theme}>
           <Router>
             <Switch>
-              <Route exact path="/" component={LoginRegistration} />
+              <Route
+                exact
+                path="/"
+                component={LoginRegistration}
+              />
+              {/* <Route exact path="/" component={LoginRegistration} /> */}
               <Route
                 exact
                 path="/account_verification"
