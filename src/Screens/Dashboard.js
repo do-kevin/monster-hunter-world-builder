@@ -1,21 +1,17 @@
-import React, { Component } from 'react';
-import {
-  withStyles, Toolbar, AppBar, Button, Grid,
-} from '@material-ui/core';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { withStyles, Toolbar, AppBar, Button, Grid } from "@material-ui/core";
+import { connect } from "react-redux";
 
 import { bindActionCreators } from "redux";
 
+import { AuthContext } from "Authentication/AuthContext";
+// import { getProfile } from "services/RegistrationAPI";
 
-import { AuthContext } from 'Authentication/AuthContext';
-import { getProfile } from 'Services/RegistrationAPI';
-import api from 'Services/Api';
-import auth from 'Authentication/auth';
+import { logout } from "services/Auth/RegistrationApi";
 
-import UpdateProfile from 'Screens/UpdateProfile';
-import { GET_PROFILE } from 'Redux/actions/types';
-import { fetchProfileTemp } from 'Redux/actions/profile';
-
+import UpdateProfile from "screens/UpdateProfile";
+import { GET_PROFILE } from "Redux/actions/types";
+import { fetchProfileTemp } from "Redux/actions/profile";
 
 const styles = () => ({});
 
@@ -23,22 +19,20 @@ class Dashboard extends Component {
   static contextType = AuthContext;
 
   state = {
-    page: false,
-  }
+    page: false
+  };
 
   async componentDidMount() {
-    console.log(this.props);
-    console.log(this.context);
-    const { profileToken } = this.context;
-    await api.authInstance(profileToken);
+    // console.log(this.props);
+    // console.log(this.context);
+    // const { profileToken } = this.context;
+    // await api.authInstance(profileToken);
     // console.log(this.props.userProfile);
     // const { userId, profileToken } = this.context;
     // const { dispatch } = this.props;
-
     // const response = await getProfileTemp(userId, profileToken);
     // console.log(fetchProfileTemp.toString())
     // await this.props.fetchProfileTemp();
-
     // dispatch({
     //   type: GET_PROFILE,
     //   payload: {
@@ -63,7 +57,7 @@ class Dashboard extends Component {
     const { history } = this.props;
     let renderPage;
     const { page } = this.state;
-    if (page === 'profileSettings') {
+    if (page === "profileSettings") {
       renderPage = <UpdateProfile />;
     }
     return (
@@ -76,22 +70,14 @@ class Dashboard extends Component {
               justify="space-between"
               alignItems="center"
             >
-              <Button onClick={() => {
-                this.setState({ page: 'profileSettings' });
-              }}
-              >
-              Settings
-              </Button>
               <Button
                 onClick={() => {
-                  api.logout(() => {
-                    history.push('/');
-                  });
-                  api.isAuthenticated();
+                  this.setState({ page: "profileSettings" });
                 }}
               >
-                Log out
+                Settings
               </Button>
+              <Button onClick={() => logout()}>Log out</Button>
             </Grid>
           </Toolbar>
         </AppBar>
@@ -106,14 +92,17 @@ const componentWithStyles = withStyles(styles)(Dashboard);
 
 function mapStateToProps(state) {
   return {
-    userProfile: state.userProfile,
+    userProfile: state.userProfile
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProfileTemp: bindActionCreators(fetchProfileTemp, dispatch),
+    fetchProfileTemp: bindActionCreators(fetchProfileTemp, dispatch)
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(componentWithStyles);

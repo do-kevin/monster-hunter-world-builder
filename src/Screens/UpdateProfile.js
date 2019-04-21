@@ -1,21 +1,19 @@
 /* eslint-disable react/prefer-stateless-function */
-import React, { Component } from 'react';
-import {
-  TextField, withStyles, Button,
-} from '@material-ui/core';
-import { Formik } from 'formik';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { TextField, withStyles, Button } from "@material-ui/core";
+import { Formik } from "formik";
+import { connect } from "react-redux";
 
-import { } from 'Services/RegistrationAPI';
+import {} from "services/Auth/RegistrationApi";
 // import { AuthContext } from 'Authentication/AuthContext';
-import { FETCH_PROFILE } from 'Redux/actions/types';
-import CenterPaper from 'components/layout/CenterPaper';
+import { FETCH_PROFILE } from "Redux/actions/types";
+import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({});
 
 const txtfields = {
-  width: '100%',
-  marginTop: '25px',
+  width: "100%",
+  marginTop: "25px"
 };
 
 class UpdateProfile extends Component {
@@ -26,7 +24,7 @@ class UpdateProfile extends Component {
     const { dispatch } = this.props;
 
     const response = await dispatch({
-      type: FETCH_PROFILE,
+      type: FETCH_PROFILE
     });
 
     console.log(response);
@@ -41,21 +39,16 @@ class UpdateProfile extends Component {
         <CenterPaper>
           <Formik
             initialValues={{
-              fname: 'Redux state first name goes here', lname: 'Redux state last name goes here', birthdate: '1994-03-25', phonenum: '',
+              fname: "Redux state first name goes here",
+              lname: "Redux state last name goes here",
+              birthdate: "1994-03-25",
+              phonenum: ""
             }}
-            onSubmit={
-              (values) => {
-                const {
-                  fname, lname, birthdate, phonenum,
-                } = values;
-              }
-            }
+            onSubmit={values => {
+              const { fname, lname, birthdate, phonenum } = values;
+            }}
           >
-            {({
-              values,
-              handleChange,
-              handleSubmit,
-            }) => (
+            {({ values, handleChange, handleSubmit }) => (
               <form onSubmit={handleSubmit}>
                 <TextField
                   id="fname"
@@ -106,7 +99,7 @@ class UpdateProfile extends Component {
                   color="primary"
                   type="submit"
                   variant="contained"
-                  style={{ marginTop: '25px' }}
+                  style={{ marginTop: "25px" }}
                 >
                   Submit
                 </Button>
@@ -123,7 +116,7 @@ const componentWithStyles = withStyles(styles)(UpdateProfile);
 
 function mapStateToProps(state) {
   return {
-    userProfile: state.userProfile,
+    userProfile: state.userProfile
   };
 }
 
