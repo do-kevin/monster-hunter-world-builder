@@ -13,11 +13,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { PrivateRoute } from "Services/Auth/PrivateRoute";
 import { AuthProvider } from "Services/Auth/AuthContext";
 
-// import Authentication from "Screens/Authentication";
-// import Dashboard from "Screens/Dashboard";
-// import ProfileCreation from "./Screens/ProfileCreation";
 import {
-  Dashboard, ProfileCreation, NotFound, Authentication,
+  Home, NotFound, Authentication,
 } from "Screens";
 
 const theme = createMuiTheme({
@@ -59,23 +56,7 @@ class App extends React.Component {
                 )}
               />
               <Route path="/auth/:auth_type?" component={Authentication} />
-              <PrivateRoute path="/app" component={Dashboard} />
-              <PrivateRoute path="/app/profile" component={ProfileCreation} />
-              {/* <PrivateRoute
-                exact
-                path="/app/create_profile"
-                component={ProfileCreation}
-              />
-              <PrivateRoute
-                exact
-                path="/app/create_profile"
-                component={ProfileCreation}
-              />
-              <PrivateRoute exact path="/app/dashboard" component={Dashboard} /> */}
-              {/* <Route
-            path="/confirm-password/:initToken"
-            component={ConfirmPassword}
-            /> */}
+              <PrivateRoute path="/app" component={Home} />
               <Route component={NotFound} />
             </Switch>
           </Router>

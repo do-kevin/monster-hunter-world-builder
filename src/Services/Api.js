@@ -47,6 +47,7 @@ class Api {
     } catch (error) {
       console.error(error.request);
       toast.error(error.message);
+      toast.error(error.request.responseText);
       return false;
     } finally {
       nprogress.done();
@@ -55,6 +56,10 @@ class Api {
 
   async post(url, data) {
     return this.request(url, "post", data);
+  }
+
+  async put(url, data) {
+    return this.request(url, "put", data);
   }
 
   async get(url) {

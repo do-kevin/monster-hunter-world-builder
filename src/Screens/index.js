@@ -1,13 +1,11 @@
-import Authentication from './Authentication';
-import Dashboard from './Dashboard';
-import NotFound from './NotFound';
-import ProfileCreation from './ProfileCreation';
-import UpdateProfile from './UpdateProfile';
+import Authentication from "./Authentication";
+import Home from "./Home";
+import NotFound from "./NotFound";
+import Dashboard from "./Dashboard";
 
 export {
   Authentication,
-  Dashboard,
+  Home,
   NotFound,
-  ProfileCreation,
-  UpdateProfile,
+  Dashboard,
 };

@@ -23,6 +23,7 @@ function Signup(props) {
     if (response) {
       setSignedUp(true);
     }
+    console.log(response);
   };
 
   return signedUp ? (

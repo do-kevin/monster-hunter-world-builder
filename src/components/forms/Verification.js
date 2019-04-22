@@ -49,7 +49,7 @@ class Verification extends Component {
   handleSetPassword = async (password) => {
     const { user_id, history } = this.props;
     await setPassword(user_id, password);
-    history.push("/app");
+    history.push("/auth");
   };
 
   render() {

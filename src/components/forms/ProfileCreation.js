@@ -1,33 +1,25 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import {
   TextField, withStyles, Button, Grid,
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { createProfile, getProfile } from "Services/Auth/RegistrationApi";
-import { AuthContext } from "Services/Auth/AuthContext";
-
+import { updateProfile, grabId } from "Redux/state/profile/actions";
+import { createProfile } from "Services/Auth/RegistrationApi";
 import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({});
 
 class ProfileCreation extends Component {
-  static contextType = AuthContext;
-
-  async componentDidMount() {
-    const { userId, profileToken } = this.context;
-    const { history } = this.props;
-
-    const response = await getProfile(userId, profileToken);
-    if (response.status === 200) {
-      history.push("/dashboard");
-    }
-  }
-
   render() {
-    const { userId, profileToken } = this.context;
-    const { classes } = this.props;
+    const {
+      classes, reduxState, initCreation, changePage, setId,
+    } = this.props;
+    const userId = reduxState.profile.user;
+
     return (
       <CenterPaper>
         <Formik
@@ -37,23 +29,22 @@ class ProfileCreation extends Component {
             birthdate: "",
             phonenum: "",
           }}
-          onSubmit={(values) => {
+          onSubmit={async (values) => {
             const {
               fname, lname, birthdate, phonenum,
             } = values;
 
-            createProfile(
-              userId,
-              profileToken,
-              fname,
-              lname,
-              birthdate,
-              phonenum,
-            );
+            await initCreation(userId, fname, lname, birthdate, phonenum);
+            const response = await createProfile(userId, fname, lname, birthdate, phonenum);
+            if (response) {
+              await setId(response.id);
+              changePage();
+            }
           }}
         >
           {({ values, handleChange, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
+              <h2>Create your profile</h2>
               <TextField
                 id="fname"
                 label="First name"
@@ -65,7 +56,6 @@ class ProfileCreation extends Component {
                 onChange={handleChange}
                 value={values.fname}
                 margin="normal"
-                variant="outlined"
               />
               <TextField
                 id="lname"
@@ -78,7 +68,6 @@ class ProfileCreation extends Component {
                 onChange={handleChange}
                 value={values.lname}
                 margin="normal"
-                variant="outlined"
               />
               <TextField
                 id="birthdate"
@@ -92,7 +81,6 @@ class ProfileCreation extends Component {
                 value={values.birthdate}
                 InputLabelProps={{ shrink: true }}
                 margin="normal"
-                variant="outlined"
               />
               <TextField
                 id="phonenum"
@@ -119,4 +107,22 @@ class ProfileCreation extends Component {
   }
 }
 
-export default withStyles(styles)(ProfileCreation);
+const componentWithStyles = withStyles(styles)(ProfileCreation);
+
+function mapStateToProps(state) {
+  return {
+    reduxState: state,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    initCreation: bindActionCreators(updateProfile, dispatch),
+    setId: bindActionCreators(grabId, dispatch),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(componentWithStyles);

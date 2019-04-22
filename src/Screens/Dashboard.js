@@ -1,71 +1,53 @@
-import React, { Component } from "react";
+import React from "react";
 import {
-  withStyles, Toolbar, AppBar, Button, Grid,
+  withStyles, Toolbar, AppBar, Grid,
 } from "@material-ui/core";
-import { connect } from "react-redux";
 
-import { logout, getProfile } from "Services/Auth/RegistrationApi";
-import UpdateProfile from "Screens/UpdateProfile";
+const styles = () => ({
+  container: {
+    height: "100%",
+    paddingLeft: "133px",
+    zIndex: "-1",
+  },
+  toolbar: {
+    background: "hsl(175, 5%, 75%)",
+    paddingLeft: "110px",
+  },
+  mainSection: {
+    border: "1px solid blue",
+    width: "100%",
+    height: "100vh",
+    marginTop: "80px",
+    position: "relative",
+  },
+});
 
-const styles = () => ({});
+function Dashboard(props) {
+  const { classes } = props;
 
-class Dashboard extends Component {
-  state = {
-    page: null,
-  };
-
-  async componentDidMount() {
-    const { reduxState } = this.props;
-    const { profile } = reduxState;
-    const { user } = profile;
-    const response = await getProfile(user);
-
-    if (!response) {
-      this.setState({ page: "profileSettings" });
-    }
-  }
-
-  render() {
-    const { history } = this.props;
-    let renderPage;
-    const { page } = this.state;
-    if (page === "profileSettings") {
-      renderPage = <UpdateProfile />;
-    }
-    return (
-      <div>
-        <AppBar>
-          <Toolbar>
-            <Grid
-              container
-              direction="row"
-              justify="space-between"
-              alignItems="center"
-            >
-              <Button
-                onClick={() => {
-                  this.setState({ page: "profileSettings" });
-                }}
-              >
-                Settings
-              </Button>
-              <Button onClick={() => logout(history.push("/"))}>Log out</Button>
-            </Grid>
-          </Toolbar>
+  return (
+    <Grid
+      container
+      direction="column"
+      justify="center"
+      alignItems="center"
+      className={classes.container}
+    >
+      <Grid item>
+        <AppBar className={classes.toolbar}>
+          <Toolbar style={{ border: "1px solid red" }} />
         </AppBar>
-        Dashboard
-        {renderPage}
-      </div>
-    );
-  }
+      </Grid>
+      <Grid
+        item
+        className={classes.mainSection}
+      >
+        <main>
+          Placeholder
+        </main>
+      </Grid>
+    </Grid>
+  );
 }
 
-const componentWithStyles = withStyles(styles)(Dashboard);
-
-function mapStateToProps(state) {
-  return {
-    reduxState: state,
-  };
-}
-
-export default connect(mapStateToProps)(componentWithStyles);
+export default withStyles(styles)(Dashboard);
