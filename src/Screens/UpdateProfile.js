@@ -2,11 +2,8 @@
 import React, { Component } from "react";
 import { TextField, withStyles, Button } from "@material-ui/core";
 import { Formik } from "formik";
-import { connect } from "react-redux";
 
 import {} from "Services/Auth/RegistrationApi";
-// import { AuthContext } from 'Authentication/AuthContext';
-import { FETCH_PROFILE } from "Redux/actions/types";
 import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({});
@@ -17,21 +14,7 @@ const txtfields = {
 };
 
 class UpdateProfile extends Component {
-  // static contextType = AuthContext;
-
-  async componentDidMount() {
-    // const { userId, profileToken } = this.context;
-    const { dispatch } = this.props;
-
-    const response = await dispatch({
-      type: FETCH_PROFILE,
-    });
-
-    console.log(response);
-  }
-
   render() {
-    // const { userId, profileToken } = this.context;
     const { classes } = this.props;
     return (
       <div>
@@ -114,12 +97,4 @@ class UpdateProfile extends Component {
   }
 }
 
-const componentWithStyles = withStyles(styles)(UpdateProfile);
-
-function mapStateToProps(state) {
-  return {
-    userProfile: state.userProfile,
-  };
-}
-
-export default connect(mapStateToProps)(componentWithStyles);
+export default withStyles(styles)(UpdateProfile);

@@ -98,8 +98,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  console.log(ownProps);
+function mapDispatchToProps(dispatch) {
   return {
     updateProfile: bindActionCreators(Login, dispatch),
   };

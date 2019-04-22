@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import profileReducer from 'Redux/state/ducks/profile/reducers';
 import thunk from 'redux-thunk';
+import profileReducer from 'Redux/state/profile/reducers';
 
 const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
 const configureStore = () => {
@@ -14,12 +14,11 @@ const configureStore = () => {
 
   if (process.env.NODE_ENV !== 'production') {
     if (module.hot) {
-      module.hot.accept('Redux/reducers/reducers', () => {
+      module.hot.accept('Redux/state/profile/reducers', () => {
         store.replaceReducer(profileReducer);
       });
     }
   }
-
   return store;
 };
 

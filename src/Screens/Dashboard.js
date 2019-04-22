@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import {
   withStyles, Toolbar, AppBar, Button, Grid,
 } from "@material-ui/core";
+import { connect } from "react-redux";
 
-import { logout } from "Services/Auth/RegistrationApi";
+import { logout, getProfile } from "Services/Auth/RegistrationApi";
 import UpdateProfile from "Screens/UpdateProfile";
 
 const styles = () => ({});
@@ -12,6 +13,17 @@ class Dashboard extends Component {
   state = {
     page: null,
   };
+
+  async componentDidMount() {
+    const { reduxState } = this.props;
+    const { profile } = reduxState;
+    const { user } = profile;
+    const response = await getProfile(user);
+
+    if (!response) {
+      this.setState({ page: "profileSettings" });
+    }
+  }
 
   render() {
     const { history } = this.props;
@@ -48,4 +60,12 @@ class Dashboard extends Component {
   }
 }
 
-export default withStyles(styles)(Dashboard);
+const componentWithStyles = withStyles(styles)(Dashboard);
+
+function mapStateToProps(state) {
+  return {
+    reduxState: state,
+  };
+}
+
+export default connect(mapStateToProps)(componentWithStyles);

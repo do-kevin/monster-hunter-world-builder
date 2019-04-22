@@ -1,1 +1,5 @@
-export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+const UPDATE_PROFILE = 'UPDATE_PROFILE';
+
+export {
+  UPDATE_PROFILE,
+};
