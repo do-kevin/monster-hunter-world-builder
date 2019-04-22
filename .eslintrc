@@ -33,6 +33,7 @@
 		"react/prop-types": "off",
 		"no-console": "off",
 		"camelcase": "off",
-		"quotes": 0
+		"quotes": 0,
+		"no-underscore-dangle": "off"
 	}
 }

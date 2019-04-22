@@ -30,15 +30,15 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: "hsl(240, 100%, 76%)",
-    }
-  }
+    },
+  },
 });
 
 class App extends React.Component {
   render() {
     return (
       <AuthProvider>
-        <ToastContainer autoClose={1500} hideProgressBar={true} />
+        <ToastContainer autoClose={1500} hideProgressBar />
         <MuiThemeProvider theme={theme}>
           <Router>
             <Switch>

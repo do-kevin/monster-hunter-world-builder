@@ -15,7 +15,6 @@ class LoginRegistration extends Component {
     const { match, location } = this.props;
     const { auth_type } = match.params;
     let form;
-
     switch (auth_type) {
       case "reset_password":
         form = <ResetPassword />;

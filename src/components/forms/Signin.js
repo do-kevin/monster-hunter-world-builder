@@ -1,11 +1,14 @@
 import React from "react";
+import { Link, withRouter } from "react-router-dom";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import {
   Grid, Button, TextField, withStyles,
 } from "@material-ui/core";
 import { Formik } from "formik";
-import { Link, withRouter } from "react-router-dom";
 
 import { userLogin } from "Services/Auth/RegistrationApi";
+import { updateProfile as Login } from 'Redux/state/profile/actions';
 
 const styles = () => ({
   submitButton: {
@@ -18,9 +21,10 @@ function Signin(props) {
   const { classes } = props;
 
   const handleLogin = async (email, password) => {
-    const { history } = props;
+    const { history, updateProfile } = props;
     const response = await userLogin(email, password);
-    console.log(response);
+    const { token, user_id } = response;
+    updateProfile(token, user_id);
     history.push("/app");
   };
 
@@ -86,4 +90,22 @@ function Signin(props) {
   );
 }
 
-export default withRouter(withStyles(styles)(Signin));
+const componentWithStyles = withRouter(withStyles(styles)(Signin));
+
+function mapStateToProps(state) {
+  return {
+    profileReducer: state.profileReducer,
+  };
+}
+
+function mapDispatchToProps(dispatch, ownProps) {
+  console.log(ownProps);
+  return {
+    updateProfile: bindActionCreators(Login, dispatch),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(componentWithStyles);

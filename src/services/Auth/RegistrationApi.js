@@ -1,5 +1,4 @@
 import api from "Services/Api";
-import axios from "axios";
 import Auth from "Services/Auth/Auth";
 
 async function registerEmail(email = "") {
@@ -33,24 +32,8 @@ async function createProfile(profile) {
   return api.post("/user_profiles/", profile);
 }
 
-async function getProfile(userId, authToken = "") {
-  const authConfig = {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: `Token ${authToken}`,
-    },
-  };
-
-  try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_SERVER_URL}/user_profiles/${userId}/`,
-      authConfig,
-    );
-    return response;
-  } catch (err) {
-    console.error(err);
-    return "Not found";
-  }
+async function getProfile(userId) {
+  return api.get(`/user_profiles/${userId}/`);
 }
 
 async function resetPassword(email = "") {

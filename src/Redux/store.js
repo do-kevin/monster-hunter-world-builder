@@ -1,12 +1,11 @@
-/* eslint-disable no-underscore-dangle */
 import { createStore, applyMiddleware, compose } from 'redux';
-import reducers from 'Redux/reducers/reducers';
+import profileReducer from 'Redux/state/ducks/profile/reducers';
 import thunk from 'redux-thunk';
 
 const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
 const configureStore = () => {
   const store = createStore(
-    reducers,
+    profileReducer,
     compose(
       applyMiddleware(thunk),
       reduxDevTools,
@@ -16,7 +15,7 @@ const configureStore = () => {
   if (process.env.NODE_ENV !== 'production') {
     if (module.hot) {
       module.hot.accept('Redux/reducers/reducers', () => {
-        store.replaceReducer(reducers);
+        store.replaceReducer(profileReducer);
       });
     }
   }
