@@ -30,9 +30,9 @@ class Home extends Component {
   };
 
   async componentDidMount() {
-    const { loadProfile, reduxState } = this.props;
+    const { loadProfile, userProfile } = this.props;
     const response = await getProfile();
-    const { user } = reduxState.profile;
+    const { user } = userProfile;
 
     if (response === false) {
       this.setState({ page: "initProfile" });
@@ -124,7 +124,7 @@ const componentWithStyles = withStyles(styles)(Home);
 
 function mapStateToProps(state) {
   return {
-    reduxState: state,
+    userProfile: state.profile,
   };
 }
 
