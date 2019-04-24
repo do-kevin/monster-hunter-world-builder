@@ -5,7 +5,7 @@ const list = [];
 function userList(state = list, action) {
   switch (action.type) {
     case GRAB_USER_LIST:
-      return state.concat(action.payload);
+      return action.payload;
     case CLEAR_USER_LIST:
       return list;
     default:

@@ -46,8 +46,7 @@ class Api {
       return response.data;
     } catch (error) {
       console.error(error.request);
-      toast.error(error.message);
-      toast.error(error.request.responseText);
+      toast.error(`${error.message}\n${error.request.statusText}`);
       return false;
     } finally {
       nprogress.done();
