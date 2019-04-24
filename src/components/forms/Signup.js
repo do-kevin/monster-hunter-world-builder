@@ -5,7 +5,7 @@ import {
 import { Formik } from "formik";
 import { Link, withRouter } from "react-router-dom";
 
-import { registerEmail } from "Services/Auth/RegistrationApi";
+import { registerEmail } from "services/auth/RegistrationApi";
 
 const styles = () => ({
   submitButton: {
@@ -23,7 +23,6 @@ function Signup(props) {
     if (response) {
       setSignedUp(true);
     }
-    console.log(response);
   };
 
   return signedUp ? (

@@ -1,4 +1,4 @@
-import api from "Services/Api";
+import api from "services/Api";
 
 async function createProfile(user = null, fname = '', lname = '', birthDate = '', phoneNum = '') {
   const data = {
@@ -27,8 +27,13 @@ async function getProfile() {
   return api.get("/user_profiles/me");
 }
 
+async function listAllProfiles() {
+  return api.get("/user_profiles/");
+}
+
 export {
   getProfile,
   updateProfile,
   createProfile,
+  listAllProfiles,
 };

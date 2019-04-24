@@ -5,7 +5,7 @@ import {
 import { Formik } from "formik";
 import { Link } from "react-router-dom";
 
-import { resetPassword } from "Services/Auth/RegistrationApi";
+import { resetPassword } from "services/auth/RegistrationApi";
 
 const styles = () => ({
   submitButton: {

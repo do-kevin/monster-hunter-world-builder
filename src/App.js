@@ -10,12 +10,12 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { PrivateRoute } from "Services/Auth/PrivateRoute";
-import { AuthProvider } from "Services/Auth/AuthContext";
+import { PrivateRoute } from "services/auth/PrivateRoute";
+import { AuthProvider } from "services/auth/AuthContext";
 
 import {
   Home, NotFound, Authentication,
-} from "Screens";
+} from "screens";
 
 const theme = createMuiTheme({
   typography: {

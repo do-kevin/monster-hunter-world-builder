@@ -60,9 +60,9 @@ body {
 }
 
 .dashboard-grid {
-  grid-template-columns: 110px 100%;
+  grid-template-columns: 110px 1fr;
   display: grid;
-  grid-template-rows: 79px 100%;
+  grid-template-rows: 79px 1fr;
   grid-gap: 0;
   z-index: -1;
 }

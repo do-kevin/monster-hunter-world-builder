@@ -1,18 +1,18 @@
 /* eslint-disable react/prefer-stateless-function */
-import React, { Component } from 'react';
-import { withStyles, Grid, Paper } from '@material-ui/core/';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import { withStyles, Grid, Paper } from "@material-ui/core/";
+import PropTypes from "prop-types";
 
 const styles = theme => ({
   root: {
-    height: '100vh',
-    width: '100%',
+    height: "100vh",
+    width: "100%",
   },
   paper: {
     padding: theme.spacing.unit * 7,
-    textAlign: 'center',
+    textAlign: "center",
     color: theme.palette.text.secondary,
-    width: '400px',
+    width: "400px",
   },
 });
 
@@ -24,7 +24,7 @@ class CenterPaper extends Component {
   }
 
   render() {
-    const { classes, children } = this.props; // eslint-disable-line react/prop-types
+    const { classes, children } = this.props;
 
     return (
       <Grid

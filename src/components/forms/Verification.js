@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
   Grid, Button, TextField, withStyles,
@@ -6,8 +7,7 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { setPassword, verifyEmail } from "Services/Auth/RegistrationApi";
-import { withRouter } from "react-router-dom";
+import { setPassword, verifyEmail } from "services/auth/RegistrationApi";
 
 const styles = () => ({
   CustomBtn: {

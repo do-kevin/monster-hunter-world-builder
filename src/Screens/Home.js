@@ -6,11 +6,12 @@ import { PowerSettingsNew, Settings, Dashboard as DashboardIcon } from "@materia
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import { logout } from "Services/Auth/RegistrationApi";
-import { getProfile } from "Services/ProfileApi";
-import { fullyUpdateProfile, userLogout } from "Redux/state/profile/actions";
+import { logout } from "services/auth/RegistrationApi";
+import { getProfile } from "services/ProfileApi";
+import { fullyUpdateProfile, userLogout } from "redux/state/profile/Actions";
+import { clearUserList } from "redux/state/list/Actions";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
-import { Dashboard } from "Screens";
+import { Dashboard } from "screens";
 
 const styles = () => ({
   iconBtn: {
@@ -45,9 +46,12 @@ class Home extends Component {
   }
 
   render() {
-    const { history, classes, signOut } = this.props;
+    const {
+      history, classes, signOut, emptyUserList,
+    } = this.props;
     const { page } = this.state;
     let renderPage;
+
     switch (page) {
       case "initProfile":
         renderPage = <ProfileCreationForm changePage={() => this.setState({ page: "dashboard" })} />;
@@ -106,6 +110,7 @@ class Home extends Component {
                   onClick={() => {
                     logout(history.push("/"));
                     signOut();
+                    emptyUserList();
                   }}
                 >
                   <PowerSettingsNew />
@@ -132,6 +137,7 @@ function mapDispatchToProps(dispatch) {
   return {
     loadProfile: bindActionCreators(fullyUpdateProfile, dispatch),
     signOut: bindActionCreators(userLogout, dispatch),
+    emptyUserList: bindActionCreators(clearUserList, dispatch),
   };
 }
 

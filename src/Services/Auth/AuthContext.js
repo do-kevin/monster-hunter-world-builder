@@ -1,21 +1,21 @@
 /* eslint-disable react/sort-comp */
 /* eslint-disable react/no-unused-state */
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 const AuthContext = React.createContext();
 
 class AuthProvider extends Component {
-  setProfileToken = (tokenString = '') => {
+  setProfileToken = (tokenString = "") => {
     this.setState({ profileToken: tokenString });
   }
 
-  setUserId = (idString = '') => {
+  setUserId = (idString = "") => {
     this.setState({ userId: idString });
   }
 
   state = {
-    profileToken: '',
-    userId: '',
+    profileToken: "",
+    userId: "",
     setProfileToken: this.setProfileToken,
     setUserId: this.setUserId,
   }

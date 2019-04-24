@@ -6,8 +6,8 @@ import {
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { updateProfile, grabId } from "Redux/state/profile/actions";
-import { createProfile } from "Services/ProfileApi";
+import { updateProfile, grabId } from "redux/state/profile/Actions";
+import { createProfile } from "services/ProfileApi";
 import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({});

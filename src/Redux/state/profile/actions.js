@@ -1,4 +1,4 @@
-import { UPDATE_PROFILE, USER_LOGOUT } from './constants';
+import { UPDATE_PROFILE, USER_LOGOUT } from './Constants';
 
 export const setTokenUserId = (token, userId) => dispatch => dispatch({
   type: UPDATE_PROFILE,

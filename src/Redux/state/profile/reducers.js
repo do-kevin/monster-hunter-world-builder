@@ -1,5 +1,4 @@
-import { combineReducers } from 'redux';
-import { UPDATE_PROFILE, USER_LOGOUT } from './constants';
+import { UPDATE_PROFILE, USER_LOGOUT } from "./Constants";
 
 const profileState = {
   user: null,
@@ -16,8 +15,4 @@ function profile(state = profileState, action) {
   }
 }
 
-const profileReducer = combineReducers({
-  profile,
-});
-
-export default profileReducer;
+export default profile;

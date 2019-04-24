@@ -1,14 +1,14 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import {
   Grid, Button, TextField, withStyles,
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { userLogin } from "Services/Auth/RegistrationApi";
-import { setTokenUserId } from 'Redux/state/profile/actions';
+import { userLogin } from "services/auth/RegistrationApi";
+import { setTokenUserId } from "redux/state/profile/Actions";
 
 const styles = () => ({
   submitButton: {
