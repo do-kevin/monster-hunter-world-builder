@@ -10,7 +10,7 @@ function profile(state = profileState, action) {
     case UPDATE_PROFILE:
       return Object.assign({}, state, action.payload);
     case USER_LOGOUT:
-      return null;
+      return profileState;
     default:
       return state;
   }

@@ -1,5 +1,4 @@
-/* eslint-disable react/prefer-stateless-function */
-import React, { Component } from "react";
+import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
@@ -8,19 +7,25 @@ import {
 import { Formik } from "formik";
 
 import { updateProfile, grabId } from "Redux/state/profile/actions";
-import { createProfile } from "Services/Auth/RegistrationApi";
+import { createProfile } from "Services/ProfileApi";
 import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({});
 
-class ProfileCreation extends Component {
-  render() {
-    const {
-      classes, reduxState, initCreation, changePage, setId,
-    } = this.props;
-    const userId = reduxState.profile.user;
+function ProfileCreationForm(props) {
+  const {
+    classes, userProfile, initCreation, changePage, setId,
+  } = props;
+  const userId = userProfile.user;
 
-    return (
+  return (
+    <Grid
+      container
+      justify="center"
+      alignItems="center"
+      direction="column"
+      style={{ width: "110vw" }}
+    >
       <CenterPaper>
         <Formik
           initialValues={{
@@ -96,22 +101,22 @@ class ProfileCreation extends Component {
               />
               <Grid item>
                 <Button color="primary" type="submit" variant="contained">
-                  Submit
+                Submit
                 </Button>
               </Grid>
             </form>
           )}
         </Formik>
       </CenterPaper>
-    );
-  }
+    </Grid>
+  );
 }
 
-const componentWithStyles = withStyles(styles)(ProfileCreation);
+const componentWithStyles = withStyles(styles)(ProfileCreationForm);
 
 function mapStateToProps(state) {
   return {
-    reduxState: state,
+    userProfile: state.profile,
   };
 }
 

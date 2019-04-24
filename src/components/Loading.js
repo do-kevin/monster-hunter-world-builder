@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { withStyles, Grid } from '@material-ui/core/';
 

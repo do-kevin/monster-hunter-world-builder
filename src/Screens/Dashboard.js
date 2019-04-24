@@ -1,24 +1,18 @@
 import React from "react";
 import {
-  withStyles, Toolbar, AppBar, Grid,
+  withStyles,
 } from "@material-ui/core";
 
 const styles = () => ({
-  container: {
-    height: "100%",
-    paddingLeft: "133px",
-    zIndex: "-1",
-  },
   toolbar: {
-    background: "hsl(175, 5%, 75%)",
-    paddingLeft: "110px",
+    height: "100%",
+    background: "grey",
+    width: "100vw",
   },
-  mainSection: {
-    border: "1px solid blue",
-    width: "100%",
-    height: "100vh",
-    marginTop: "80px",
-    position: "relative",
+  content: {
+    background: "white",
+    width: "100vw",
+    height: "100%",
   },
 });
 
@@ -26,27 +20,16 @@ function Dashboard(props) {
   const { classes } = props;
 
   return (
-    <Grid
-      container
-      direction="column"
-      justify="center"
-      alignItems="center"
-      className={classes.container}
-    >
-      <Grid item>
-        <AppBar className={classes.toolbar}>
-          <Toolbar style={{ border: "1px solid red" }} />
-        </AppBar>
-      </Grid>
-      <Grid
-        item
-        className={classes.mainSection}
-      >
-        <main>
-          Placeholder
-        </main>
-      </Grid>
-    </Grid>
+    <div className="dashboard-grid">
+      <div />
+      <nav className={classes.toolbar}>
+        Toolbar placeholder
+      </nav>
+      <div />
+      <main className={classes.content}>
+        Content placeholder
+      </main>
+    </div>
   );
 }
 

@@ -8,7 +8,7 @@ import {
 import { Formik } from "formik";
 
 import { userLogin } from "Services/Auth/RegistrationApi";
-import { authLogin } from 'Redux/state/profile/actions';
+import { setTokenUserId } from 'Redux/state/profile/actions';
 
 const styles = () => ({
   submitButton: {
@@ -21,10 +21,10 @@ function Signin(props) {
   const { classes } = props;
 
   const handleLogin = async (email, password) => {
-    const { history, updateProfile } = props;
+    const { history, tokenUserIdOnLogin } = props;
     const response = await userLogin(email, password);
     const { token, user_id } = response;
-    updateProfile(token, user_id);
+    tokenUserIdOnLogin(token, user_id);
     history.push("/app");
   };
 
@@ -94,7 +94,7 @@ const componentWithStyles = withRouter(withStyles(styles)(Signin));
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateProfile: bindActionCreators(authLogin, dispatch),
+    tokenUserIdOnLogin: bindActionCreators(setTokenUserId, dispatch),
   };
 }
 

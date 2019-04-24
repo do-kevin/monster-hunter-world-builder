@@ -1,10 +1,10 @@
 import { UPDATE_PROFILE, USER_LOGOUT } from './constants';
 
-export const authLogin = (token, id) => dispatch => dispatch({
+export const setTokenUserId = (token, userId) => dispatch => dispatch({
   type: UPDATE_PROFILE,
   payload: {
     token,
-    user: id,
+    user: userId,
   },
 });
 
@@ -26,7 +26,9 @@ export const grabId = id => dispatch => dispatch({
   },
 });
 
-export const mountProfile = (id, user, first_name, last_name, birth_date, phone_number, avatar) => dispatch => dispatch({
+export const fullyUpdateProfile = (
+  id, user, first_name, last_name, birth_date, phone_number, avatar,
+) => dispatch => dispatch({
   type: UPDATE_PROFILE,
   payload: {
     id,
@@ -39,7 +41,7 @@ export const mountProfile = (id, user, first_name, last_name, birth_date, phone_
   },
 });
 
-export const putNewProfileInfo = (returnedData = {}) => dispatch => dispatch({
+export const updateProfileFromRequest = (returnedData = {}) => dispatch => dispatch({
   type: UPDATE_PROFILE,
   payload: returnedData,
 });

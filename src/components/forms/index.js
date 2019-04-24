@@ -2,14 +2,14 @@ import Signin from "./Signin";
 import Signup from "./Signup";
 import ResetPassword from "./ResetPassword";
 import Verification from "./Verification";
-import ProfileCreation from "./ProfileCreation";
-import UpdateProfile from "./UpdateProfile";
+import ProfileCreationForm from "./ProfileCreationForm";
+import ProfileUpdateForm from "./ProfileUpdateForm";
 
 export {
   Signin,
   Signup,
   ResetPassword,
   Verification,
-  ProfileCreation,
-  UpdateProfile,
+  ProfileCreationForm,
+  ProfileUpdateForm,
 };

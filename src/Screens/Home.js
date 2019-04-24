@@ -6,9 +6,10 @@ import { PowerSettingsNew, Settings, Dashboard as DashboardIcon } from "@materia
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import { logout, getProfile } from "Services/Auth/RegistrationApi";
-import { mountProfile, userLogout } from "Redux/state/profile/actions";
-import { UpdateProfile, ProfileCreation } from "components/forms";
+import { logout } from "Services/Auth/RegistrationApi";
+import { getProfile } from "Services/ProfileApi";
+import { fullyUpdateProfile, userLogout } from "Redux/state/profile/actions";
+import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
 import { Dashboard } from "Screens";
 
 const styles = () => ({
@@ -43,18 +44,16 @@ class Home extends Component {
     await loadProfile(id, user, first_name, last_name, birth_date, phone_number, avatar);
   }
 
-  home = () => this.setState({ page: "dashboard" });
-
   render() {
     const { history, classes, signOut } = this.props;
     const { page } = this.state;
     let renderPage;
     switch (page) {
       case "initProfile":
-        renderPage = <ProfileCreation changePage={this.home} />;
+        renderPage = <ProfileCreationForm changePage={() => this.setState({ page: "dashboard" })} />;
         break;
       case "profileSettings":
-        renderPage = <UpdateProfile />;
+        renderPage = <ProfileUpdateForm />;
         break;
       case "dashboard":
         renderPage = <Dashboard />;
@@ -65,69 +64,58 @@ class Home extends Component {
     }
 
     return (
-      <Grid container direction="row-reverse">
-        <Grid item>
-          <AppBar style={{ width: "110px", height: "100vh", left: "0" }}>
-            <Toolbar style={{ height: "100%" }}>
-              <Grid
-                container
-                direction="column"
-                justify="space-between"
-                alignItems="center"
-                style={{ height: "100%", left: "-24px", position: "relative" }}
-              >
-                <Grid>
-                  <Grid
-                    item
-                    className={classes.gridDivider}
+      <main className="home-grid">
+        <AppBar style={{ width: "110px", height: "100vh", left: "0" }}>
+          <Toolbar style={{ height: "100%" }}>
+            <Grid
+              container
+              direction="column"
+              justify="space-between"
+              alignItems="center"
+              style={{ height: "100%", left: "-24px", position: "relative" }}
+            >
+              <Grid>
+                <Grid
+                  item
+                  className={classes.gridDivider}
+                >
+                  <Button
+                    className={classes.iconBtn}
+                    onClick={() => this.setState({ page: "dashboard" })}
+                    disabled={page === "initProfile"}
                   >
-                    <Button
-                      className={classes.iconBtn}
-                      onClick={this.home}
-                      disabled={page === "initProfile"}
-                    >
-                      <DashboardIcon />
-                    </Button>
-                  </Grid>
-                  <Grid
-                    item
-                  >
-                    <Button
-                      className={classes.iconBtn}
-                      onClick={() => {
-                        this.setState({ page: "profileSettings" });
-                      }}
-                    >
-                      <Settings />
-                    </Button>
-                  </Grid>
+                    <DashboardIcon />
+                  </Button>
                 </Grid>
-                <Grid item>
+                <Grid
+                  item
+                >
                   <Button
                     className={classes.iconBtn}
                     onClick={() => {
-                      logout(history.push("/"));
-                      signOut();
+                      this.setState({ page: "profileSettings" });
                     }}
                   >
-                    <PowerSettingsNew />
+                    <Settings />
                   </Button>
                 </Grid>
               </Grid>
-            </Toolbar>
-          </AppBar>
-        </Grid>
-        <Grid
-          container
-          spacing={24}
-          justify="center"
-          alignItems="center"
-          direction="column"
-          style={{ left: "5vw" }}
-        >
-          {renderPage}
-        </Grid>
-      </Grid>
+              <Grid item>
+                <Button
+                  className={classes.iconBtn}
+                  onClick={() => {
+                    logout(history.push("/"));
+                    signOut();
+                  }}
+                >
+                  <PowerSettingsNew />
+                </Button>
+              </Grid>
+            </Grid>
+          </Toolbar>
+        </AppBar>
+        {renderPage}
+      </main>
     );
   }
 }
@@ -142,7 +130,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadProfile: bindActionCreators(mountProfile, dispatch),
+    loadProfile: bindActionCreators(fullyUpdateProfile, dispatch),
     signOut: bindActionCreators(userLogout, dispatch),
   };
 }

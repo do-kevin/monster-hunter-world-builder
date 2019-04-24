@@ -1,11 +1,13 @@
 import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { TextField, withStyles, Button } from "@material-ui/core";
+import {
+  TextField, withStyles, Button, Grid,
+} from "@material-ui/core";
 import { Formik } from "formik";
 
-import { putNewProfileInfo } from "Redux/state/profile/actions";
-import { updateProfile } from "Services/Auth/RegistrationApi";
+import { updateProfileFromRequest } from "Redux/state/profile/actions";
+import { updateProfile } from "Services/ProfileApi";
 import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({
@@ -22,26 +24,20 @@ const txtfields = {
   marginTop: "25px",
 };
 
-function UpdateProfile(props) {
-  const { classes, reduxState, profileUpdate } = props;
+function ProfileUpdateForm(props) {
+  const { classes, userProfile, setNewProfileInfo } = props;
   const {
     first_name, last_name, birth_date, phone_number, id, user,
-  } = reduxState.profile;
-
-  // const userGender = [
-  //   {
-  //     value: "male",
-  //     label: "Male",
-  //   },
-  //   {
-  //     value: "female",
-  //     label: "Female",
-  //   },
-  // ];
+  } = userProfile;
 
   return (
-    <div>
-      <hr />
+    <Grid
+      container
+      justify="center"
+      alignItems="center"
+      direction="column"
+      style={{ width: "110vw" }}
+    >
       <CenterPaper>
         <Formik
           initialValues={{
@@ -49,29 +45,11 @@ function UpdateProfile(props) {
             lname: last_name,
             birthdate: birth_date,
             phonenum: phone_number,
-            // gender: reduxState.profile.gender,
           }}
           onSubmit={async (values) => {
             const {
               fname, lname, birthdate, phonenum,
-              // gender,
             } = values;
-
-            // let avatarUrl = null;
-
-            // const randomNum = Math.floor(Math.random() * 100);
-
-            // switch (gender) {
-            //   case "male":
-            //     avatarUrl = `https://randomuser.me/api/portraits/men/${randomNum}.jpg`;
-            //     break;
-            //   case "female":
-            //     avatarUrl = `https://randomuser.me/api/portraits/women/${randomNum}.jpg`;
-            //     break;
-            //   default:
-            //     avatarUrl = null;
-            //     break;
-            // }
 
             const response = await updateProfile(
               id,
@@ -81,16 +59,13 @@ function UpdateProfile(props) {
               birthdate,
               phonenum,
             );
-
-            // const newObj = await Object.assign(response, { gender });
-            profileUpdate(response);
+            setNewProfileInfo(response);
           }}
         >
           {({ values, handleChange, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
               <h2>Update your profile</h2>
               <img
-                // src={avatar === null ? "https://randomuser.me/api/portraits/lego/1.jpg" : avatar}
                 src="https://randomuser.me/api/portraits/lego/1.jpg"
                 alt="avatar"
                 className={classes.picture}
@@ -117,28 +92,6 @@ function UpdateProfile(props) {
                 onChange={handleChange}
                 value={values.lname}
               />
-              {/* <TextField
-                id="gender"
-                label="Gender"
-                className={classes.TextField}
-                style={{
-                  width: "100%",
-                  marginTop: "25px",
-                  textAlign: "left",
-                }}
-                select
-                type="text"
-                name="gender"
-                margin="normal"
-                onChange={handleChange}
-                value={values.gender}
-              >
-                {userGender.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField> */}
               <TextField
                 id="birthdate"
                 label="Birthday"
@@ -174,21 +127,21 @@ function UpdateProfile(props) {
           )}
         </Formik>
       </CenterPaper>
-    </div>
+    </Grid>
   );
 }
 
-const componentWithStyles = withStyles(styles)(UpdateProfile);
+const componentWithStyles = withStyles(styles)(ProfileUpdateForm);
 
 function mapStateToProps(state) {
   return {
-    reduxState: state,
+    userProfile: state.profile,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    profileUpdate: bindActionCreators(putNewProfileInfo, dispatch),
+    setNewProfileInfo: bindActionCreators(updateProfileFromRequest, dispatch),
   };
 }
 
