@@ -54,6 +54,19 @@ body {
   }
 }
 
+.home-grid {
+  display: grid;
+  grid-template-columns: 114px 100%;
+}
+
+.dashboard-grid {
+  grid-template-columns: 110px 100%;
+  display: grid;
+  grid-template-rows: 79px 100%;
+  grid-gap: 0;
+  z-index: -1;
+}
+
 .NotFound {
   @extend .flexCenter;
   border-radius: 7px;

@@ -1,12 +1,21 @@
 /* eslint-disable react/prefer-stateless-function */
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import { AuthProvider } from 'components/AuthContext';
-import DynamicImport from 'components/DynamicImport';
-import Loading from 'components/Loading';
+import { PrivateRoute } from "Services/Auth/PrivateRoute";
+import { AuthProvider } from "Services/Auth/AuthContext";
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {
+  Home, NotFound, Authentication,
+} from "Screens";
 
 const theme = createMuiTheme({
   typography: {
@@ -14,76 +23,40 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: 'hsl(175, 100%, 20%)',
+      main: "hsl(175, 100%, 20%)",
     },
     secondary: {
-      main: 'hsl(240, 100%, 76%)',
+      main: "hsl(240, 100%, 76%)",
     },
   },
 });
-
-const LoginRegistration = props => (
-  <DynamicImport load={() => import('Screens/LoginRegistration')}>
-    {
-      Component => (Component === null
-        ? (
-          <Loading />
-        )
-        : <Component {...props} />)
-    }
-  </DynamicImport>
-);
-
-const Verification = props => (
-  <DynamicImport load={() => import('Screens/Verification')}>
-    {
-      Component => (Component === null
-        ? (
-          <Loading />
-        )
-        : <Component {...props} />)
-    }
-  </DynamicImport>
-);
-
-const ConfirmPassword = props => (
-  <DynamicImport load={() => import('Screens/ConfirmPassword')}>
-    {
-      Component => (Component === null
-        ? (
-          <Loading />
-        )
-        : <Component {...props} />)
-    }
-  </DynamicImport>
-);
-
-const NotFound = props => (
-  <DynamicImport load={() => import('Screens/NotFound')}>
-    {
-      Component => (Component === null
-        ? (
-          <Loading />
-        )
-        : <Component {...props} />)
-    }
-  </DynamicImport>
-);
 
 class App extends React.Component {
   render() {
     return (
       <AuthProvider>
+        <ToastContainer autoClose={1500} hideProgressBar />
         <MuiThemeProvider theme={theme}>
           <Router>
             <Switch>
-              <Route exact path="/" component={LoginRegistration} />
               <Route
                 exact
-                path="/account_verification"
-                component={Verification}
+                path="/"
+                component={() => <Redirect from="/" to="/auth" />}
               />
-              <Route path="/confirm-password/:initToken" component={ConfirmPassword} />
+              <Route
+                path="/account_verification"
+                component={props => (
+                  <Redirect
+                    to={{
+                      pathname: "/auth/account_verification",
+                      state: { credentials: props.location.search },
+                    }}
+                  />
+                )}
+              />
+              <Route path="/auth/:auth_type?" component={Authentication} />
+              <PrivateRoute path="/app" component={Home} />
               <Route component={NotFound} />
             </Switch>
           </Router>

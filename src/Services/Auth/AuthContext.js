@@ -5,8 +5,8 @@ import React, { Component } from 'react';
 const AuthContext = React.createContext();
 
 class AuthProvider extends Component {
-  setProfileId = (tokenString = '') => {
-    this.setState({ profileId: tokenString });
+  setProfileToken = (tokenString = '') => {
+    this.setState({ profileToken: tokenString });
   }
 
   setUserId = (idString = '') => {
@@ -14,14 +14,14 @@ class AuthProvider extends Component {
   }
 
   state = {
-    profileId: '',
+    profileToken: '',
     userId: '',
-    setProfileId: this.setProfileId,
+    setProfileToken: this.setProfileToken,
     setUserId: this.setUserId,
   }
 
   render() {
-    const { children } = this.props; // eslint-disable-line react/prop-types
+    const { children } = this.props;
 
     return (
       <AuthContext.Provider value={this.state}>
