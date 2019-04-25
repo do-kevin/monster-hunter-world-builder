@@ -23,10 +23,10 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: "hsl(175, 100%, 20%)",
+      main: "hsl(247, 9%, 15%)",
     },
     secondary: {
-      main: "hsl(240, 100%, 76%)",
+      main: "hsl(16, 100%, 60%)",
     },
   },
 });

@@ -23,7 +23,6 @@ function ProfileCreationForm(props) {
       container
       justify="center"
       alignItems="center"
-      direction="column"
       style={{ width: "110vw" }}
     >
       <CenterPaper>
@@ -100,7 +99,12 @@ function ProfileCreationForm(props) {
                 margin="normal"
               />
               <Grid item>
-                <Button color="primary" type="submit" variant="contained">
+                <Button
+                  color="secondary"
+                  style={{ color: "white" }}
+                  type="submit"
+                  variant="contained"
+                >
                 Submit
                 </Button>
               </Grid>

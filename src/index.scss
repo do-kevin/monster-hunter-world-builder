@@ -1,7 +1,8 @@
-$night0: hsl(137, 8%, 17%);
+$night0: hsl(240, 21%, 11%);
 $night1: hsl(137, 5%, 88%);
 $grey0: hsl(0, 0%, 98%);
 $grey1: hsl(175, 5%, 75%);
+$grey3: hsl(247, 9%, 15%);
 $purple: hsl(240, 100%, 76%);
 $purple2: hsl(240, 100%, 66%);
 $aqua0: hsl(175, 100%, 20%);
@@ -31,27 +32,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.formikChild {
-  &__form {
-    &__errorMessage {
-      background: $danger0;
-      padding: 3px 9px;
-      border-radius: 15px;
-      color: hsl(0, 97%, 95%);
-      font-weight: 700;
-      font-size: 14px;
-      transition: background-color 170ms linear;
-    }
-
-    &__errorMessage2 {
-      color: $danger0;
-      ul {
-        list-style-type: none;
-      }
-    }
-  }
 }
 
 .home-grid {
@@ -92,61 +72,5 @@ body {
     &__p3 {
       font-size: 72px;
     }
-  }
-}
-
-.lds-ellipsis {
-  display: inline-block;
-  position: relative;
-  width: 64px;
-  height: 64px;
-}
-.lds-ellipsis div {
-  position: absolute;
-  top: 27px;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: #fff;
-  animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-.lds-ellipsis div:nth-child(1) {
-  left: 6px;
-  animation: lds-ellipsis1 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(2) {
-  left: 6px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(3) {
-  left: 26px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(4) {
-  left: 45px;
-  animation: lds-ellipsis3 0.6s infinite;
-}
-@keyframes lds-ellipsis1 {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-@keyframes lds-ellipsis3 {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
-@keyframes lds-ellipsis2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(19px, 0);
   }
 }

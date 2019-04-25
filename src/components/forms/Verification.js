@@ -13,6 +13,7 @@ const styles = () => ({
   CustomBtn: {
     fontWeight: "600",
     width: "220px",
+    color: "white",
   },
   CustomTxtBtn: {
     padding: "0 2px",
@@ -87,7 +88,7 @@ class Verification extends Component {
             <Grid item>
               <Button
                 className={classes.CustomBtn}
-                color="primary"
+                color="secondary"
                 type="submit"
                 disabled={isSubmitting}
                 variant="contained"

@@ -35,7 +35,6 @@ function ProfileUpdateForm(props) {
       container
       justify="center"
       alignItems="center"
-      direction="column"
       style={{ width: "110vw" }}
     >
       <CenterPaper>
@@ -116,10 +115,10 @@ function ProfileUpdateForm(props) {
                 value={values.phonenum}
               />
               <Button
-                color="primary"
+                color="secondary"
                 type="submit"
                 variant="contained"
-                style={{ marginTop: "25px" }}
+                style={{ marginTop: "25px", color: "white" }}
               >
                   Update
               </Button>

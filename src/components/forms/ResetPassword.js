@@ -11,6 +11,7 @@ const styles = () => ({
   submitButton: {
     fontWeight: "600",
     width: "250px",
+    color: "white",
   },
 });
 
@@ -38,7 +39,7 @@ function ResetPassword(props) {
             <Grid item>
               <Button
                 className={classes.submitButton}
-                color="primary"
+                color="secondary"
                 type="submit"
                 variant="contained"
               >

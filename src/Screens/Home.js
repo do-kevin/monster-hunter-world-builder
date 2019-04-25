@@ -21,7 +21,7 @@ const styles = () => ({
     padding: "25px 5px",
   },
   gridDivider: {
-    borderBottom: "1px ridge hsl(175, 100%, 15%)",
+    borderBottom: "1px ridge hsl(247, 9%, 21%)",
   },
 });
 
@@ -85,6 +85,7 @@ class Home extends Component {
                 >
                   <Button
                     className={classes.iconBtn}
+                    color="secondary"
                     onClick={() => this.setState({ page: "dashboard" })}
                     disabled={page === "initProfile"}
                   >
@@ -96,6 +97,7 @@ class Home extends Component {
                 >
                   <Button
                     className={classes.iconBtn}
+                    color="secondary"
                     onClick={() => {
                       this.setState({ page: "profileSettings" });
                     }}
@@ -107,10 +109,11 @@ class Home extends Component {
               <Grid item>
                 <Button
                   className={classes.iconBtn}
+                  color="secondary"
                   onClick={() => {
-                    logout(history.push("/"));
-                    signOut();
                     emptyUserList();
+                    signOut();
+                    logout(history.push("/"));
                   }}
                 >
                   <PowerSettingsNew />
