@@ -7,7 +7,7 @@ import {
   Card, CardContent, CardMedia, Typography, Slide,
   TextField, InputAdornment,
 } from "@material-ui/core";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { Refresh, Search } from "@material-ui/icons";
 import ReactTable from "react-table";
 import { listAllProfiles } from "services/ProfileApi";
@@ -15,12 +15,37 @@ import { grabUserList, clearUserList } from "redux/state/list/Actions";
 
 const StyledTable = styled.div`
   .rt-tbody {
-    text-align: center;
+    text-align: left;
   }
   .rt-resizable-header-content {
     color: hsl(195, 86%, 40%);
-    font-weight: 600;
     font-size: 18px;
+  }
+  .rt-tr-group {
+    .rt-tr {
+      .rt-td:first-child {
+        flex: 28 !important;
+      }
+      .rt-td:nth-child(2) {
+        padding: 16px;
+      }
+    }
+  }
+  .rt-thead {
+    .rt-tr {
+      .rt-th:first-child {
+        flex: 28 !important;
+      }
+      .rt-th:not(first-child) {
+        text-align: left;
+        div:first-child {
+          padding: 3px 0 3px 13px;
+        }
+      }
+    }
+  }
+  .rt-td {
+    border-bottom: 1px solid hsl(0, 0%, 85%);
   }
 `;
 
@@ -81,6 +106,10 @@ const styles = () => ({
     fontWeight: 600,
     marginRight: "10px",
   },
+  cellStyles: {
+    fontWeight: 600,
+    padding: "14px",
+  },
 });
 
 class Dashboard extends Component {
@@ -93,7 +122,6 @@ class Dashboard extends Component {
 
   async componentDidMount() {
     this.refreshList(this.props);
-    console.log(this);
   }
 
   refreshList = async (props) => {
@@ -128,7 +156,7 @@ class Dashboard extends Component {
         Header: "",
         Cell: () => (
           <Avatar
-            className={classes.smallAvatar}
+            className={`${classes.smallAvatar} table-avatar`}
             src={`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 100)}.jpg`}
             alt="avatar placeholder"
           />
@@ -152,6 +180,8 @@ class Dashboard extends Component {
                   textTransform: "none",
                   fontWeight: 600,
                   color: "hsl(0, 0%, 0%)",
+                  paddingLeft: "3px",
+                  paddingRight: "3px",
                 }}
               >
                 {props.value}
@@ -190,6 +220,44 @@ class Dashboard extends Component {
             </div>
           );
         },
+        filterMethod: (filter, row) => {
+          const id = filter.pivotId || filter.id;
+          if (row.firstName.startsWith(filter.value)) {
+            return String(row.firstName).startsWith(filter.value);
+          }
+          if (row.lastName.startsWith(filter.value)) {
+            return String(row.lastName).startsWith(filter.value);
+          }
+          return row[id] !== undefined ? String(row[id]).startsWith(filter.value) : true;
+        },
+      },
+      {
+        id: "firstName",
+        Header: "First name",
+        accessor: "first_name",
+        Cell: props => (
+          <Typography
+            variant="body1"
+            className={classes.cellStyles}
+          >
+            {props.value}
+          </Typography>
+        ),
+        show: false,
+      },
+      {
+        id: "lastName",
+        Header: "Last name",
+        accessor: "last_name",
+        Cell: props => (
+          <Typography
+            variant="body1"
+            className={classes.cellStyles}
+          >
+            {props.value}
+          </Typography>
+        ),
+        show: false,
       },
       {
         Header: "Birth date",
@@ -197,7 +265,7 @@ class Dashboard extends Component {
         Cell: props => (
           <Typography
             variant="body1"
-            style={{ paddingTop: "5px" }}
+            className={classes.cellStyles}
           >
             {props.value}
           </Typography>
@@ -210,7 +278,7 @@ class Dashboard extends Component {
         Cell: props => (
           <Typography
             variant="body1"
-            style={{ paddingTop: "5px" }}
+            className={classes.cellStyles}
           >
             {props.value}
           </Typography>
@@ -241,7 +309,7 @@ class Dashboard extends Component {
               Refresh list
             </Button>
             <TextField
-              id="fullName"
+              id="fullName firstName lastName"
               type="text"
               className={classes.TextField}
               autoComplete="off"
@@ -266,7 +334,7 @@ class Dashboard extends Component {
           <StyledTable>
             <ReactTable
               ref={this.reactTable}
-              className={`${classes.table} -striped -highlight`}
+              className={`${classes.table} -highlight`}
               data={people}
               columns={columns}
             />
