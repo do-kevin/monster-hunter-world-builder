@@ -4,12 +4,25 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
   withStyles, AppBar, Toolbar, Modal, Button, Avatar,
-  Card, CardContent, CardMedia, Typography,
+  Card, CardContent, CardMedia, Typography, Slide,
+  TextField, InputAdornment,
 } from "@material-ui/core";
-import { Refresh } from "@material-ui/icons";
+import styled, { css } from "styled-components";
+import { Refresh, Search } from "@material-ui/icons";
 import ReactTable from "react-table";
 import { listAllProfiles } from "services/ProfileApi";
 import { grabUserList, clearUserList } from "redux/state/list/Actions";
+
+const StyledTable = styled.div`
+  .rt-tbody {
+    text-align: center;
+  }
+  .rt-resizable-header-content {
+    color: hsl(195, 86%, 40%);
+    font-weight: 600;
+    font-size: 18px;
+  }
+`;
 
 const styles = () => ({
   topbar: {
@@ -60,13 +73,27 @@ const styles = () => ({
     height: "200px",
     background: "linear-gradient(to bottom right, hsl(161, 100%, 61%), hsl(219, 61%, 53%), hsl(235, 100%, 50%))",
   },
+  fullNameFilter: {
+    background: "hsl(205, 11%, 42%)",
+    borderRadius: "4px",
+    height: "33px",
+    color: "white",
+    fontWeight: 600,
+    marginRight: "10px",
+  },
 });
 
 class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.reactTable = React.createRef();
+  }
+
   state = {};
 
   async componentDidMount() {
     this.refreshList(this.props);
+    console.log(this);
   }
 
   refreshList = async (props) => {
@@ -76,7 +103,6 @@ class Dashboard extends Component {
     setUserList(response);
     response.map((result) => {
       const { user } = result;
-      console.log(result);
       Object.assign(this.state, { [`modal${user}`]: false });
       return false;
     });
@@ -135,24 +161,31 @@ class Dashboard extends Component {
                 open={this.state[`modal${userId}`]}
                 onClose={() => { this.closeModal(userId); }}
               >
-                <Card
-                  className={classes.card}
+                <Slide
+                  direction="up"
+                  in={this.state[`modal${userId}`]}
+                  mountOnEnter
+                  unmountOnExit
                 >
-                  <CardMedia
-                    className={classes.media}
+                  <Card
+                    className={`${classes.card}`}
                   >
-                    <Avatar
-                      className={classes.innerAvatar}
-                      src={`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 100)}.jpg`}
-                      alt="avatar placeholder"
-                    />
-                  </CardMedia>
-                  <CardContent>
-                    <Typography variant="h5">{props.value}</Typography>
-                    <Typography variant="subtitle1">{birth_date}</Typography>
-                    <Typography variant="subtitle2">{phone_number}</Typography>
-                  </CardContent>
-                </Card>
+                    <CardMedia
+                      className={classes.media}
+                    >
+                      <Avatar
+                        className={classes.innerAvatar}
+                        src={`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 100)}.jpg`}
+                        alt="avatar placeholder"
+                      />
+                    </CardMedia>
+                    <CardContent>
+                      <Typography variant="h5">{props.value}</Typography>
+                      <Typography variant="subtitle1">{birth_date}</Typography>
+                      <Typography variant="subtitle2">{phone_number}</Typography>
+                    </CardContent>
+                  </Card>
+                </Slide>
               </Modal>
             </div>
           );
@@ -207,16 +240,37 @@ class Dashboard extends Component {
               {" "}
               Refresh list
             </Button>
+            <TextField
+              id="fullName"
+              type="text"
+              className={classes.TextField}
+              autoComplete="off"
+              onChange={event => (
+                this.reactTable.current.filterColumn(columns[1], event.target.value)
+              )}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search />
+                  </InputAdornment>
+                ),
+                className: classes.fullNameFilter,
+              }}
+              placeholder="Search by name..."
+              variant="outlined"
+            />
           </Toolbar>
         </AppBar>
         <div />
         <main className={`${classes.rtWrapper} flexCenter`}>
-          <ReactTable
-            className={`${classes.table} -striped -highlight`}
-            data={people}
-            columns={columns}
-            filterable
-          />
+          <StyledTable>
+            <ReactTable
+              ref={this.reactTable}
+              className={`${classes.table} -striped -highlight`}
+              data={people}
+              columns={columns}
+            />
+          </StyledTable>
         </main>
       </div>
     );
