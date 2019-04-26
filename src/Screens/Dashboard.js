@@ -87,9 +87,6 @@ const styles = () => ({
     borderRadius: "50%",
     boxShadow: "0 2px 10px hsl(219, 61%, 26%)",
   },
-  backdrop: {
-    backgroundColor: "transparent",
-  },
   card: {
     width: "300px",
     outline: "none",
@@ -309,7 +306,7 @@ class Dashboard extends Component {
               Refresh list
             </Button>
             <TextField
-              id="fullName firstName lastName"
+              id="fullName"
               type="text"
               className={classes.TextField}
               autoComplete="off"
