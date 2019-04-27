@@ -69,7 +69,14 @@ class Home extends Component {
 
     return (
       <main className="home-grid">
-        <AppBar style={{ width: "110px", height: "100vh", left: "0" }}>
+        <AppBar
+          style={{
+            gridArea: "Menu",
+            width: "110px",
+            height: "100vh",
+            left: "0",
+          }}
+        >
           <Toolbar style={{ height: "100%" }}>
             <Grid
               container

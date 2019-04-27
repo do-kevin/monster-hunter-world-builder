@@ -1,23 +1,14 @@
-$night0: hsl(240, 21%, 11%);
-$night1: hsl(137, 5%, 88%);
 $grey0: hsl(0, 0%, 98%);
 $grey1: hsl(175, 5%, 75%);
-$grey3: hsl(247, 9%, 15%);
-$purple: hsl(240, 100%, 76%);
-$purple2: hsl(240, 100%, 66%);
-$aqua0: hsl(175, 100%, 20%);
-$aqua1: hsl(175, 100%, 25%);
-$aqua2: hsl(175, 100%, 15%);
 $danger0: hsl(355, 70%, 46%);
+$dark0: hsl(60, 3%, 25%);
 
 * {
 	font-family: Lato, Roboto, Ubuntu, sans-serif;
 }
 
-$danger0: hsl(355, 70%, 46%);
-
 body {
-  width: 100%;
+  max-width: 100%;
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -25,7 +16,25 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: $night0;
+  background-color: $dark0;
+  overflow-x: hidden;
+}
+
+.name-filter {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: hsl(0, 0%, 100%);
+    -webkit-box-shadow: 0 0 0px 1000px hsl(205, 11%, 31%) inset;
+    height: 0;
+    padding-left: 5px;
+  }
+}
+
+.-previous, .-next {
+  button {
+    color: hsl(0, 0%, 100%) !important;
+  }
 }
 
 .flexCenter {
@@ -36,15 +45,19 @@ body {
 
 .home-grid {
   display: grid;
-  grid-template-columns: 114px 100%;
+  grid-template-columns: 110px 1fr;
+  grid-template-areas: "Menu Content";
 }
 
 .dashboard-grid {
-  grid-template-columns: 110px 1fr;
-  display: grid;
-  grid-template-rows: 79px 1fr;
+  @extend .home-grid;
+  grid-template-rows: 70px 1fr;
+  grid-template-areas: 
+    "nav Topbar" 
+    "nav List";
   grid-gap: 0;
   z-index: 2;
+  height: 100%;
 }
 
 .NotFound {

@@ -3,6 +3,7 @@ import NProgress from "multi-nprogress";
 import { toast } from "react-toastify";
 
 const nprogress = NProgress();
+nprogress.configure({ showSpinner: false });
 
 toast.configure({
   autoClose: 1500,

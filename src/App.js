@@ -26,7 +26,7 @@ const theme = createMuiTheme({
       main: "hsl(247, 9%, 15%)",
     },
     secondary: {
-      main: "hsl(16, 100%, 60%)",
+      main: "hsl(235, 100%, 50%)",
     },
   },
 });

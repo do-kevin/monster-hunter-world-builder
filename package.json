@@ -10,6 +10,7 @@
 		"bluebird": "^3.5.4",
 		"formik": "^1.5.1",
 		"inflection": "^1.12.0",
+		"match-sorter": "^3.0.0",
 		"multi-nprogress": "^0.3.3",
 		"node-sass": "^4.11.0",
 		"prop-types": "^15.7.2",

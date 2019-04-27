@@ -10,34 +10,44 @@ import {
 import styled from "styled-components";
 import { Refresh, Search } from "@material-ui/icons";
 import ReactTable from "react-table";
+import matchSorter from "match-sorter";
 import { listAllProfiles } from "services/ProfileApi";
 import { grabUserList, clearUserList } from "redux/state/list/Actions";
 
-const StyledTable = styled.div`
+const textColor = "hsl(0, 0%, 77%)";
+const avatarFlex = "16.5 !important";
+const avatarPadding = "9px 8px";
+
+const StyledTable = styled.main`
   .rt-tbody {
-    text-align: left;
+    text-align: center;
   }
   .rt-resizable-header-content {
-    color: hsl(195, 86%, 40%);
+    color: hsl(0, 0%, 100%);
     font-size: 18px;
   }
   .rt-tr-group {
     .rt-tr {
       .rt-td:first-child {
-        flex: 28 !important;
+        padding: ${avatarPadding}
+        flex: ${avatarFlex}
       }
       .rt-td:nth-child(2) {
         padding: 16px;
+      }
+      .rt-td {
+        color: ${textColor};
       }
     }
   }
   .rt-thead {
     .rt-tr {
       .rt-th:first-child {
-        flex: 28 !important;
+        padding: ${avatarPadding}
+        flex: ${avatarFlex}
       }
       .rt-th:not(first-child) {
-        text-align: left;
+        text-align: center;
         div:first-child {
           padding: 3px 0 3px 13px;
         }
@@ -45,15 +55,17 @@ const StyledTable = styled.div`
     }
   }
   .rt-td {
-    border-bottom: 1px solid hsl(0, 0%, 85%);
+    border-bottom: 1px solid hsl(206, 12%, 15%);
   }
 `;
 
 const styles = () => ({
   topbar: {
+    gridArea: "Topbar",
     height: "70px",
     background: "hsl(205, 11%, 31%)",
     width: "100%",
+    position: "absolute",
   },
   toolbar: {
     paddingLeft: "120px",
@@ -61,16 +73,15 @@ const styles = () => ({
     flexDirection: "row-reverse",
   },
   rtWrapper: {
-    width: "97.2vw",
-    padding: "20px 20px",
+    gridArea: "List",
+    width: "calc(97.5vw - 110px)",
+    padding: "18px 18px 18px 17px",
   },
   table: {
-    minWidth: "900px",
-    maxWidth: "1200px",
-    left: "56px",
-    background: "hsl(0, 0%, 100%)",
-    height: "100vh",
-    top: "-10px",
+    width: "100%",
+    background: "hsl(206, 12%, 17%)",
+    color: textColor,
+    height: "calc(95vh - 70px)",
     borderRadius: "5px",
   },
   smallAvatar: {
@@ -99,13 +110,14 @@ const styles = () => ({
     background: "hsl(205, 11%, 42%)",
     borderRadius: "4px",
     height: "33px",
-    color: "white",
+    color: "hsl(0, 100%, 100%)",
     fontWeight: 600,
     marginRight: "10px",
   },
   cellStyles: {
     fontWeight: 600,
     padding: "14px",
+    color: textColor,
   },
 });
 
@@ -176,16 +188,17 @@ class Dashboard extends Component {
                 style={{
                   textTransform: "none",
                   fontWeight: 600,
-                  color: "hsl(0, 0%, 0%)",
-                  paddingLeft: "3px",
-                  paddingRight: "3px",
+                  color: textColor,
+                  padding: "6px 10px 6px 10px",
                 }}
               >
                 {props.value}
               </Button>
               <Modal
                 className="flexCenter"
-                open={this.state[`modal${userId}`]}
+                open={
+                  this.state[`modal${userId}`] === undefined ? false : this.state[`modal${userId}`]
+                }
                 onClose={() => { this.closeModal(userId); }}
               >
                 <Slide
@@ -217,16 +230,7 @@ class Dashboard extends Component {
             </div>
           );
         },
-        filterMethod: (filter, row) => {
-          const id = filter.pivotId || filter.id;
-          if (row.firstName.startsWith(filter.value)) {
-            return String(row.firstName).startsWith(filter.value);
-          }
-          if (row.lastName.startsWith(filter.value)) {
-            return String(row.lastName).startsWith(filter.value);
-          }
-          return row[id] !== undefined ? String(row[id]).startsWith(filter.value) : true;
-        },
+        filterMethod: (filter, row) => matchSorter([row[filter.id]], filter.value).length !== 0,
       },
       {
         id: "firstName",
@@ -286,7 +290,12 @@ class Dashboard extends Component {
 
     return (
       <div className="dashboard-grid">
-        <div />
+        <div
+          style={{
+            border: "2px dashed white",
+            gridArea: "nav",
+          }}
+        />
         <AppBar
           className={classes.topbar}
         >
@@ -308,7 +317,7 @@ class Dashboard extends Component {
             <TextField
               id="fullName"
               type="text"
-              className={classes.TextField}
+              className={`${classes.TextField} name-filter`}
               autoComplete="off"
               onChange={event => (
                 this.reactTable.current.filterColumn(columns[1], event.target.value)
@@ -326,8 +335,7 @@ class Dashboard extends Component {
             />
           </Toolbar>
         </AppBar>
-        <div />
-        <main className={`${classes.rtWrapper} flexCenter`}>
+        <main className={classes.rtWrapper}>
           <StyledTable>
             <ReactTable
               ref={this.reactTable}
