@@ -7,119 +7,13 @@ import {
   Card, CardContent, CardMedia, Typography, Slide,
   TextField, InputAdornment,
 } from "@material-ui/core";
-import styled from "styled-components";
 import { Refresh, Search } from "@material-ui/icons";
 import ReactTable from "react-table";
 import matchSorter from "match-sorter";
+import inflection from "inflection";
 import { listAllProfiles } from "services/ProfileApi";
 import { grabUserList, clearUserList } from "redux/state/list/Actions";
-
-const textColor = "hsl(0, 0%, 77%)";
-const avatarFlex = "16.5 !important";
-const avatarPadding = "9px 8px";
-
-const StyledTable = styled.main`
-  .rt-tbody {
-    text-align: center;
-  }
-  .rt-resizable-header-content {
-    color: hsl(0, 0%, 100%);
-    font-size: 18px;
-  }
-  .rt-tr-group {
-    .rt-tr {
-      .rt-td:first-child {
-        padding: ${avatarPadding}
-        flex: ${avatarFlex}
-      }
-      .rt-td:nth-child(2) {
-        padding: 16px;
-      }
-      .rt-td {
-        color: ${textColor};
-      }
-    }
-  }
-  .rt-thead {
-    .rt-tr {
-      .rt-th:first-child {
-        padding: ${avatarPadding}
-        flex: ${avatarFlex}
-      }
-      .rt-th:not(first-child) {
-        text-align: center;
-        div:first-child {
-          padding: 3px 0 3px 13px;
-        }
-      }
-    }
-  }
-  .rt-td {
-    border-bottom: 1px solid hsl(206, 12%, 15%);
-  }
-`;
-
-const styles = () => ({
-  topbar: {
-    gridArea: "Topbar",
-    height: "70px",
-    background: "hsl(205, 11%, 31%)",
-    width: "100%",
-    position: "absolute",
-  },
-  toolbar: {
-    paddingLeft: "120px",
-    display: "flex",
-    flexDirection: "row-reverse",
-  },
-  rtWrapper: {
-    gridArea: "List",
-    width: "calc(97.5vw - 110px)",
-    padding: "18px 18px 18px 17px",
-  },
-  table: {
-    width: "100%",
-    background: "hsl(206, 12%, 17%)",
-    color: textColor,
-    height: "calc(95vh - 70px)",
-    borderRadius: "5px",
-  },
-  smallAvatar: {
-    height: "50px",
-    width: "50px",
-    borderRadius: "50%",
-  },
-  innerAvatar: {
-    position: "relative",
-    height: "130px",
-    width: "130px",
-    left: "83px",
-    top: "34px",
-    borderRadius: "50%",
-    boxShadow: "0 2px 10px hsl(219, 61%, 26%)",
-  },
-  card: {
-    width: "300px",
-    outline: "none",
-  },
-  media: {
-    height: "200px",
-    background: "linear-gradient(to bottom right, hsl(161, 100%, 61%), hsl(219, 61%, 53%), hsl(235, 100%, 50%))",
-  },
-  fullNameFilter: {
-    background: "hsl(205, 11%, 42%)",
-    borderRadius: "4px",
-    height: "33px",
-    color: "hsl(0, 100%, 100%)",
-    fontWeight: 600,
-    marginRight: "10px",
-  },
-  cellStyles: {
-    fontWeight: 600,
-    padding: "14px",
-    color: textColor,
-  },
-});
+import { bigStyles, StyledTable, TextButton } from "screens/DashboardStyles";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -145,16 +39,31 @@ class Dashboard extends Component {
     });
   }
 
-  openModal = (userId) => {
+  toggleModal = (userId) => {
     this.setState({
-      [`modal${userId}`]: true,
+      [`modal${userId}`]: !this.state[`modal${userId}`],
     });
   }
 
-  closeModal = (userId) => {
-    this.setState({
-      [`modal${userId}`]: false,
-    });
+  generateColumn = (props, key = "", filterable = false, show = true) => {
+    const { classes } = props;
+    const newCell = {
+      id: inflection.camelize(key, key.charAt(0)),
+      Header: inflection.humanize(key),
+      accessor: key,
+      filterable,
+      show,
+      Cell: d => (
+        <Typography
+          variant="body1"
+          className={classes.cellStyles}
+        >
+          {d.value}
+        </Typography>
+      ),
+    };
+
+    return newCell;
   }
 
   render() {
@@ -181,25 +90,20 @@ class Dashboard extends Component {
           const userId = props.original.user;
           return (
             <div>
-              <Button
-                onClick={() => this.openModal(userId)}
-                variant="text"
-                color="secondary"
-                style={{
-                  textTransform: "none",
-                  fontWeight: 600,
-                  color: textColor,
-                  padding: "6px 10px 6px 10px",
-                }}
-              >
-                {props.value}
-              </Button>
+              <TextButton>
+                <Typography
+                  onClick={() => this.toggleModal(userId)}
+                  variant="body1"
+                >
+                  {props.value}
+                </Typography>
+              </TextButton>
               <Modal
                 className="flexCenter"
                 open={
                   this.state[`modal${userId}`] === undefined ? false : this.state[`modal${userId}`]
                 }
-                onClose={() => { this.closeModal(userId); }}
+                onClose={() => { this.toggleModal(userId); }}
               >
                 <Slide
                   direction="up"
@@ -232,78 +136,19 @@ class Dashboard extends Component {
         },
         filterMethod: (filter, row) => matchSorter([row[filter.id]], filter.value).length !== 0,
       },
-      {
-        id: "firstName",
-        Header: "First name",
-        accessor: "first_name",
-        Cell: props => (
-          <Typography
-            variant="body1"
-            className={classes.cellStyles}
-          >
-            {props.value}
-          </Typography>
-        ),
-        show: false,
-      },
-      {
-        id: "lastName",
-        Header: "Last name",
-        accessor: "last_name",
-        Cell: props => (
-          <Typography
-            variant="body1"
-            className={classes.cellStyles}
-          >
-            {props.value}
-          </Typography>
-        ),
-        show: false,
-      },
-      {
-        Header: "Birth date",
-        accessor: "birth_date",
-        Cell: props => (
-          <Typography
-            variant="body1"
-            className={classes.cellStyles}
-          >
-            {props.value}
-          </Typography>
-        ),
-        filterable: false,
-      },
-      {
-        Header: "Phone number",
-        accessor: "phone_number",
-        Cell: props => (
-          <Typography
-            variant="body1"
-            className={classes.cellStyles}
-          >
-            {props.value}
-          </Typography>
-        ),
-        filterable: false,
-      },
+      this.generateColumn(this.props, "first_name", false, false),
+      this.generateColumn(this.props, "last_name", false, false),
+      this.generateColumn(this.props, "birth_date"),
+      this.generateColumn(this.props, "phone_number"),
     ];
 
     return (
       <div className="dashboard-grid">
-        <div
-          style={{
-            border: "2px dashed white",
-            gridArea: "nav",
-          }}
-        />
-        <AppBar
-          className={classes.topbar}
-        >
+        <div style={{ gridArea: "nav" }} />
+        <AppBar className={classes.topbar}>
           <Toolbar className={classes.toolbar}>
             <Button
-              onClick={() => {
-                this.refreshList(this.props);
-              }}
+              onClick={() => this.refreshList(this.props)}
               color="secondary"
               style={{
                 textTransform: "none",
@@ -350,7 +195,7 @@ class Dashboard extends Component {
   }
 }
 
-const componentWithStyles = withStyles(styles)(Dashboard);
+const componentWithStyles = withStyles(bigStyles)(Dashboard);
 
 function mapStateToProps(state) {
   const { userList } = state;

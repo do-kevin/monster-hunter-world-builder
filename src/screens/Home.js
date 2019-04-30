@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-  withStyles, Toolbar, AppBar, Grid, Button,
+  withStyles, Toolbar, AppBar, Grid,
 } from "@material-ui/core";
 import { PowerSettingsNew, Settings, Dashboard as DashboardIcon } from "@material-ui/icons";
 import { bindActionCreators } from "redux";
@@ -12,16 +12,14 @@ import { fullyUpdateProfile, userLogout } from "redux/state/profile/Actions";
 import { clearUserList } from "redux/state/list/Actions";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
 import { Dashboard } from "screens";
+import { SidebarBtn } from "components/buttons";
 
 const styles = () => ({
-  iconBtn: {
-    margin: "3px 0",
-    color: "hsl(0, 0%, 98%)",
+  sidebar: {
+    gridArea: "Menu",
     width: "110px",
-    padding: "25px 5px",
-  },
-  gridDivider: {
-    borderBottom: "1px ridge hsl(247, 9%, 21%)",
+    height: "100vh",
+    left: "0",
   },
 });
 
@@ -70,12 +68,7 @@ class Home extends Component {
     return (
       <main className="home-grid">
         <AppBar
-          style={{
-            gridArea: "Menu",
-            width: "110px",
-            height: "100vh",
-            left: "0",
-          }}
+          className={classes.sidebar}
         >
           <Toolbar style={{ height: "100%" }}>
             <Grid
@@ -86,46 +79,28 @@ class Home extends Component {
               style={{ height: "100%", left: "-24px", position: "relative" }}
             >
               <Grid>
-                <Grid
-                  item
-                  className={classes.gridDivider}
-                >
-                  <Button
-                    className={classes.iconBtn}
-                    color="secondary"
-                    onClick={() => this.setState({ page: "dashboard" })}
-                    disabled={page === "initProfile"}
-                  >
-                    <DashboardIcon />
-                  </Button>
-                </Grid>
-                <Grid
-                  item
-                >
-                  <Button
-                    className={classes.iconBtn}
-                    color="secondary"
-                    onClick={() => {
-                      this.setState({ page: "profileSettings" });
-                    }}
-                  >
-                    <Settings />
-                  </Button>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Button
-                  className={classes.iconBtn}
+                <SidebarBtn
                   color="secondary"
-                  onClick={() => {
-                    emptyUserList();
-                    signOut();
-                    logout(history.push("/"));
-                  }}
-                >
-                  <PowerSettingsNew />
-                </Button>
+                  icon={<DashboardIcon />}
+                  onClick={() => this.setState({ page: "dashboard" })}
+                  disabled={page === "initProfile"}
+                  divider
+                />
+                <SidebarBtn
+                  color="secondary"
+                  icon={<Settings />}
+                  onClick={() => this.setState({ page: "profileSettings" })}
+                />
               </Grid>
+              <SidebarBtn
+                color="secondary"
+                icon={<PowerSettingsNew />}
+                onClick={() => {
+                  emptyUserList();
+                  signOut();
+                  logout(history.push("/"));
+                }}
+              />
             </Grid>
           </Toolbar>
         </AppBar>
