@@ -56,7 +56,7 @@ class App extends React.Component {
                 )}
               />
               <Route path="/auth/:auth_type?" component={Authentication} />
-              <PrivateRoute path="/app" component={Home} />
+              <PrivateRoute path="/app/:page?" component={Home} />
               <Route component={NotFound} />
             </Switch>
           </Router>

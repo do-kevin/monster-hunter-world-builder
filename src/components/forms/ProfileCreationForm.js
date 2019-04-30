@@ -6,7 +6,7 @@ import {
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { updateProfile, grabId } from "redux/state/profile/Actions";
+import { updateProfile, grabId } from "store/ducks/Profile";
 import { createProfile } from "services/ProfileApi";
 import CenterPaper from "components/layout/CenterPaper";
 
@@ -14,9 +14,9 @@ const styles = () => ({});
 
 function ProfileCreationForm(props) {
   const {
-    classes, userProfile, initCreation, changePage, setId,
+    classes, profile, updateProfile, history, grabId,
   } = props;
-  const userId = userProfile.user;
+  const userId = profile.user;
 
   return (
     <Grid
@@ -38,11 +38,11 @@ function ProfileCreationForm(props) {
               fname, lname, birthdate, phonenum,
             } = values;
 
-            await initCreation(userId, fname, lname, birthdate, phonenum);
+            await updateProfile(userId, fname, lname, birthdate, phonenum);
             const response = await createProfile(userId, fname, lname, birthdate, phonenum);
             if (response) {
-              await setId(response.id);
-              changePage();
+              await grabId(response.id);
+              history.push("/app/dashboard");
             }
           }}
         >
@@ -120,14 +120,14 @@ const componentWithStyles = withStyles(styles)(ProfileCreationForm);
 
 function mapStateToProps(state) {
   return {
-    userProfile: state.profile,
+    profile: state.profile,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    initCreation: bindActionCreators(updateProfile, dispatch),
-    setId: bindActionCreators(grabId, dispatch),
+    updateProfile: bindActionCreators(updateProfile, dispatch),
+    grabId: bindActionCreators(grabId, dispatch),
   };
 }
 

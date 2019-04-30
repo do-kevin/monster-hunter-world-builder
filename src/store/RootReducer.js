@@ -1,10 +1,9 @@
 import { combineReducers } from "redux";
-import profile from "redux/state/profile/Reducers";
-import userList from "redux/state/list/Reducers";
+import { profile, list } from "store/ducks";
 
 const rootReducer = combineReducers({
   profile,
-  userList,
+  list,
 });
 
 export default rootReducer;

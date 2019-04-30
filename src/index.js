@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import configureStore from "redux/Store";
+import configureStore from "store/Store";
 import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App";
 import "react-table/react-table.css";

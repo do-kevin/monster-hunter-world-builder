@@ -1,4 +1,9 @@
-import { UPDATE_PROFILE, USER_LOGOUT } from './Constants';
+// ======================= Constants ======================= //
+
+const UPDATE_PROFILE = "UPDATE_PROFILE";
+const USER_LOGOUT = "USER_LOGOUT";
+
+// ======================= Actions ======================= //
 
 export const setTokenUserId = (token, userId) => dispatch => dispatch({
   type: UPDATE_PROFILE,
@@ -8,7 +13,7 @@ export const setTokenUserId = (token, userId) => dispatch => dispatch({
   },
 });
 
-export const updateProfile = (user = null, fname = '', lname = '', birthDate = '', phoneNum = '') => dispatch => dispatch({
+export const updateProfile = (user = null, fname = "", lname = "", birthDate = "", phoneNum = "") => dispatch => dispatch({
   type: UPDATE_PROFILE,
   payload: {
     user,
@@ -47,3 +52,22 @@ export const updateProfileFromRequest = (returnedData = {}) => dispatch => dispa
 });
 
 export const userLogout = () => dispatch => dispatch({ type: USER_LOGOUT });
+
+// ======================= Reducers ======================= //
+
+const profileState = {
+  user: null,
+};
+
+function profile(state = profileState, action) {
+  switch (action.type) {
+    case UPDATE_PROFILE:
+      return Object.assign({}, state, action.payload);
+    case USER_LOGOUT:
+      return profileState;
+    default:
+      return state;
+  }
+}
+
+export default profile;

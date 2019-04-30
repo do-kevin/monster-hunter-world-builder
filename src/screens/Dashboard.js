@@ -11,8 +11,9 @@ import { Refresh, Search } from "@material-ui/icons";
 import ReactTable from "react-table";
 import matchSorter from "match-sorter";
 import inflection from "inflection";
+
 import { listAllProfiles } from "services/ProfileApi";
-import { grabUserList, clearUserList } from "redux/state/list/Actions";
+import { grabUserList, clearUserList } from "store/ducks/List";
 import { bigStyles, StyledTable, TextButton } from "screens/DashboardStyles";
 
 class Dashboard extends Component {
@@ -62,19 +63,18 @@ class Dashboard extends Component {
         </Typography>
       ),
     };
-
     return newCell;
   }
 
   render() {
-    const { classes, people } = this.props;
+    const { classes, list } = this.props;
 
     const columns = [
       {
         Header: "",
         Cell: () => (
           <Avatar
-            className={`${classes.smallAvatar} table-avatar`}
+            className={classes.smallAvatar}
             src={`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 100)}.jpg`}
             alt="avatar placeholder"
           />
@@ -150,10 +150,7 @@ class Dashboard extends Component {
             <Button
               onClick={() => this.refreshList(this.props)}
               color="secondary"
-              style={{
-                textTransform: "none",
-                color: "white",
-              }}
+              className={classes.refreshBtn}
             >
               <Refresh />
               {" "}
@@ -185,7 +182,7 @@ class Dashboard extends Component {
             <ReactTable
               ref={this.reactTable}
               className={`${classes.table} -highlight`}
-              data={people}
+              data={list}
               columns={columns}
             />
           </StyledTable>
@@ -198,9 +195,9 @@ class Dashboard extends Component {
 const componentWithStyles = withStyles(bigStyles)(Dashboard);
 
 function mapStateToProps(state) {
-  const { userList } = state;
+  const { list } = state;
   return {
-    people: userList,
+    list,
   };
 }
 

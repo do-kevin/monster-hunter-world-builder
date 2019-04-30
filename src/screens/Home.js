@@ -1,15 +1,17 @@
 import React, { Component } from "react";
+import { Switch } from "react-router-dom";
+import { PrivateRoute } from "services/auth/PrivateRoute";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import {
   withStyles, Toolbar, AppBar, Grid,
 } from "@material-ui/core";
 import { PowerSettingsNew, Settings, Dashboard as DashboardIcon } from "@material-ui/icons";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
 
 import { logout } from "services/auth/RegistrationApi";
 import { getProfile } from "services/ProfileApi";
-import { fullyUpdateProfile, userLogout } from "redux/state/profile/Actions";
-import { clearUserList } from "redux/state/list/Actions";
+import { fullyUpdateProfile, userLogout } from "store/ducks/Profile";
+import { clearUserList } from "store/ducks/List";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
 import { Dashboard } from "screens";
 import { SidebarBtn } from "components/buttons";
@@ -24,46 +26,30 @@ const styles = () => ({
 });
 
 class Home extends Component {
-  state = {
-    page: "dashboard",
-  };
-
   async componentDidMount() {
-    const { loadProfile, userProfile } = this.props;
+    const {
+      fullyUpdateProfile, profile, history,
+    } = this.props;
     const response = await getProfile();
-    const { user } = userProfile;
+    const { user } = profile;
 
     if (response === false) {
-      this.setState({ page: "initProfile" });
+      history.push("/app/create-profile");
+    } else {
+      history.push("/app/dashboard");
     }
 
     const {
       id, first_name, last_name, birth_date, phone_number, avatar,
     } = response;
-    await loadProfile(id, user, first_name, last_name, birth_date, phone_number, avatar);
+    await fullyUpdateProfile(id, user, first_name, last_name, birth_date, phone_number, avatar);
   }
 
   render() {
     const {
-      history, classes, signOut, emptyUserList,
+      history, classes, userLogout, clearUserList, location,
     } = this.props;
-    const { page } = this.state;
-    let renderPage;
-
-    switch (page) {
-      case "initProfile":
-        renderPage = <ProfileCreationForm changePage={() => this.setState({ page: "dashboard" })} />;
-        break;
-      case "profileSettings":
-        renderPage = <ProfileUpdateForm />;
-        break;
-      case "dashboard":
-        renderPage = <Dashboard />;
-        break;
-      default:
-        renderPage = <Dashboard />;
-        break;
-    }
+    const { pathname } = location;
 
     return (
       <main className="home-grid">
@@ -82,29 +68,44 @@ class Home extends Component {
                 <SidebarBtn
                   color="secondary"
                   icon={<DashboardIcon />}
-                  onClick={() => this.setState({ page: "dashboard" })}
-                  disabled={page === "initProfile"}
+                  to="/app/dashboard"
+                  disabled={pathname === "/app/create-profile"}
                   divider
                 />
                 <SidebarBtn
                   color="secondary"
                   icon={<Settings />}
-                  onClick={() => this.setState({ page: "profileSettings" })}
+                  to="/app/settings"
+                  disabled={pathname === "/app/create-profile"}
                 />
               </Grid>
               <SidebarBtn
                 color="secondary"
                 icon={<PowerSettingsNew />}
+                to=""
                 onClick={() => {
-                  emptyUserList();
-                  signOut();
+                  clearUserList();
+                  userLogout();
                   logout(history.push("/"));
                 }}
               />
             </Grid>
           </Toolbar>
         </AppBar>
-        {renderPage}
+        <Switch>
+          <PrivateRoute
+            path="/app/create-profile"
+            component={ProfileCreationForm}
+          />
+          <PrivateRoute
+            path="/app/dashboard"
+            component={Dashboard}
+          />
+          <PrivateRoute
+            path="/app/settings"
+            component={ProfileUpdateForm}
+          />
+        </Switch>
       </main>
     );
   }
@@ -114,15 +115,15 @@ const componentWithStyles = withStyles(styles)(Home);
 
 function mapStateToProps(state) {
   return {
-    userProfile: state.profile,
+    profile: state.profile,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadProfile: bindActionCreators(fullyUpdateProfile, dispatch),
-    signOut: bindActionCreators(userLogout, dispatch),
-    emptyUserList: bindActionCreators(clearUserList, dispatch),
+    fullyUpdateProfile: bindActionCreators(fullyUpdateProfile, dispatch),
+    userLogout: bindActionCreators(userLogout, dispatch),
+    clearUserList: bindActionCreators(clearUserList, dispatch),
   };
 }
 

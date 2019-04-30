@@ -1,5 +1,6 @@
 import React from "react";
 import { withStyles, Button, Grid } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const styles = () => ({
@@ -16,9 +17,8 @@ const styles = () => ({
 
 function SidebarBtn(props) {
   const {
-    classes, label, icon, divider, color, onClick, disabled,
+    classes, label, icon, divider, color, onClick, disabled, to,
   } = props;
-  console.log(label);
 
   SidebarBtn.defaultProps = {
     label: "",
@@ -34,14 +34,21 @@ function SidebarBtn(props) {
       item
       className={divider ? classes.gridDivider : ""}
     >
-      <Button
-        className={classes.sidebarBtn}
-        color={color}
-        onClick={onClick}
-        disabled={disabled}
+      <Link
+        to={to}
+        style={disabled ? { pointerEvents: "none" } : null}
       >
-        {icon}{" "}{label}
-      </Button>
+        <Button
+          className={classes.sidebarBtn}
+          color={color}
+          onClick={onClick}
+          disabled={disabled}
+        >
+          {icon}
+          {" "}
+          {label}
+        </Button>
+      </Link>
     </Grid>
   );
 }

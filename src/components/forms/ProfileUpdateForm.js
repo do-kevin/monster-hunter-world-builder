@@ -6,7 +6,7 @@ import {
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { updateProfileFromRequest } from "redux/state/profile/Actions";
+import { updateProfileFromRequest } from "store/ducks/Profile";
 import { updateProfile } from "services/ProfileApi";
 import CenterPaper from "components/layout/CenterPaper";
 
@@ -25,10 +25,10 @@ const txtfields = {
 };
 
 function ProfileUpdateForm(props) {
-  const { classes, userProfile, setNewProfileInfo } = props;
+  const { classes, profile, updateProfileFromRequest } = props;
   const {
     first_name, last_name, birth_date, phone_number, id, user,
-  } = userProfile;
+  } = profile;
 
   return (
     <Grid
@@ -58,7 +58,7 @@ function ProfileUpdateForm(props) {
               birthdate,
               phonenum,
             );
-            setNewProfileInfo(response);
+            updateProfileFromRequest(response);
           }}
         >
           {({ values, handleChange, handleSubmit }) => (
@@ -134,13 +134,13 @@ const componentWithStyles = withStyles(styles)(ProfileUpdateForm);
 
 function mapStateToProps(state) {
   return {
-    userProfile: state.profile,
+    profile: state.profile,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    setNewProfileInfo: bindActionCreators(updateProfileFromRequest, dispatch),
+    updateProfileFromRequest: bindActionCreators(updateProfileFromRequest, dispatch),
   };
 }
 

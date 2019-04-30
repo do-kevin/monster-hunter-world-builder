@@ -119,6 +119,10 @@ const bigStyles = () => ({
     padding: "14px",
     color: textColor,
   },
+  refreshBtn: {
+    textTransform: "none",
+    color: "white",
+  },
 });
 
 export {
