@@ -3,8 +3,7 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
-  withStyles, AppBar, Toolbar, Modal, Button, Avatar,
-  Card, CardContent, CardMedia, Typography, Slide,
+  withStyles, AppBar, Toolbar, Typography, Button, Avatar,
   TextField, InputAdornment,
 } from "@material-ui/core";
 import { Refresh, Search } from "@material-ui/icons";
@@ -12,9 +11,20 @@ import ReactTable from "react-table";
 import matchSorter from "match-sorter";
 import inflection from "inflection";
 
-import { listAllProfiles } from "services/ProfileApi";
-import { grabUserList, clearUserList } from "store/ducks/List";
+import { retrieveUserList } from "store/ducks/List";
 import { bigStyles, StyledTable, TextButton } from "screens/DashboardStyles";
+import ModalCard from "components/ModalCard";
+
+const defaultState = {
+  selectedUser: [
+    "",
+    {
+      birth_date: "",
+      phone_number: "",
+    },
+  ],
+  openModal: false,
+};
 
 class Dashboard extends Component {
   constructor(props) {
@@ -22,32 +32,27 @@ class Dashboard extends Component {
     this.reactTable = React.createRef();
   }
 
-  state = {};
+  state = defaultState;
 
   async componentDidMount() {
-    this.refreshList(this.props);
+    this.refreshList();
   }
 
-  refreshList = async (props) => {
-    const { setUserList } = props;
-    await clearUserList();
-    const response = await listAllProfiles();
-    setUserList(response);
-    response.map((result) => {
-      const { user } = result;
-      Object.assign(this.state, { [`modal${user}`]: false });
-      return false;
-    });
+  shouldComponentUpdate(nextProps, prevState) {
+    if (prevState.openModal !== this.state.openModal) {
+      return true;
+    }
+    return false;
   }
 
-  toggleModal = (userId) => {
-    this.setState({
-      [`modal${userId}`]: !this.state[`modal${userId}`],
-    });
+  refreshList = async () => {
+    const { retrieveUserList } = this.props;
+    this.setState(defaultState);
+    retrieveUserList();
   }
 
-  generateColumn = (props, key = "", filterable = false, show = true) => {
-    const { classes } = props;
+  generateColumn = (key = "", filterable = false, show = true) => {
+    const { classes } = this.props;
     const newCell = {
       id: inflection.camelize(key, key.charAt(0)),
       Header: inflection.humanize(key),
@@ -68,7 +73,6 @@ class Dashboard extends Component {
 
   render() {
     const { classes, list } = this.props;
-
     const columns = [
       {
         Header: "",
@@ -86,60 +90,33 @@ class Dashboard extends Component {
         Header: "Full name",
         accessor: d => `${d.first_name} ${d.last_name}`,
         Cell: (props) => {
-          const { birth_date, phone_number } = props.original;
-          const userId = props.original.user;
+          const userData = [
+            props.value,
+            props.original,
+          ];
+
           return (
-            <div>
-              <TextButton>
-                <Typography
-                  onClick={() => this.toggleModal(userId)}
-                  variant="body1"
-                >
-                  {props.value}
-                </Typography>
-              </TextButton>
-              <Modal
-                className="flexCenter"
-                open={
-                  this.state[`modal${userId}`] === undefined ? false : this.state[`modal${userId}`]
-                }
-                onClose={() => { this.toggleModal(userId); }}
+            <TextButton>
+              <Typography
+                onClick={() => {
+                  this.setState({
+                    selectedUser: userData,
+                    openModal: true,
+                  });
+                }}
+                variant="body1"
               >
-                <Slide
-                  direction="up"
-                  in={this.state[`modal${userId}`]}
-                  mountOnEnter
-                  unmountOnExit
-                >
-                  <Card
-                    className={`${classes.card}`}
-                  >
-                    <CardMedia
-                      className={classes.media}
-                    >
-                      <Avatar
-                        className={classes.innerAvatar}
-                        src={`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 100)}.jpg`}
-                        alt="avatar placeholder"
-                      />
-                    </CardMedia>
-                    <CardContent>
-                      <Typography variant="h5">{props.value}</Typography>
-                      <Typography variant="subtitle1">{birth_date}</Typography>
-                      <Typography variant="subtitle2">{phone_number}</Typography>
-                    </CardContent>
-                  </Card>
-                </Slide>
-              </Modal>
-            </div>
+                {props.value}
+              </Typography>
+            </TextButton>
           );
         },
         filterMethod: (filter, row) => matchSorter([row[filter.id]], filter.value).length !== 0,
       },
-      this.generateColumn(this.props, "first_name", false, false),
-      this.generateColumn(this.props, "last_name", false, false),
-      this.generateColumn(this.props, "birth_date"),
-      this.generateColumn(this.props, "phone_number"),
+      this.generateColumn("first_name", false, false),
+      this.generateColumn("last_name", false, false),
+      this.generateColumn("birth_date"),
+      this.generateColumn("phone_number"),
     ];
 
     return (
@@ -148,7 +125,7 @@ class Dashboard extends Component {
         <AppBar className={classes.topbar}>
           <Toolbar className={classes.toolbar}>
             <Button
-              onClick={() => this.refreshList(this.props)}
+              onClick={() => this.refreshList()}
               color="secondary"
               className={classes.refreshBtn}
             >
@@ -178,6 +155,17 @@ class Dashboard extends Component {
           </Toolbar>
         </AppBar>
         <main className={classes.rtWrapper}>
+          <ModalCard
+            modalData={this.state.selectedUser}
+            openModal={this.state.openModal}
+            onClose={() => {
+              this.setState({ openModal: false });
+              setTimeout(() => {
+                this.setState(defaultState.selectedUser);
+              }, 1000);
+            }
+            }
+          />
           <StyledTable>
             <ReactTable
               ref={this.reactTable}
@@ -203,7 +191,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setUserList: bindActionCreators(grabUserList, dispatch),
+    retrieveUserList: bindActionCreators(retrieveUserList, dispatch),
   };
 }
 
