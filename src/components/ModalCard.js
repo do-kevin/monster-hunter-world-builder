@@ -28,6 +28,7 @@ function ModalCard(props) {
           >
             <CardMedia
               className={classes.media}
+              src={`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 100)}.jpg`}
             >
               <Avatar
                 className={classes.innerAvatar}

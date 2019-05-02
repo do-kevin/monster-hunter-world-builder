@@ -20,15 +20,6 @@ function SidebarBtn(props) {
     classes, label, icon, divider, color, onClick, disabled, to,
   } = props;
 
-  SidebarBtn.defaultProps = {
-    label: "",
-  };
-
-  SidebarBtn.propTypes = {
-    icon: PropTypes.element.isRequired,
-    label: PropTypes.string,
-  };
-
   return (
     <Grid
       item
@@ -52,5 +43,14 @@ function SidebarBtn(props) {
     </Grid>
   );
 }
+
+SidebarBtn.defaultProps = {
+  label: "",
+};
+
+SidebarBtn.propTypes = {
+  icon: PropTypes.element.isRequired,
+  label: PropTypes.string,
+};
 
 export default withStyles(styles)(SidebarBtn);

@@ -6,8 +6,7 @@ import {
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { updateProfileFromRequest } from "store/ducks/Profile";
-import { updateProfile } from "services/ProfileApi";
+import { fullProfileUpdate } from "store/ducks/Profile";
 import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({
@@ -25,7 +24,7 @@ const txtfields = {
 };
 
 function ProfileUpdateForm(props) {
-  const { classes, profile, updateProfileFromRequest } = props;
+  const { classes, profile, fullProfileUpdate } = props;
   const {
     first_name, last_name, birth_date, phone_number, id, user,
   } = profile;
@@ -50,7 +49,7 @@ function ProfileUpdateForm(props) {
               fname, lname, birthdate, phonenum,
             } = values;
 
-            const response = await updateProfile(
+            fullProfileUpdate(
               id,
               user,
               fname,
@@ -58,7 +57,6 @@ function ProfileUpdateForm(props) {
               birthdate,
               phonenum,
             );
-            updateProfileFromRequest(response);
           }}
         >
           {({ values, handleChange, handleSubmit }) => (
@@ -132,17 +130,11 @@ function ProfileUpdateForm(props) {
 
 const componentWithStyles = withStyles(styles)(ProfileUpdateForm);
 
-function mapStateToProps(state) {
-  return {
-    profile: state.profile,
-  };
-}
+const mapStateToProps = state => ({ profile: state.profile });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    updateProfileFromRequest: bindActionCreators(updateProfileFromRequest, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  fullProfileUpdate: bindActionCreators(fullProfileUpdate, dispatch),
+});
 
 export default connect(
   mapStateToProps,

@@ -38,14 +38,7 @@ class Dashboard extends Component {
     this.refreshList();
   }
 
-  shouldComponentUpdate(nextProps, prevState) {
-    if (prevState.openModal !== this.state.openModal) {
-      return true;
-    }
-    return false;
-  }
-
-  refreshList = async () => {
+  refreshList = () => {
     const { retrieveUserList } = this.props;
     this.setState(defaultState);
     retrieveUserList();
@@ -158,13 +151,7 @@ class Dashboard extends Component {
           <ModalCard
             modalData={this.state.selectedUser}
             openModal={this.state.openModal}
-            onClose={() => {
-              this.setState({ openModal: false });
-              setTimeout(() => {
-                this.setState(defaultState.selectedUser);
-              }, 1000);
-            }
-            }
+            onClose={() => this.setState({ openModal: false })}
           />
           <StyledTable>
             <ReactTable
@@ -182,17 +169,10 @@ class Dashboard extends Component {
 
 const componentWithStyles = withStyles(bigStyles)(Dashboard);
 
-function mapStateToProps(state) {
-  const { list } = state;
-  return {
-    list,
-  };
-}
+const mapStateToProps = state => ({ list: state.list });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    retrieveUserList: bindActionCreators(retrieveUserList, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  retrieveUserList: bindActionCreators(retrieveUserList, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

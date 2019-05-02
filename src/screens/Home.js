@@ -9,8 +9,7 @@ import {
 import { PowerSettingsNew, Settings, Dashboard as DashboardIcon } from "@material-ui/icons";
 
 import { logout } from "services/auth/RegistrationApi";
-import { getProfile } from "services/ProfileApi";
-import { fullyUpdateProfile, userLogout } from "store/ducks/Profile";
+import { getProfile, userLogout } from "store/ducks/Profile";
 import { clearUserList } from "store/ducks/List";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
 import { Dashboard } from "screens";
@@ -28,21 +27,15 @@ const styles = () => ({
 class Home extends Component {
   async componentDidMount() {
     const {
-      fullyUpdateProfile, profile, history,
+      getProfile, history,
     } = this.props;
     const response = await getProfile();
-    const { user } = profile;
 
     if (response === false) {
       history.push("/app/create-profile");
     } else {
       history.push("/app/dashboard");
     }
-
-    const {
-      id, first_name, last_name, birth_date, phone_number, avatar,
-    } = response;
-    await fullyUpdateProfile(id, user, first_name, last_name, birth_date, phone_number, avatar);
   }
 
   render() {
@@ -113,18 +106,12 @@ class Home extends Component {
 
 const componentWithStyles = withStyles(styles)(Home);
 
-function mapStateToProps(state) {
-  return {
-    profile: state.profile,
-  };
-}
+const mapStateToProps = state => ({ profile: state.profile });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fullyUpdateProfile: bindActionCreators(fullyUpdateProfile, dispatch),
-    userLogout: bindActionCreators(userLogout, dispatch),
-    clearUserList: bindActionCreators(clearUserList, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  getProfile: bindActionCreators(getProfile, dispatch),
+  userLogout: bindActionCreators(userLogout, dispatch),
+  clearUserList: bindActionCreators(clearUserList, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

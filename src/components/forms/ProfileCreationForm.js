@@ -6,15 +6,14 @@ import {
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { updateProfile, grabId } from "store/ducks/Profile";
-import { createProfile } from "services/ProfileApi";
+import { createNewProfile } from "store/ducks/Profile";
 import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({});
 
 function ProfileCreationForm(props) {
   const {
-    classes, profile, updateProfile, history, grabId,
+    classes, profile, history, createNewProfile,
   } = props;
   const userId = profile.user;
 
@@ -38,10 +37,8 @@ function ProfileCreationForm(props) {
               fname, lname, birthdate, phonenum,
             } = values;
 
-            await updateProfile(userId, fname, lname, birthdate, phonenum);
-            const response = await createProfile(userId, fname, lname, birthdate, phonenum);
-            if (response) {
-              await grabId(response.id);
+            const result = await createNewProfile(userId, fname, lname, birthdate, phonenum);
+            if (result === true) {
               history.push("/app/dashboard");
             }
           }}
@@ -118,18 +115,11 @@ function ProfileCreationForm(props) {
 
 const componentWithStyles = withStyles(styles)(ProfileCreationForm);
 
-function mapStateToProps(state) {
-  return {
-    profile: state.profile,
-  };
-}
+const mapStateToProps = state => ({ profile: state.profile });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    updateProfile: bindActionCreators(updateProfile, dispatch),
-    grabId: bindActionCreators(grabId, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  createNewProfile: bindActionCreators(createNewProfile, dispatch),
+});
 
 export default connect(
   mapStateToProps,

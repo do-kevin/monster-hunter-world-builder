@@ -1,3 +1,9 @@
+import {
+  createProfile,
+  updateProfile as updateProfileReq,
+  getProfile as getProfileReq,
+} from "services/ProfileApi";
+
 // ======================= Constants ======================= //
 
 const UPDATE_PROFILE = "UPDATE_PROFILE";
@@ -13,6 +19,24 @@ export const setTokenUserId = (token, userId) => dispatch => dispatch({
   },
 });
 
+export const createNewProfile = (
+  user = null,
+  fname = "",
+  lname = "",
+  birthDate = "",
+  phoneNum = "",
+) => async (dispatch) => {
+  const response = await createProfile(user, fname, lname, birthDate, phoneNum);
+  if (response) {
+    dispatch({
+      type: UPDATE_PROFILE,
+      payload: response,
+    });
+    return true;
+  }
+  return false;
+};
+
 export const updateProfile = (user = null, fname = "", lname = "", birthDate = "", phoneNum = "") => dispatch => dispatch({
   type: UPDATE_PROFILE,
   payload: {
@@ -24,32 +48,40 @@ export const updateProfile = (user = null, fname = "", lname = "", birthDate = "
   },
 });
 
-export const grabId = id => dispatch => dispatch({
-  type: UPDATE_PROFILE,
-  payload: {
-    id,
-  },
-});
+export const getProfile = () => async (dispatch) => {
+  const response = await getProfileReq();
+  if (response) {
+    dispatch({
+      type: UPDATE_PROFILE,
+      payload: response,
+    });
+    return true;
+  }
+  return false;
+};
 
-export const fullyUpdateProfile = (
-  id, user, first_name, last_name, birth_date, phone_number, avatar,
-) => dispatch => dispatch({
-  type: UPDATE_PROFILE,
-  payload: {
+export const fullProfileUpdate = (
+  id = null,
+  user = null,
+  fname = "",
+  lname = "",
+  birthdate = "",
+  phonenum = "",
+) => async (dispatch) => {
+  const response = await updateProfileReq(
     id,
     user,
-    first_name,
-    last_name,
-    birth_date,
-    phone_number,
-    avatar,
-  },
-});
+    fname,
+    lname,
+    birthdate,
+    phonenum,
+  );
 
-export const updateProfileFromRequest = (returnedData = {}) => dispatch => dispatch({
-  type: UPDATE_PROFILE,
-  payload: returnedData,
-});
+  dispatch({
+    type: UPDATE_PROFILE,
+    payload: response,
+  });
+};
 
 export const userLogout = () => dispatch => dispatch({ type: USER_LOGOUT });
 

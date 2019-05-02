@@ -93,11 +93,9 @@ function Signin(props) {
 
 const componentWithStyles = withRouter(withStyles(styles)(Signin));
 
-function mapDispatchToProps(dispatch) {
-  return {
-    setTokenUserId: bindActionCreators(setTokenUserId, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  setTokenUserId: bindActionCreators(setTokenUserId, dispatch),
+});
 
 export default connect(
   null,
