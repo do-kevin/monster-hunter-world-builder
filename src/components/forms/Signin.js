@@ -1,19 +1,20 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import {
   Grid, Button, TextField, withStyles,
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { userLogin } from "Services/Auth/RegistrationApi";
-import { setTokenUserId } from 'Redux/state/profile/actions';
+import { userLogin } from "services/auth/RegistrationApi";
+import { setTokenUserId } from "store/ducks/Profile";
 
 const styles = () => ({
   submitButton: {
     fontWeight: "600",
     width: "250px",
+    color: "white",
   },
 });
 
@@ -21,10 +22,10 @@ function Signin(props) {
   const { classes } = props;
 
   const handleLogin = async (email, password) => {
-    const { history, tokenUserIdOnLogin } = props;
+    const { history, setTokenUserId } = props;
     const response = await userLogin(email, password);
     const { token, user_id } = response;
-    tokenUserIdOnLogin(token, user_id);
+    setTokenUserId(token, user_id);
     history.push("/app");
   };
 
@@ -62,7 +63,7 @@ function Signin(props) {
             <Grid item>
               <Button
                 className={classes.submitButton}
-                color="primary"
+                color="secondary"
                 type="submit"
                 variant="contained"
               >
@@ -92,11 +93,9 @@ function Signin(props) {
 
 const componentWithStyles = withRouter(withStyles(styles)(Signin));
 
-function mapDispatchToProps(dispatch) {
-  return {
-    tokenUserIdOnLogin: bindActionCreators(setTokenUserId, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  setTokenUserId: bindActionCreators(setTokenUserId, dispatch),
+});
 
 export default connect(
   null,

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { AuthContext } from "Services/Auth/AuthContext";
+import { AuthContext } from "services/auth/AuthContext";
 import queryString from "query-string";
 
 import CenterPaper from "components/layout/CenterPaper";
@@ -23,6 +23,7 @@ class LoginRegistration extends Component {
         form = <Signup />;
         break;
       case "account_verification":
+        // eslint-disable-next-line no-case-declarations
         const { user_id = null, token = null } = queryString.parse(
           location.state.credentials,
         );

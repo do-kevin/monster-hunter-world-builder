@@ -3,6 +3,7 @@ import NProgress from "multi-nprogress";
 import { toast } from "react-toastify";
 
 const nprogress = NProgress();
+nprogress.configure({ showSpinner: false });
 
 toast.configure({
   autoClose: 1500,
@@ -46,8 +47,11 @@ class Api {
       return response.data;
     } catch (error) {
       console.error(error.request);
-      toast.error(error.message);
-      toast.error(error.request.responseText);
+      if (error.message && error.request.statusText) {
+        toast.error(`${error.message}\n${error.request.statusText}`);
+      } else {
+        toast.error(error.message);
+      }
       return false;
     } finally {
       nprogress.done();

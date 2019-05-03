@@ -10,12 +10,12 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { PrivateRoute } from "Services/Auth/PrivateRoute";
-import { AuthProvider } from "Services/Auth/AuthContext";
+import { PrivateRoute } from "services/auth/PrivateRoute";
+import { AuthProvider } from "services/auth/AuthContext";
 
 import {
   Home, NotFound, Authentication,
-} from "Screens";
+} from "screens";
 
 const theme = createMuiTheme({
   typography: {
@@ -23,10 +23,10 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: "hsl(175, 100%, 20%)",
+      main: "hsl(247, 9%, 15%)",
     },
     secondary: {
-      main: "hsl(240, 100%, 76%)",
+      main: "hsl(235, 100%, 50%)",
     },
   },
 });
@@ -56,7 +56,7 @@ class App extends React.Component {
                 )}
               />
               <Route path="/auth/:auth_type?" component={Authentication} />
-              <PrivateRoute path="/app" component={Home} />
+              <PrivateRoute path="/app/" component={Home} />
               <Route component={NotFound} />
             </Switch>
           </Router>

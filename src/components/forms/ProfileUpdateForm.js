@@ -6,8 +6,7 @@ import {
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { updateProfileFromRequest } from "Redux/state/profile/actions";
-import { updateProfile } from "Services/ProfileApi";
+import { fullProfileUpdate } from "store/ducks/Profile";
 import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({
@@ -25,17 +24,16 @@ const txtfields = {
 };
 
 function ProfileUpdateForm(props) {
-  const { classes, userProfile, setNewProfileInfo } = props;
+  const { classes, profile, fullProfileUpdate } = props;
   const {
     first_name, last_name, birth_date, phone_number, id, user,
-  } = userProfile;
+  } = profile;
 
   return (
     <Grid
       container
       justify="center"
       alignItems="center"
-      direction="column"
       style={{ width: "110vw" }}
     >
       <CenterPaper>
@@ -51,7 +49,7 @@ function ProfileUpdateForm(props) {
               fname, lname, birthdate, phonenum,
             } = values;
 
-            const response = await updateProfile(
+            fullProfileUpdate(
               id,
               user,
               fname,
@@ -59,7 +57,6 @@ function ProfileUpdateForm(props) {
               birthdate,
               phonenum,
             );
-            setNewProfileInfo(response);
           }}
         >
           {({ values, handleChange, handleSubmit }) => (
@@ -116,10 +113,10 @@ function ProfileUpdateForm(props) {
                 value={values.phonenum}
               />
               <Button
-                color="primary"
+                color="secondary"
                 type="submit"
                 variant="contained"
-                style={{ marginTop: "25px" }}
+                style={{ marginTop: "25px", color: "white" }}
               >
                   Update
               </Button>
@@ -133,17 +130,11 @@ function ProfileUpdateForm(props) {
 
 const componentWithStyles = withStyles(styles)(ProfileUpdateForm);
 
-function mapStateToProps(state) {
-  return {
-    userProfile: state.profile,
-  };
-}
+const mapStateToProps = state => ({ profile: state.profile });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    setNewProfileInfo: bindActionCreators(updateProfileFromRequest, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  fullProfileUpdate: bindActionCreators(fullProfileUpdate, dispatch),
+});
 
 export default connect(
   mapStateToProps,

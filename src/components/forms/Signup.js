@@ -5,12 +5,13 @@ import {
 import { Formik } from "formik";
 import { Link, withRouter } from "react-router-dom";
 
-import { registerEmail } from "Services/Auth/RegistrationApi";
+import { registerEmail } from "services/auth/RegistrationApi";
 
 const styles = () => ({
   submitButton: {
     fontWeight: "600",
     width: "250px",
+    color: "white",
   },
 });
 
@@ -23,7 +24,6 @@ function Signup(props) {
     if (response) {
       setSignedUp(true);
     }
-    console.log(response);
   };
 
   return signedUp ? (
@@ -52,7 +52,7 @@ function Signup(props) {
             <Grid item>
               <Button
                 className={classes.submitButton}
-                color="primary"
+                color="secondary"
                 type="submit"
                 variant="contained"
               >

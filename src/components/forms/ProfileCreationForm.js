@@ -6,24 +6,22 @@ import {
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { updateProfile, grabId } from "Redux/state/profile/actions";
-import { createProfile } from "Services/ProfileApi";
+import { createNewProfile } from "store/ducks/Profile";
 import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({});
 
 function ProfileCreationForm(props) {
   const {
-    classes, userProfile, initCreation, changePage, setId,
+    classes, profile, history, createNewProfile,
   } = props;
-  const userId = userProfile.user;
+  const userId = profile.user;
 
   return (
     <Grid
       container
       justify="center"
       alignItems="center"
-      direction="column"
       style={{ width: "110vw" }}
     >
       <CenterPaper>
@@ -39,11 +37,9 @@ function ProfileCreationForm(props) {
               fname, lname, birthdate, phonenum,
             } = values;
 
-            await initCreation(userId, fname, lname, birthdate, phonenum);
-            const response = await createProfile(userId, fname, lname, birthdate, phonenum);
-            if (response) {
-              await setId(response.id);
-              changePage();
+            const result = await createNewProfile(userId, fname, lname, birthdate, phonenum);
+            if (result === true) {
+              history.push("/app/dashboard");
             }
           }}
         >
@@ -100,7 +96,12 @@ function ProfileCreationForm(props) {
                 margin="normal"
               />
               <Grid item>
-                <Button color="primary" type="submit" variant="contained">
+                <Button
+                  color="secondary"
+                  style={{ color: "white" }}
+                  type="submit"
+                  variant="contained"
+                >
                 Submit
                 </Button>
               </Grid>
@@ -114,18 +115,11 @@ function ProfileCreationForm(props) {
 
 const componentWithStyles = withStyles(styles)(ProfileCreationForm);
 
-function mapStateToProps(state) {
-  return {
-    userProfile: state.profile,
-  };
-}
+const mapStateToProps = state => ({ profile: state.profile });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    initCreation: bindActionCreators(updateProfile, dispatch),
-    setId: bindActionCreators(grabId, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  createNewProfile: bindActionCreators(createNewProfile, dispatch),
+});
 
 export default connect(
   mapStateToProps,

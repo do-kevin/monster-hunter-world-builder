@@ -1,5 +1,5 @@
-import api from "Services/Api";
-import Auth from "Services/Auth/Auth";
+import api from "services/Api";
+import Auth from "services/auth/Auth";
 
 async function registerEmail(email = "") {
   return api.post("/users/", { email });
