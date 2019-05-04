@@ -6,13 +6,17 @@ import { connect } from "react-redux";
 import {
   withStyles, Toolbar, AppBar, Grid,
 } from "@material-ui/core";
-import { PowerSettingsNew, Settings, Dashboard as DashboardIcon, Movie } from "@material-ui/icons";
+import {
+  PowerSettingsNew, Settings,
+  Dashboard as DashboardIcon,
+  BrightnessAuto as ArmorIcon,
+} from "@material-ui/icons";
 
 import { logout } from "services/auth/RegistrationApi";
 import { getProfile, userLogout } from "store/ducks/Profile";
 import { clearUserList } from "store/ducks/List";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
-import { Dashboard, Movies } from "screens";
+import { Dashboard, Armors } from "screens";
 import { SidebarBtn } from "components/buttons";
 
 const styles = () => ({
@@ -67,8 +71,8 @@ class Home extends Component {
                 />
                 <SidebarBtn
                   color="secondary"
-                  icon={<Movie />}
-                  to="/app/movies"
+                  icon={<ArmorIcon />}
+                  to="/app/armors"
                   disabled={pathname === "/app/create-profile"}
                   divider
                 />
@@ -98,8 +102,8 @@ class Home extends Component {
             component={Dashboard}
           />
           <PrivateRoute
-            path="/app/movies"
-            component={Movies}
+            path="/app/armors"
+            component={Armors}
           />
           <PrivateRoute
             path="/app/settings"

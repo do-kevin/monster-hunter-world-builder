@@ -2,9 +2,9 @@ import React from "react";
 import {
   Typography, withStyles, Modal, Slide, Card, CardMedia, Avatar, CardContent,
 } from "@material-ui/core";
-import { bigStyles } from "screens/DashboardStyles";
+import { dashboardStyles } from "screens/Styles";
 
-function ModalCard(props) {
+function ProfileModal(props) {
   const {
     classes, modalData, openModal, onClose,
   } = props;
@@ -52,4 +52,4 @@ function ModalCard(props) {
   );
 }
 
-export default withStyles(bigStyles)(ModalCard);
+export default withStyles(dashboardStyles)(ProfileModal);
