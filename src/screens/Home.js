@@ -6,13 +6,13 @@ import { connect } from "react-redux";
 import {
   withStyles, Toolbar, AppBar, Grid,
 } from "@material-ui/core";
-import { PowerSettingsNew, Settings, Dashboard as DashboardIcon } from "@material-ui/icons";
+import { PowerSettingsNew, Settings, Dashboard as DashboardIcon, Movie } from "@material-ui/icons";
 
 import { logout } from "services/auth/RegistrationApi";
 import { getProfile, userLogout } from "store/ducks/Profile";
 import { clearUserList } from "store/ducks/List";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
-import { Dashboard } from "screens";
+import { Dashboard, Movies } from "screens";
 import { SidebarBtn } from "components/buttons";
 
 const styles = () => ({
@@ -67,6 +67,13 @@ class Home extends Component {
                 />
                 <SidebarBtn
                   color="secondary"
+                  icon={<Movie />}
+                  to="/app/movies"
+                  disabled={pathname === "/app/create-profile"}
+                  divider
+                />
+                <SidebarBtn
+                  color="secondary"
                   icon={<Settings />}
                   to="/app/settings"
                   disabled={pathname === "/app/create-profile"}
@@ -87,16 +94,20 @@ class Home extends Component {
         </AppBar>
         <Switch>
           <PrivateRoute
-            path="/app/create-profile"
-            component={ProfileCreationForm}
-          />
-          <PrivateRoute
             path="/app/dashboard"
             component={Dashboard}
           />
           <PrivateRoute
+            path="/app/movies"
+            component={Movies}
+          />
+          <PrivateRoute
             path="/app/settings"
             component={ProfileUpdateForm}
+          />
+          <PrivateRoute
+            path="/app/create-profile"
+            component={ProfileCreationForm}
           />
         </Switch>
       </main>
