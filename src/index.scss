@@ -43,23 +43,6 @@ body {
   align-items: center;
 }
 
-.home-grid {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  grid-template-areas: "Menu Content";
-}
-
-.dashboard-grid {
-  @extend .home-grid;
-  grid-template-rows: 70px 1fr;
-  grid-template-areas: 
-    "nav Topbar" 
-    "nav List";
-  grid-gap: 0;
-  z-index: 2;
-  height: 100%;
-}
-
 .NotFound {
   @extend .flexCenter;
   border-radius: 7px;

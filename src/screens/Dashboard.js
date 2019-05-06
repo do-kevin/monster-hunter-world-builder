@@ -12,8 +12,10 @@ import matchSorter from "match-sorter";
 import inflection from "inflection";
 
 import { retrieveUserList } from "store/ducks/List";
-import { bigStyles, StyledTable, TextButton } from "screens/DashboardStyles";
-import ModalCard from "components/ModalCard";
+import {
+  dashboardStyles, StyledTable, TextButton, toolbar, topbar, ChildGrid, rTable, View,
+} from "screens/Styles";
+import ProfileModal from "components/ProfileModal";
 
 const defaultState = {
   selectedUser: [
@@ -113,10 +115,10 @@ class Dashboard extends Component {
     ];
 
     return (
-      <div className="dashboard-grid">
-        <div style={{ gridArea: "nav" }} />
-        <AppBar className={classes.topbar}>
-          <Toolbar className={classes.toolbar}>
+      <ChildGrid>
+        <div style={{ gridArea: "topbar" }} />
+        <AppBar style={topbar}>
+          <Toolbar style={toolbar}>
             <Button
               onClick={() => this.refreshList()}
               color="secondary"
@@ -147,8 +149,8 @@ class Dashboard extends Component {
             />
           </Toolbar>
         </AppBar>
-        <main className={classes.rtWrapper}>
-          <ModalCard
+        <View>
+          <ProfileModal
             modalData={this.state.selectedUser}
             openModal={this.state.openModal}
             onClose={() => this.setState({ openModal: false })}
@@ -156,18 +158,19 @@ class Dashboard extends Component {
           <StyledTable>
             <ReactTable
               ref={this.reactTable}
-              className={`${classes.table} -highlight`}
+              className="-hightlight"
+              style={rTable}
               data={list}
               columns={columns}
             />
           </StyledTable>
-        </main>
-      </div>
+        </View>
+      </ChildGrid>
     );
   }
 }
 
-const componentWithStyles = withStyles(bigStyles)(Dashboard);
+const componentWithStyles = withStyles(dashboardStyles)(Dashboard);
 
 const mapStateToProps = state => ({ list: state.list });
 

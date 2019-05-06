@@ -15,6 +15,7 @@ import {
 import { logout } from "services/auth/RegistrationApi";
 import { getProfile, userLogout } from "store/ducks/Profile";
 import { clearUserList } from "store/ducks/List";
+import { ParentGrid } from "screens/Styles";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
 import { Dashboard, Armors } from "screens";
 import { SidebarBtn } from "components/buttons";
@@ -49,7 +50,7 @@ class Home extends Component {
     const { pathname } = location;
 
     return (
-      <main className="home-grid">
+      <ParentGrid>
         <AppBar
           className={classes.sidebar}
         >
@@ -114,7 +115,7 @@ class Home extends Component {
             component={ProfileCreationForm}
           />
         </Switch>
-      </main>
+      </ParentGrid>
     );
   }
 }

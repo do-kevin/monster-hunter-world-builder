@@ -1,10 +1,52 @@
 import styled from "styled-components";
 
+const gridAreaTop = "Topbar";
+const gridAreaContent = "View";
+
+export const ParentGrid = styled.div`
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  grid-template-areas: "Menu Content";
+`;
+
+export const ChildGrid = styled.div`
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  grid-template-areas: "Menu Content";
+  grid-template-rows: 70px 1fr;
+  grid-template-areas: 
+    "sidebar ${gridAreaTop}" 
+    "sidebar ${gridAreaContent}";
+  grid-gap: 0;
+  z-index: 2;
+  height: 100%;
+`;
+
+export const topbar = {
+  gridArea: gridAreaTop,
+  height: "70px",
+  background: "hsl(205, 11%, 31%)",
+  width: "100%",
+  position: "absolute",
+};
+
+export const toolbar = {
+  paddingLeft: "120px",
+  display: "flex",
+  flexDirection: "row-reverse",
+};
+
+export const View = styled.main`
+  grid-area: ${gridAreaContent};
+  width: calc(97.5vw - 110px);
+  padding: 18px 18px 18px 17px;
+`;
+
 const textColor = "hsl(0, 0%, 77%)";
 const avatarFlex = "16.5 !important";
 const avatarPadding = "9px 8px";
 
-const StyledTable = styled.main`
+export const StyledTable = styled.main`
   .rt-tbody {
     text-align: center;
   }
@@ -45,7 +87,15 @@ const StyledTable = styled.main`
   }
 `;
 
-const TextButton = styled.div`
+export const rTable = {
+  width: "100%",
+  background: "hsl(206, 12%, 17%)",
+  color: textColor,
+  height: "calc(95vh - 70px)",
+  borderRadius: "5px",
+};
+
+export const TextButton = styled.div`
   padding-top: 5px;
   p {
     cursor: pointer;
@@ -59,31 +109,7 @@ const TextButton = styled.div`
   }
 `;
 
-const bigStyles = () => ({
-  topbar: {
-    gridArea: "Topbar",
-    height: "70px",
-    background: "hsl(205, 11%, 31%)",
-    width: "100%",
-    position: "absolute",
-  },
-  toolbar: {
-    paddingLeft: "120px",
-    display: "flex",
-    flexDirection: "row-reverse",
-  },
-  rtWrapper: {
-    gridArea: "List",
-    width: "calc(97.5vw - 110px)",
-    padding: "18px 18px 18px 17px",
-  },
-  table: {
-    width: "100%",
-    background: "hsl(206, 12%, 17%)",
-    color: textColor,
-    height: "calc(95vh - 70px)",
-    borderRadius: "5px",
-  },
+export const dashboardStyles = () => ({
   smallAvatar: {
     height: "50px",
     width: "50px",
@@ -125,8 +151,45 @@ const bigStyles = () => ({
   },
 });
 
-export {
-  bigStyles,
-  StyledTable,
-  TextButton,
-};
+export const ArmorsTable = styled.div`
+  .rt-tbody {
+    text-align: center;
+  }
+  .rt-resizable-header-content {
+    color: hsl(0, 0%, 100%);
+    font-size: 18px;
+  }
+  .rt-tr-group {
+    .rt-tr {
+      .rt-td {
+        color: ${textColor};
+        padding: 16px;
+      }
+    }
+  }
+  .rt-thead {
+    .rt-tr {
+      .rt-th {
+        text-align: center;
+        div:first-child {
+          padding: 3px 0 3px 13px;
+        }
+      }
+    }
+  }
+  .rt-td {
+    border-bottom: 1px solid hsl(206, 12%, 15%);
+  }
+`;
+
+export const armorsStyles = () => ({
+  searchfield: {
+    borderRadius: "4px",
+    height: "53px",
+    color: "hsl(204, 5%, 69%)",
+    fontWeight: 600,
+    marginRight: "10px",
+    fontSize: "22px",
+    padding: "0 5px",
+  },
+});

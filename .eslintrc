@@ -36,6 +36,7 @@
 		"quotes": 0,
 		"no-underscore-dangle": "off",
 		"no-shadow": "warn",
-		"react/destructuring-assignment": "warn"
+		"react/destructuring-assignment": "warn",
+		"one-var":"off"
 	}
 }
