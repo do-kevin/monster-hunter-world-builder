@@ -14,6 +14,7 @@ import inflection from "inflection";
 import { retrieveUserList } from "store/ducks/List";
 import {
   dashboardStyles, StyledTable, TextButton, toolbar, topbar, ChildGrid, rTable, View,
+  cellStyles,
 } from "screens/Styles";
 import ProfileModal from "components/ProfileModal";
 
@@ -47,7 +48,6 @@ class Dashboard extends Component {
   }
 
   generateColumn = (key = "", filterable = false, show = true) => {
-    const { classes } = this.props;
     const newCell = {
       id: inflection.camelize(key, key.charAt(0)),
       Header: inflection.humanize(key),
@@ -57,7 +57,7 @@ class Dashboard extends Component {
       Cell: d => (
         <Typography
           variant="body1"
-          className={classes.cellStyles}
+          style={cellStyles}
         >
           {d.value}
         </Typography>

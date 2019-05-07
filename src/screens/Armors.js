@@ -11,7 +11,7 @@ import inflection from "inflection";
 import { retrieveAllArmors } from "store/ducks/MonsterHunter";
 import {
   ChildGrid, toolbar, topbar, View, rTable, ArmorsTable, armorsStyles,
-  TextButton,
+  TextButton, armorCells,
 } from "screens/Styles";
 import ArmorModal from "components/ArmorModal";
 
@@ -40,26 +40,55 @@ class Armors extends Component {
         id: "armorpiece",
         Header: "Armor name",
         accessor: "name",
-        Cell: (props) => (
-            <TextButton>
-              <Typography
-                onClick={() => this.setState({
-                  openArmorModal: true,
-                  selectedArmorPiece: props.original,
-                })}
-              >
-                {props.value}
-              </Typography>
-            </TextButton>
-          ),
+        Cell: props => (
+          <TextButton>
+            <Typography
+              variant="body1"
+              onClick={() => this.setState({
+                openArmorModal: true,
+                selectedArmorPiece: props.original,
+              })}
+            >
+              {props.value}
+            </Typography>
+          </TextButton>
+        ),
       },
       {
         Header: "Type",
         accessor: "type",
+        Cell: props => (
+          <Typography
+            variant="body1"
+            style={armorCells}
+          >
+            {inflection.capitalize(props.value)}
+          </Typography>
+        ),
       },
       {
         Header: "Rank",
         accessor: "rank",
+        Cell: props => (
+          <Typography
+            variant="body1"
+            style={armorCells}
+          >
+            {inflection.capitalize(props.value)}
+          </Typography>
+        ),
+      },
+      {
+        Header: "Defense",
+        accessor: "defense",
+        Cell: props => (
+          <Typography
+            variant="body1"
+            style={armorCells}
+          >
+            {props.value.base}
+          </Typography>
+        ),
       },
     ];
 
@@ -77,7 +106,7 @@ class Armors extends Component {
                   <TextField
                     id="armorpiece"
                     type="text"
-                    fullWidth="true"
+                    fullWidth
                     className={`${classes.TextField} name-filter`}
                     autoComplete="off"
                     onChange={event => (

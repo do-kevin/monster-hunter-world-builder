@@ -140,16 +140,23 @@ export const dashboardStyles = () => ({
     fontWeight: 600,
     marginRight: "10px",
   },
-  cellStyles: {
-    fontWeight: 600,
-    padding: "14px",
-    color: textColor,
-  },
   refreshBtn: {
     textTransform: "none",
     color: "white",
   },
 });
+
+export const cellStyles = {
+  fontWeight: 600,
+  padding: "14px",
+  color: textColor,
+};
+
+export const armorCells = {
+  fontWeight: 600,
+  paddingTop: "3px",
+  color: textColor,
+};
 
 export const ArmorsTable = styled.div`
   .rt-tbody {
@@ -172,7 +179,7 @@ export const ArmorsTable = styled.div`
       .rt-th {
         text-align: center;
         div:first-child {
-          padding: 3px 0 3px 13px;
+          padding: 3px 0 3px;
         }
       }
     }
@@ -193,3 +200,10 @@ export const armorsStyles = () => ({
     padding: "0 5px",
   },
 });
+
+export const StyledRecharts = styled.div`
+  .recharts-wrapper {
+    padding: 7px;
+    box-sizing: border-box;
+  }
+`;

@@ -3,7 +3,7 @@ import {
   Typography, withStyles, Card, CardMedia, Avatar, CardContent,
 } from "@material-ui/core";
 import { dashboardStyles } from "screens/Styles";
-import SlidingModal from "components/SlidingModal";
+import SlidingModal from "components/layout/SlidingModal";
 
 function ProfileModal(props) {
   const {
