@@ -70,7 +70,7 @@ function ProfileUpdateForm(props) {
               <TextField
                 id="fname"
                 label="First name"
-                className={classes.TextField}
+                className={classes.textField}
                 style={txtfields}
                 type="text"
                 name="fname"
@@ -81,7 +81,7 @@ function ProfileUpdateForm(props) {
               <TextField
                 id="lname"
                 label="Last name"
-                className={classes.TextField}
+                className={classes.textField}
                 style={txtfields}
                 type="text"
                 name="lname"
@@ -92,7 +92,7 @@ function ProfileUpdateForm(props) {
               <TextField
                 id="birthdate"
                 label="Birthday"
-                className={classes.TextField}
+                className={classes.textfield}
                 style={txtfields}
                 type="date"
                 name="birthdate"
@@ -104,7 +104,7 @@ function ProfileUpdateForm(props) {
               <TextField
                 id="phonenum"
                 label="Phone number"
-                className={classes.TextField}
+                className={classes.textField}
                 style={txtfields}
                 type="text"
                 name="phonenum"

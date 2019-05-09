@@ -1,10 +1,12 @@
 import axios from "axios";
 
 async function requestAllArmors() {
-  return axios({
+  const request = await axios({
     url: "https://mhw-db.com/armor/",
     method: "GET",
   });
+  console.log(request);
+  return request;
 }
 
 export {

@@ -1,9 +1,10 @@
 import profile from "./Profile";
 import list from "./List";
-import { armors } from "./MonsterHunter";
+import { armors, loadouts } from "./MonsterHunter";
 
 export {
   profile,
   list,
   armors,
+  loadouts,
 };

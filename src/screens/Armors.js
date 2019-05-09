@@ -14,11 +14,13 @@ import {
   TextButton, armorCells,
 } from "screens/Styles";
 import ArmorModal from "components/ArmorModal";
+// import _ from "lodash";
+// import { denormalize, schema } from "normalizr";
 
 class Armors extends Component {
   constructor(props) {
     super(props);
-    this.reactTable = React.createRef();
+    // this.reactTable = React.createRef();
     this.state = {
       isSearching: false,
       openArmorModal: false,
@@ -27,13 +29,20 @@ class Armors extends Component {
   }
 
   async componentDidMount() {
+    console.log("componentDidMount fired");
     const { retrieveAllArmors } = this.props;
-    retrieveAllArmors();
+    await retrieveAllArmors();
   }
 
   render() {
-    const { armors, classes } = this.props;
-    const { isSearching, openArmorModal, selectedArmorPiece } = this.state;
+    const { classes, armors } = this.props;
+
+
+    const {
+      isSearching,
+      openArmorModal,
+      selectedArmorPiece,
+    } = this.state;
 
     const columns = [
       {
@@ -94,7 +103,6 @@ class Armors extends Component {
 
     return (
       <ChildGrid>
-        <div style={{ gridArea: "topbar" }} />
         <AppBar style={topbar}>
           <Toolbar style={toolbar}>
             <IconButton onClick={() => this.setState({ isSearching: !isSearching })}>
@@ -107,10 +115,10 @@ class Armors extends Component {
                     id="armorpiece"
                     type="text"
                     fullWidth
-                    className={`${classes.TextField} name-filter`}
+                    className={`${classes.textField} name-filter`}
                     autoComplete="off"
                     onChange={event => (
-                      this.reactTable.current.filterColumn(columns[0], inflection.titleize(event.target.value))
+                      // this.reactTable.current.filterColumn(columns[0], inflection.titleize(event.target.value))
                     )}
                     InputProps={{
                       className: classes.searchfield,
@@ -133,7 +141,7 @@ class Armors extends Component {
               className="-hightlight"
               style={rTable}
               columns={columns}
-              data={armors}
+              data={Object.values(armors)}
               ref={this.reactTable}
             />
           </ArmorsTable>
@@ -145,7 +153,12 @@ class Armors extends Component {
 
 const componentWithStyles = withStyles(armorsStyles)(Armors);
 
-const mapStateToProps = state => ({ armors: state.armors });
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    armors: state.armors,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   retrieveAllArmors: bindActionCreators(retrieveAllArmors, dispatch),

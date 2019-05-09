@@ -3,6 +3,7 @@ import Home from "./Home";
 import NotFound from "./NotFound";
 import Dashboard from "./Dashboard";
 import Armors from "./Armors";
+import Builds from "./Builds";
 
 export {
   Authentication,
@@ -10,4 +11,5 @@ export {
   NotFound,
   Dashboard,
   Armors,
+  Builds,
 };

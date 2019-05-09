@@ -116,7 +116,6 @@ class Dashboard extends Component {
 
     return (
       <ChildGrid>
-        <div style={{ gridArea: "topbar" }} />
         <AppBar style={topbar}>
           <Toolbar style={toolbar}>
             <Button
@@ -131,7 +130,7 @@ class Dashboard extends Component {
             <TextField
               id="fullName"
               type="text"
-              className={`${classes.TextField} name-filter`}
+              className={`${classes.textField} name-filter`}
               autoComplete="off"
               onChange={event => (
                 this.reactTable.current.filterColumn(columns[1], event.target.value)
@@ -155,7 +154,7 @@ class Dashboard extends Component {
             openModal={this.state.openModal}
             onClose={() => this.setState({ openModal: false })}
           />
-          <StyledTable>
+          {/* <StyledTable>
             <ReactTable
               ref={this.reactTable}
               className="-hightlight"
@@ -163,7 +162,7 @@ class Dashboard extends Component {
               data={list}
               columns={columns}
             />
-          </StyledTable>
+          </StyledTable> */}
         </View>
       </ChildGrid>
     );

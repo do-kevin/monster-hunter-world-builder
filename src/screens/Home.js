@@ -10,14 +10,16 @@ import {
   PowerSettingsNew, Settings,
   Dashboard as DashboardIcon,
   BrightnessAuto as ArmorIcon,
+  ViewList,
 } from "@material-ui/icons";
 
 import { logout } from "services/auth/RegistrationApi";
 import { getProfile, userLogout } from "store/ducks/Profile";
 import { clearUserList } from "store/ducks/List";
+import { clearLoadouts, clearArmors } from "store/ducks/MonsterHunter";
 import { ParentGrid } from "screens/Styles";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
-import { Dashboard, Armors } from "screens";
+import { Dashboard, Armors, Builds } from "screens";
 import { SidebarBtn } from "components/buttons";
 
 const styles = () => ({
@@ -45,7 +47,8 @@ class Home extends Component {
 
   render() {
     const {
-      history, classes, userLogout, clearUserList, location,
+      history, classes, userLogout, clearUserList, location, clearLoadouts,
+      clearArmors,
     } = this.props;
     const { pathname } = location;
 
@@ -79,6 +82,13 @@ class Home extends Component {
                 />
                 <SidebarBtn
                   color="secondary"
+                  icon={<ViewList />}
+                  to="/app/builds"
+                  disabled={pathname === "/app/create-profile"}
+                  divider
+                />
+                <SidebarBtn
+                  color="secondary"
                   icon={<Settings />}
                   to="/app/settings"
                   disabled={pathname === "/app/create-profile"}
@@ -90,6 +100,8 @@ class Home extends Component {
                 to=""
                 onClick={() => {
                   clearUserList();
+                  clearLoadouts();
+                  clearArmors();
                   userLogout();
                   logout(history.push("/"));
                 }}
@@ -111,6 +123,10 @@ class Home extends Component {
             component={ProfileUpdateForm}
           />
           <PrivateRoute
+            path="/app/builds"
+            component={Builds}
+          />
+          <PrivateRoute
             path="/app/create-profile"
             component={ProfileCreationForm}
           />
@@ -128,6 +144,8 @@ const mapDispatchToProps = dispatch => ({
   getProfile: bindActionCreators(getProfile, dispatch),
   userLogout: bindActionCreators(userLogout, dispatch),
   clearUserList: bindActionCreators(clearUserList, dispatch),
+  clearLoadouts: bindActionCreators(clearLoadouts, dispatch),
+  clearArmors: bindActionCreators(clearArmors, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

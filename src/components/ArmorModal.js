@@ -1,13 +1,18 @@
 import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import {
   Card, withStyles, CardHeader, CardContent,
   Table, TableHead, TableRow, TableBody, TableCell,
-  Tooltip, CardMedia,
+  Tooltip, CardMedia, CardActions, Button, Typography,
+  FormControl, Select, MenuItem, InputLabel, OutlinedInput,
 } from "@material-ui/core";
+import { Formik } from "formik";
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
 } from "recharts";
 import _ from "lodash";
+import { armorToLoadout } from "store/ducks/MonsterHunter";
 import { SlidingModal, Panel } from "components/layout";
 import { StyledRecharts } from "screens/Styles";
 
@@ -20,6 +25,10 @@ const styles = () => ({
   betterTooltip: {
     fontSize: "16px",
     backgroundColor: "black",
+  },
+  select: {
+    top: "626px",
+    background: "red",
   },
 });
 
@@ -38,8 +47,10 @@ class ArmorModal extends Component {
     const { swapImage } = this.state;
 
     const {
-      classes, isOpen, onClose, armorData,
+      classes, isOpen, onClose, armorData, loadouts, armorToLoadout,
     } = this.props;
+
+    const { builds } = loadouts;
 
     const {
       name, defense, type, resistances, crafting, skills, assets,
@@ -219,10 +230,90 @@ class ArmorModal extends Component {
               </StyledRecharts>
             </Panel>
           </CardContent>
+          <CardActions
+            style={{ backgroundColor: "hsl(0, 0%, 100%)" }}
+          >
+            <Formik
+              initialValues={{ selectedLoadout: "" }}
+              onSubmit={values => armorToLoadout(values.selectedLoadout, armorData)}
+              render={({ values, handleSubmit, handleChange }) => (
+                <div style={{ padding: "5px 10px" }}>
+                  {
+                    Object.keys(builds).length === 0
+                      ? (
+                        <Typography
+                          variant="body1"
+                          style={{
+                            color: "hsl(0, 0%, 0%)",
+                            padding: "5px 10px",
+                            borderRadius: "5px",
+                            backgroundColor: "hsl(48, 100%, 50%)",
+                          }}
+                        >
+                          Please create a loadout to save the item
+                        </Typography>
+                      )
+                      : (
+                        <form onSubmit={handleSubmit}>
+                          <FormControl
+                            className={classes.formControl}
+                            variant="outlined"
+                          >
+                            <InputLabel htmlFor="selectedLoadout">Select</InputLabel>
+                            <Select
+                              onChange={handleChange}
+                              value={values.selectedLoadout}
+                              style={{ width: "200px" }}
+                              input={(
+                                <OutlinedInput
+                                  labelWidth={200}
+                                  name="selectedLoadout"
+                                  id="selectedLoadout"
+                                />
+                              )}
+                            >
+                              {
+                                Object.keys(builds).map(loadout => (
+                                  <MenuItem key={loadout} value={loadout}>{loadout}</MenuItem>
+                                ))
+                              }
+                            </Select>
+                          </FormControl>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            type="submit"
+                            style={{
+                              margin: "10.5px 0 0 10px",
+                              textTransform: "none",
+                              color: "hsl(0, 0%, 100%)",
+                              fontWeight: 600,
+                            }}
+                          >
+                            Save armor to loadout
+                          </Button>
+                        </form>
+                      )
+                  }
+                </div>
+              )}
+            />
+          </CardActions>
         </Card>
       </SlidingModal>
     );
   }
 }
 
-export default withStyles(styles)(ArmorModal);
+const componentWithStyles = withStyles(styles)(ArmorModal);
+
+const mapStateToProps = state => ({ loadouts: state.loadouts });
+
+const mapDispatchToProps = dispatch => ({
+  armorToLoadout: bindActionCreators(armorToLoadout, dispatch),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(componentWithStyles);
