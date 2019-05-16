@@ -154,7 +154,7 @@ class Dashboard extends Component {
             openModal={this.state.openModal}
             onClose={() => this.setState({ openModal: false })}
           />
-          {/* <StyledTable>
+          <StyledTable>
             <ReactTable
               ref={this.reactTable}
               className="-hightlight"
@@ -162,7 +162,7 @@ class Dashboard extends Component {
               data={list}
               columns={columns}
             />
-          </StyledTable> */}
+          </StyledTable>
         </View>
       </ChildGrid>
     );

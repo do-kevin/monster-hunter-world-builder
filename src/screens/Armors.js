@@ -20,7 +20,7 @@ import ArmorModal from "components/ArmorModal";
 class Armors extends Component {
   constructor(props) {
     super(props);
-    // this.reactTable = React.createRef();
+    this.reactTable = React.createRef();
     this.state = {
       isSearching: false,
       openArmorModal: false,
@@ -118,7 +118,7 @@ class Armors extends Component {
                     className={`${classes.textField} name-filter`}
                     autoComplete="off"
                     onChange={event => (
-                      // this.reactTable.current.filterColumn(columns[0], inflection.titleize(event.target.value))
+                      this.reactTable.current.filterColumn(columns[0], inflection.titleize(event.target.value))
                     )}
                     InputProps={{
                       className: classes.searchfield,

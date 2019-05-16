@@ -31,8 +31,17 @@ const styles = () => ({
 });
 
 function Builds(props) {
-  const { classes, createLoadout, loadouts } = props;
+  const {
+    classes, createLoadout, loadouts, armors,
+  } = props;
   const { builds } = loadouts;
+
+  const getArmor = (id) => {
+    if (id) {
+      return armors[id].name;
+    } return "empty";
+  };
+
 
   return (
     <ChildGrid>
@@ -77,8 +86,16 @@ function Builds(props) {
       </AppBar>
       <View>
         {
-          Object.keys(builds).map(key => (
-            <p key={key}>{key}</p>
+          Object.keys(builds).map(loadout => (
+            <>
+              <p key={loadout}>{loadout}</p>
+              <ul>
+                <li>
+                  {getArmor(builds[loadout].armor_set.head)}
+                </li>
+              </ul>
+
+            </>
           ))
         }
       </View>
@@ -88,7 +105,7 @@ function Builds(props) {
 
 const componentWithStyles = withStyles(styles)(Builds);
 
-const mapStateToProps = state => ({ loadouts: state.loadouts });
+const mapStateToProps = state => ({ loadouts: state.loadouts, armors: state.armors });
 
 const mapDispatchToProps = dispatch => ({
   createLoadout: bindActionCreators(createLoadout, dispatch),
