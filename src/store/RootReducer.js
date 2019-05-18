@@ -1,13 +1,13 @@
 import { combineReducers } from "redux";
 import {
-  profile, list, armors, loadouts,
+  profile, list, loadouts, warehouse,
 } from "store/ducks";
 
 const rootReducer = combineReducers({
   profile,
   list,
-  armors,
   loadouts,
+  warehouse,
 });
 
 export default rootReducer;

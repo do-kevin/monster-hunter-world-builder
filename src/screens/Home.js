@@ -10,16 +10,16 @@ import {
   PowerSettingsNew, Settings,
   Dashboard as DashboardIcon,
   BrightnessAuto as ArmorIcon,
-  ViewList,
 } from "@material-ui/icons";
 
 import { logout } from "services/auth/RegistrationApi";
 import { getProfile, userLogout } from "store/ducks/Profile";
 import { clearUserList } from "store/ducks/List";
-import { clearLoadouts, clearArmors } from "store/ducks/MonsterHunter";
+import { clearLoadouts } from "store/ducks/Loadouts";
+import { clearWarehouse } from "store/ducks/Warehouse";
 import { ParentGrid } from "screens/Styles";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
-import { Dashboard, Armors, Builds } from "screens";
+import { Dashboard, Armors } from "screens";
 import { SidebarBtn } from "components/buttons";
 
 const styles = () => ({
@@ -45,10 +45,22 @@ class Home extends Component {
     }
   }
 
+  clearAllOnLogout = async () => {
+    const {
+      history, userLogout, clearUserList,
+      clearLoadouts, clearWarehouse,
+    } = this.props;
+
+    await clearUserList();
+    await clearLoadouts();
+    await clearWarehouse();
+    await userLogout();
+    logout(history.push("/"));
+  }
+
   render() {
     const {
-      history, classes, userLogout, clearUserList, location, clearLoadouts,
-      clearArmors,
+      classes, location,
     } = this.props;
     const { pathname } = location;
 
@@ -82,13 +94,6 @@ class Home extends Component {
                 />
                 <SidebarBtn
                   color="secondary"
-                  icon={<ViewList />}
-                  to="/app/builds"
-                  disabled={pathname === "/app/create-profile"}
-                  divider
-                />
-                <SidebarBtn
-                  color="secondary"
                   icon={<Settings />}
                   to="/app/settings"
                   disabled={pathname === "/app/create-profile"}
@@ -98,13 +103,7 @@ class Home extends Component {
                 color="secondary"
                 icon={<PowerSettingsNew />}
                 to=""
-                onClick={() => {
-                  clearUserList();
-                  clearLoadouts();
-                  clearArmors();
-                  userLogout();
-                  logout(history.push("/"));
-                }}
+                onClick={this.clearAllOnLogout}
               />
             </Grid>
           </Toolbar>
@@ -121,10 +120,6 @@ class Home extends Component {
           <PrivateRoute
             path="/app/settings"
             component={ProfileUpdateForm}
-          />
-          <PrivateRoute
-            path="/app/builds"
-            component={Builds}
           />
           <PrivateRoute
             path="/app/create-profile"
@@ -145,7 +140,7 @@ const mapDispatchToProps = dispatch => ({
   userLogout: bindActionCreators(userLogout, dispatch),
   clearUserList: bindActionCreators(clearUserList, dispatch),
   clearLoadouts: bindActionCreators(clearLoadouts, dispatch),
-  clearArmors: bindActionCreators(clearArmors, dispatch),
+  clearWarehouse: bindActionCreators(clearWarehouse, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

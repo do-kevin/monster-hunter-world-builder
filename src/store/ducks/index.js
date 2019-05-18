@@ -1,10 +1,11 @@
 import profile from "./Profile";
 import list from "./List";
-import { armors, loadouts } from "./MonsterHunter";
+import loadouts from "./Loadouts";
+import warehouse from "./Warehouse";
 
 export {
   profile,
   list,
-  armors,
   loadouts,
+  warehouse,
 };

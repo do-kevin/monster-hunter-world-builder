@@ -6,13 +6,15 @@ import {
   Table, TableHead, TableRow, TableBody, TableCell,
   Tooltip, CardMedia, CardActions, Button, Typography,
   FormControl, Select, MenuItem, InputLabel, OutlinedInput,
+  IconButton,
 } from "@material-ui/core";
+import { Close } from "@material-ui/icons";
 import { Formik } from "formik";
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
 } from "recharts";
 import _ from "lodash";
-import { armorToLoadout } from "store/ducks/MonsterHunter";
+import { armorToLoadout } from "store/ducks/Loadouts";
 import { SlidingModal, Panel } from "components/layout";
 import { StyledRecharts } from "screens/Styles";
 
@@ -30,11 +32,14 @@ const styles = () => ({
     top: "626px",
     background: "red",
   },
+  newTitle: {
+    color: "hsl(205,11%,80%)",
+    fontWeight: 600,
+  },
 });
 
 const panelBtn = {
   cursor: "pointer",
-  background: "linear-gradient(to bottom, hsl(204, 12%, 57%), hsl(204, 12%, 47%), hsl(204, 12%, 37%))",
   padding: "8px",
 };
 
@@ -105,7 +110,11 @@ class ArmorModal extends Component {
             title={name}
             subheader={type}
             style={{
-              background: "white",
+              background: "hsl(207, 11%, 31%)",
+            }}
+            classes={{
+              title: classes.newTitle,
+              subheader: classes.newTitle,
             }}
           />
           <CardContent
@@ -135,7 +144,9 @@ class ArmorModal extends Component {
                 }
               />
             </Panel>
-            <Panel title="Crafting Requirements">
+            <Panel
+              title="Crafting Requirements"
+            >
               <Table className={classes.table}>
                 <TableHead>
                   <TableRow>
@@ -163,7 +174,9 @@ class ArmorModal extends Component {
                 </TableBody>
               </Table>
             </Panel>
-            <Panel title="Defense Rating">
+            <Panel
+              title="Defense Rating"
+            >
               <Table className={classes.table}>
                 <TableHead>
                   <TableRow>
@@ -181,7 +194,9 @@ class ArmorModal extends Component {
                 </TableBody>
               </Table>
             </Panel>
-            <Panel title="Passives">
+            <Panel
+              title="Passives"
+            >
               <Table className={classes.table}>
                 <TableHead>
                   <TableRow>
@@ -209,7 +224,9 @@ class ArmorModal extends Component {
                 </TableBody>
               </Table>
             </Panel>
-            <Panel title="Elemental Resistances">
+            <Panel
+              title="Elemental Resistances"
+            >
               <StyledRecharts>
                 <RadarChart
                   width={370}
@@ -231,13 +248,20 @@ class ArmorModal extends Component {
             </Panel>
           </CardContent>
           <CardActions
-            style={{ backgroundColor: "hsl(0, 0%, 100%)" }}
+            style={{ backgroundColor: "hsl(207, 11%, 31%)" }}
           >
             <Formik
               initialValues={{ selectedLoadout: "" }}
               onSubmit={values => armorToLoadout(values.selectedLoadout, armorData)}
               render={({ values, handleSubmit, handleChange }) => (
-                <div style={{ padding: "5px 10px" }}>
+                <div
+                  style={{
+                    padding: "5px 10px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
                   {
                     Object.keys(builds).length === 0
                       ? (
@@ -245,7 +269,7 @@ class ArmorModal extends Component {
                           variant="body1"
                           style={{
                             color: "hsl(0, 0%, 0%)",
-                            padding: "5px 10px",
+                            padding: "12px 20px",
                             borderRadius: "5px",
                             backgroundColor: "hsl(48, 100%, 50%)",
                           }}
@@ -263,7 +287,11 @@ class ArmorModal extends Component {
                             <Select
                               onChange={handleChange}
                               value={values.selectedLoadout}
-                              style={{ width: "200px" }}
+                              style={{
+                                width: "200px",
+                                background: "hsl(205, 11%, 42%)",
+                                borderRadius: "5px",
+                              }}
                               input={(
                                 <OutlinedInput
                                   labelWidth={200}
@@ -295,6 +323,16 @@ class ArmorModal extends Component {
                         </form>
                       )
                   }
+                  <IconButton
+                    style={{
+                      background: "hsl(207, 11%, 25%)",
+                      color: "hsl(205,11%,80%)",
+                      height: "50px",
+                    }}
+                    onClick={onClose}
+                  >
+                    <Close />
+                  </IconButton>
                 </div>
               )}
             />

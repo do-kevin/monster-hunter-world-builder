@@ -11,7 +11,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { PrivateRoute } from "services/auth/PrivateRoute";
-import { AuthProvider } from "services/auth/AuthContext";
 
 import {
   Home, NotFound, Authentication,
@@ -26,7 +25,7 @@ const theme = createMuiTheme({
       main: "hsl(247, 9%, 15%)",
     },
     secondary: {
-      main: "hsl(235, 100%, 50%)",
+      main: "hsl(214, 100%, 30%)",
     },
   },
 });
