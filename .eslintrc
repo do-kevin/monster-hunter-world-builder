@@ -37,6 +37,7 @@
 		"no-underscore-dangle": "off",
 		"no-shadow": "warn",
 		"react/destructuring-assignment": "warn",
-		"one-var":"off"
+		"one-var":"off",
+		"react/jsx-boolean-value": "warn"
 	}
 }

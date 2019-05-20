@@ -17,6 +17,8 @@ import {
   TextButton, armorCells, extendedTopbar, extendedToolbar,
 } from "screens/Styles";
 import ArmorModal from "components/ArmorModal";
+import WeaponModal from "components/WeaponModal";
+import _ from "lodash";
 
 const scrollToBtns = {
   color: "hsl(205,11%,80%)",
@@ -24,7 +26,7 @@ const scrollToBtns = {
   fontWeight: 600,
 };
 
-class Armors extends Component {
+class Forge extends Component {
   constructor(props) {
     super(props);
     this.reactTable = React.createRef();
@@ -32,6 +34,8 @@ class Armors extends Component {
       searchingWeapon: false,
       openArmorModal: false,
       selectedArmorPiece: {},
+      openWeaponModal: false,
+      selectedWeapon: {},
       selectedLoadout: undefined,
       swapImage: false,
     };
@@ -66,9 +70,39 @@ class Armors extends Component {
                 openArmorModal: true,
                 selectedArmorPiece: armors[id],
               })}
-              noWrap="true"
+              noWrap={true}
             >
               {armors[id].name}
+            </Typography>
+          </TextButton>
+        </div>
+      );
+    }
+    return <p>Empty Slot</p>;
+  };
+
+  getWeaponInfo = (id) => {
+    const { weapons, classes } = this.props;
+    if (id) {
+      return (
+        <div className={classes.inventoryPanel}>
+          <img
+            className={classes.inventoryImg}
+            src={weapons[id].assets.image}
+            alt={weapons[id].name}
+          />
+          <TextButton>
+            <Typography
+              style={{ padding: "16px 15px" }}
+              variant="body1"
+              onClick={() => this.setState({
+                openArmorModal: false,
+                openWeaponModal: true,
+                selectedWeapon: weapons[id],
+              })}
+              noWrap="true"
+            >
+              {weapons[id].name}
             </Typography>
           </TextButton>
         </div>
@@ -90,6 +124,8 @@ class Armors extends Component {
       selectedArmorPiece,
       selectedLoadout,
       swapImage,
+      openWeaponModal,
+      selectedWeapon,
     } = this.state;
 
     const armorColumns = [
@@ -103,6 +139,7 @@ class Armors extends Component {
               variant="body1"
               onClick={() => this.setState({
                 openArmorModal: true,
+                openWeaponModal: false,
                 selectedArmorPiece: props.original,
               })}
             >
@@ -155,10 +192,16 @@ class Armors extends Component {
         id: "weaponpiece",
         Header: "Weapon name",
         accessor: "name",
+        // console.log(props.original);
         Cell: props => (
           <TextButton>
             <Typography
               variant="body1"
+              onClick={() => this.setState({
+                openArmorModal: false,
+                openWeaponModal: true,
+                selectedWeapon: props.original,
+              })}
             >
               {props.value}
             </Typography>
@@ -183,6 +226,18 @@ class Armors extends Component {
         },
       },
       {
+        Header: "Rarity",
+        accessor: "rarity",
+        Cell: props => (
+          <Typography
+            variant="body1"
+            style={armorCells}
+          >
+            {props.value}
+          </Typography>
+        ),
+      },
+      {
         Header: "Attack",
         accessor: "attack",
         Cell: props => (
@@ -190,7 +245,7 @@ class Armors extends Component {
             variant="body1"
             style={armorCells}
           >
-            {props.value.raw}
+            {props.value.display}
           </Typography>
         ),
       },
@@ -304,6 +359,11 @@ class Armors extends Component {
             onClose={() => this.setState({ openArmorModal: false })}
             armorData={selectedArmorPiece}
           />
+          <WeaponModal
+            isOpen={openWeaponModal}
+            onClose={() => this.setState({ openWeaponModal: false })}
+            weaponData={selectedWeapon}
+          />
           <ArmorsTable>
             <ReactTable
               className="-hightlight"
@@ -404,6 +464,15 @@ class Armors extends Component {
                       : <p>Empty Slot</p>
                   }
                 </div>
+                <div className={classes.panel}>
+                  {
+                    builds[selectedLoadout] !== undefined
+                      ? this.getWeaponInfo(
+                        _.get(builds[selectedLoadout].weapon_set, "primary"),
+                      )
+                      : <p>Empty Slot</p>
+                  }
+                </div>
               </section>
             </main>
           </div>
@@ -413,7 +482,7 @@ class Armors extends Component {
   }
 }
 
-const componentWithStyles = withStyles(armorsStyles)(Armors);
+const componentWithStyles = withStyles(armorsStyles)(Forge);
 
 const mapStateToProps = state => ({
   weapons: state.warehouse.weapons,

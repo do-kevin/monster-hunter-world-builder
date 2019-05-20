@@ -9,7 +9,7 @@ import {
 import {
   PowerSettingsNew, Settings,
   Dashboard as DashboardIcon,
-  BrightnessAuto as ArmorIcon,
+  Build,
 } from "@material-ui/icons";
 
 import { logout } from "services/auth/RegistrationApi";
@@ -19,7 +19,7 @@ import { clearLoadouts } from "store/ducks/Loadouts";
 import { clearWarehouse } from "store/ducks/Warehouse";
 import { ParentGrid } from "screens/Styles";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
-import { Dashboard, Armors } from "screens";
+import { Dashboard, Forge } from "screens";
 import { SidebarBtn } from "components/buttons";
 
 const styles = () => ({
@@ -87,8 +87,8 @@ class Home extends Component {
                 />
                 <SidebarBtn
                   color="secondary"
-                  icon={<ArmorIcon />}
-                  to="/app/armors"
+                  icon={<Build />}
+                  to="/app/forge"
                   disabled={pathname === "/app/create-profile"}
                   divider
                 />
@@ -114,8 +114,8 @@ class Home extends Component {
             component={Dashboard}
           />
           <PrivateRoute
-            path="/app/armors"
-            component={Armors}
+            path="/app/forge"
+            component={Forge}
           />
           <PrivateRoute
             path="/app/settings"

@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 const CREATE_LOADOUT = "CREATE_LOADOUT";
 const CLEAR_LOADOUTS = "CLEAR_LOADOUTS";
 const ARMOR_TO_LOADOUT = "ARMOR_TO_LOADOUT";
+const WEAPON_TO_LOADOUT = "WEAPON_TO_LOADOUT";
 
 // ==== Actions ==== //
 export const createLoadout = loadoutName => (dispatch, getState) => {
@@ -26,14 +27,26 @@ export const createLoadout = loadoutName => (dispatch, getState) => {
   });
 };
 
-export const armorToLoadout = (loadoutName, armorPiece) => async (dispatch) => {
+export const armorToLoadout = (loadoutName, armorData) => async (dispatch) => {
   const action = {
     key: loadoutName,
-    armor: armorPiece,
+    armor: armorData,
   };
 
   dispatch({
     type: ARMOR_TO_LOADOUT,
+    payload: action,
+  });
+};
+
+export const weaponToLoadout = (loadoutName, weaponData) => async (dispatch) => {
+  const action = {
+    key: loadoutName,
+    weapon: weaponData,
+  };
+
+  dispatch({
+    type: WEAPON_TO_LOADOUT,
     payload: action,
   });
 };
@@ -68,6 +81,14 @@ function loadouts(state = initialState, action) {
       const newState = Object.assign({}, state);
       const { key: loadoutName, armor } = action.payload;
       _.set(newState, `builds.${loadoutName}.armor_set.${armor.type}`, armor.id);
+      toast.success(`Saved to ${loadoutName}`);
+      return newState;
+    }
+    case WEAPON_TO_LOADOUT: {
+      const newState = Object.assign({}, state);
+      const { key: loadoutName, weapon } = action.payload;
+      _.set(newState, `builds.${loadoutName}.weapon_set.primary`, weapon.id);
+      toast.success(`Saved to ${loadoutName}`);
       return newState;
     }
     case CLEAR_LOADOUTS:
