@@ -47,6 +47,29 @@ class Forge extends Component {
     await retrieveAllWeapons();
   }
 
+  generateColumn = (key = "", capitalize = false, filterable = false, show = true) => {
+    const newCell = {
+      id: inflection.camelize(key, key.charAt(0)),
+      Header: inflection.humanize(key),
+      accessor: key,
+      filterable,
+      show,
+      Cell: data => (
+        <Typography
+          variant="body1"
+          style={armorCells}
+        >
+          {
+            capitalize
+              ? inflection.capitalize(data.value)
+              : data.value
+          }
+        </Typography>
+      ),
+    };
+    return newCell;
+  }
+
   getArmorInfo = (id) => {
     const { armors, classes } = this.props;
     const { swapImage } = this.state;
@@ -100,7 +123,7 @@ class Forge extends Component {
                 openWeaponModal: true,
                 selectedWeapon: weapons[id],
               })}
-              noWrap="true"
+              noWrap={true}
             >
               {weapons[id].name}
             </Typography>
@@ -149,30 +172,8 @@ class Forge extends Component {
         ),
         filterMethod: (filter, row) => matchSorter([row[filter.id]], filter.value).length !== 0,
       },
-      {
-        Header: "Type",
-        accessor: "type",
-        Cell: props => (
-          <Typography
-            variant="body1"
-            style={armorCells}
-          >
-            {inflection.capitalize(props.value)}
-          </Typography>
-        ),
-      },
-      {
-        Header: "Rank",
-        accessor: "rank",
-        Cell: props => (
-          <Typography
-            variant="body1"
-            style={armorCells}
-          >
-            {inflection.capitalize(props.value)}
-          </Typography>
-        ),
-      },
+      this.generateColumn("type", true),
+      this.generateColumn("rank", true),
       {
         Header: "Defense",
         accessor: "defense",
@@ -192,7 +193,6 @@ class Forge extends Component {
         id: "weaponpiece",
         Header: "Weapon name",
         accessor: "name",
-        // console.log(props.original);
         Cell: props => (
           <TextButton>
             <Typography
@@ -225,18 +225,7 @@ class Forge extends Component {
           );
         },
       },
-      {
-        Header: "Rarity",
-        accessor: "rarity",
-        Cell: props => (
-          <Typography
-            variant="body1"
-            style={armorCells}
-          >
-            {props.value}
-          </Typography>
-        ),
-      },
+      this.generateColumn("rarity"),
       {
         Header: "Attack",
         accessor: "attack",
@@ -398,7 +387,9 @@ class Forge extends Component {
                     >
                       <p>{loadout}</p>
                       <Button
-                        onClick={() => this.setState({ selectedLoadout: loadout })}
+                        onClick={async () => {
+                          await this.setState({ selectedLoadout: loadout });
+                        }}
                         color="secondary"
                         variant="contained"
                       >
