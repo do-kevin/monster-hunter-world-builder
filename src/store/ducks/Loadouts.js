@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { toast } from "react-toastify";
+import uuidv4 from "uuid/v4";
 
 // ==== Types ==== //
 const CREATE_LOADOUT = "CREATE_LOADOUT";
@@ -73,6 +74,7 @@ function loadouts(state = initialState, action) {
       newState.builds[action.payload] = {
         armor_set: { ...initialStateForArmor },
         weapon: null,
+        id: uuidv4(),
       };
       toast.success("Loadout created.");
       return newState;
