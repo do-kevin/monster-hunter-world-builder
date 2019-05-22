@@ -38,6 +38,7 @@
 		"no-shadow": "warn",
 		"react/destructuring-assignment": "warn",
 		"one-var":"off",
-		"react/jsx-boolean-value": "warn"
+		"react/jsx-boolean-value": "warn",
+		"react/jsx-one-expression-per-line": "warn"
 	}
 }

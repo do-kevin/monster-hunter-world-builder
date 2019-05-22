@@ -70,68 +70,83 @@ class Forge extends Component {
     return newCell;
   }
 
-  getArmorInfo = (id) => {
-    const { armors, classes } = this.props;
+  generateArmorSlot = (id, type = "") => {
+    const { classes, armors } = this.props;
     const { swapImage } = this.state;
+    console.log(id);
     if (id) {
       return (
-        <div className={classes.inventoryPanel}>
-          <img
-            className={classes.inventoryImg}
-            src={
-              !swapImage
-                ? armors[id].assets.imageMale
-                : armors[id].assets.imageFemale
-            }
-            alt={armors[id].name}
-          />
-          <TextButton>
-            <Typography
-              style={{ padding: "16px 15px" }}
-              variant="body1"
-              onClick={() => this.setState({
-                openArmorModal: true,
-                selectedArmorPiece: armors[id],
-              })}
-              noWrap={true}
-            >
-              {armors[id].name}
-            </Typography>
-          </TextButton>
+        <div className={classes.panel}>
+          <div className={classes.inventoryPanel}>
+            <img
+              className={classes.inventoryImg}
+              src={
+                !swapImage
+                  ? armors[id].assets.imageMale
+                  : armors[id].assets.imageFemale
+              }
+              alt={armors[id].name}
+            />
+            <TextButton>
+              <Typography
+                style={{ padding: "16px 15px" }}
+                variant="body1"
+                onClick={() => this.setState({
+                  openArmorModal: true,
+                  selectedArmorPiece: armors[id],
+                })}
+                noWrap
+              >
+                {armors[id].name}
+              </Typography>
+            </TextButton>
+          </div>
         </div>
       );
     }
-    return <p>Empty Slot</p>;
+    return (
+      <div className={classes.panel}>
+        <p> Empty {type} slot</p>
+      </div>
+    );
   };
 
-  getWeaponInfo = (id) => {
+  generateWeaponSlot = (id) => {
     const { weapons, classes } = this.props;
     if (id) {
       return (
-        <div className={classes.inventoryPanel}>
-          <img
-            className={classes.inventoryImg}
-            src={weapons[id].assets.image}
-            alt={weapons[id].name}
-          />
-          <TextButton>
-            <Typography
-              style={{ padding: "16px 15px" }}
-              variant="body1"
-              onClick={() => this.setState({
-                openArmorModal: false,
-                openWeaponModal: true,
-                selectedWeapon: weapons[id],
-              })}
-              noWrap={true}
-            >
-              {weapons[id].name}
-            </Typography>
-          </TextButton>
+        <div className={classes.panel}>
+          <div className={classes.inventoryPanel}>
+            <img
+              className={classes.inventoryImg}
+              src={weapons[id].assets.image}
+              alt={weapons[id].name}
+            />
+            <TextButton>
+              <Typography
+                style={{ padding: "16px 15px" }}
+                variant="body1"
+                onClick={() => this.setState({
+                  openArmorModal: false,
+                  openWeaponModal: true,
+                  selectedWeapon: weapons[id],
+                })}
+                noWrap
+              >
+                {weapons[id].name}
+              </Typography>
+            </TextButton>
+          </div>
         </div>
       );
     }
-    return <p>Empty Slot</p>;
+    return (
+      <div className={classes.panel}>
+        <div className={classes.inventoryPanel}>
+          <p>Empty weapon slot</p>
+        </div>
+      </div>
+    );
   };
 
   render() {
@@ -420,50 +435,24 @@ class Forge extends Component {
                 </IconButton>
               </header>
               <section className={classes.loadoutElements}>
-                <div className={classes.panel}>
-                  {
-                    builds[selectedLoadout] !== undefined
-                      ? this.getArmorInfo(builds[selectedLoadout].armor_set.head)
-                      : <p>Empty Slot</p>
-                  }
-                </div>
-                <div className={classes.panel}>
-                  {
-                    builds[selectedLoadout] !== undefined
-                      ? this.getArmorInfo(builds[selectedLoadout].armor_set.chest)
-                      : <p>Empty Slot</p>
-                  }
-                </div>
-                <div className={classes.panel}>
-                  {
-                    builds[selectedLoadout] !== undefined
-                      ? this.getArmorInfo(builds[selectedLoadout].armor_set.waist)
-                      : <p>Empty Slot</p>
-                  }
-                </div>
-                <div className={classes.panel}>
-                  {
-                    builds[selectedLoadout] !== undefined
-                      ? this.getArmorInfo(builds[selectedLoadout].armor_set.legs)
-                      : <p>Empty Slot</p>
-                  }
-                </div>
-                <div className={classes.panel}>
-                  {
-                    builds[selectedLoadout] !== undefined
-                      ? this.getArmorInfo(builds[selectedLoadout].armor_set.gloves)
-                      : <p>Empty Slot</p>
-                  }
-                </div>
-                <div className={classes.panel}>
-                  {
-                    builds[selectedLoadout] !== undefined
-                      ? this.getWeaponInfo(
-                        _.get(builds[selectedLoadout].weapon_set, "primary"),
-                      )
-                      : <p>Empty Slot</p>
-                  }
-                </div>
+                {
+                  this.generateArmorSlot(_.get(builds[selectedLoadout], "armor_set.head"), "head")
+                }
+                {
+                  this.generateArmorSlot(_.get(builds[selectedLoadout], "armor_set.chest"), "chest")
+                }
+                {
+                  this.generateArmorSlot(_.get(builds[selectedLoadout], "armor_set.waist"), "waist")
+                }
+                {
+                  this.generateArmorSlot(_.get(builds[selectedLoadout], "armor_set.legs"), "legs")
+                }
+                {
+                  this.generateArmorSlot(_.get(builds[selectedLoadout], "armor_set.gloves"), "gloves")
+                }
+                {
+                  this.generateWeaponSlot(_.get(builds[selectedLoadout], "weapon_set.primary"))
+                }
               </section>
             </main>
           </div>
