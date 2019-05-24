@@ -266,3 +266,60 @@ export const StyledRecharts = styled.div`
     box-sizing: border-box;
   }
 `;
+
+export const modalStyles = () => ({
+  imagePanel: {
+    width: "100px",
+    height: "100px",
+    margin: "auto",
+  },
+  betterTooltip: {
+    fontSize: "16px",
+    backgroundColor: "black",
+  },
+  select: {
+    top: "626px",
+    background: "red",
+  },
+  newTitle: {
+    color: "hsl(205,11%,80%)",
+    fontWeight: 600,
+  },
+  footer: {
+    padding: "5px 10px",
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  submitBtn: {
+    margin: "10.5px 0 0 10px",
+    textTransform: "none",
+    color: "hsl(0, 0%, 100%)",
+    fontWeight: 600,
+  },
+  selectField: {
+    width: "200px",
+    background: "hsl(205, 11%, 42%)",
+    borderRadius: "5px",
+  },
+  loadoutWarning: {
+    color: "hsl(0, 0%, 0%)",
+    padding: "12px 20px",
+    borderRadius: "5px",
+    backgroundColor: "hsl(48, 100%, 50%)",
+  },
+  customCard: {
+    outline: "none",
+    background: "hsl(0, 0%, 41%)",
+    minWidth: "755px",
+  },
+  closeModalBtn: {
+    background: "hsl(207, 11%, 25%)",
+    color: "hsl(205,11%,80%)",
+    height: "50px",
+  },
+  centerContent: {
+    display: "flex",
+    flexWrap: "wrap",
+  },
+});

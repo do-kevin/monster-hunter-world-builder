@@ -3,16 +3,17 @@ import { Modal, Slide } from "@material-ui/core";
 import PropTypes from "prop-types";
 
 function SlidingModal(props) {
-  const { children, isOpen, onClose } = props;
+  const { children, isModalOpen, onClose } = props;
   return (
     <Modal
       className="flexCenter"
-      open={isOpen}
+      open={isModalOpen}
       onClose={onClose}
+      style={{ overflowY: "scroll" }}
     >
       <Slide
         direction="up"
-        in={isOpen}
+        in={isModalOpen}
         mountOnEnter
         unmountOnExit
       >
@@ -23,7 +24,7 @@ function SlidingModal(props) {
 }
 
 SlidingModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
+  isModalOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

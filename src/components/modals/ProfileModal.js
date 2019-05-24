@@ -3,7 +3,7 @@ import {
   Typography, withStyles, Card, CardMedia, Avatar, CardContent,
 } from "@material-ui/core";
 import { dashboardStyles } from "screens/Styles";
-import SlidingModal from "components/layout/SlidingModal";
+import { SlidingModal } from "components/modals";
 
 function ProfileModal(props) {
   const {
@@ -13,7 +13,7 @@ function ProfileModal(props) {
 
   return (
     <SlidingModal
-      isOpen={openModal}
+      isModalOpen={openModal}
       onClose={onClose}
     >
       <Card className={classes.card}>

@@ -16,7 +16,7 @@ import {
   dashboardStyles, StyledTable, TextButton, toolbar, topbar, ChildGrid, rTable, View,
   cellStyles,
 } from "screens/Styles";
-import ProfileModal from "components/ProfileModal";
+import { ProfileModal } from "components/modals";
 
 const defaultState = {
   selectedUser: [

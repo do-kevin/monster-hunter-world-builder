@@ -16,8 +16,7 @@ import {
   ChildGrid, ExtendedView, rTable, ArmorsTable, armorsStyles,
   TextButton, armorCells, extendedTopbar, extendedToolbar,
 } from "screens/Styles";
-import ArmorModal from "components/ArmorModal";
-import WeaponModal from "components/WeaponModal";
+import { ArmorModal, WeaponModal } from "components/modals";
 import _ from "lodash";
 
 const scrollToBtns = {
@@ -359,12 +358,12 @@ class Forge extends Component {
         </AppBar>
         <ExtendedView>
           <ArmorModal
-            isOpen={openArmorModal}
+            isArmorModalOpen={openArmorModal}
             onClose={() => this.setState({ openArmorModal: false })}
             armorData={selectedArmorPiece}
           />
           <WeaponModal
-            isOpen={openWeaponModal}
+            isWeaponModalOpen={openWeaponModal}
             onClose={() => this.setState({ openWeaponModal: false })}
             weaponData={selectedWeapon}
           />
