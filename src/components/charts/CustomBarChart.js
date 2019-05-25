@@ -2,6 +2,7 @@ import React from "react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ReferenceLine,
 } from "recharts";
+import { dark0, purple0 } from "Colors";
 
 function CustomBarChart(props) {
   const {
@@ -12,7 +13,7 @@ function CustomBarChart(props) {
       bottom: 5,
     },
     data = [], style, XAxisLabel = "", YAxisLabel = "", dataKey = "",
-    barColor = "hsl(330, 49%, 55%)", refLineColor = "hsl(0, 0%, 0%)",
+    barColor = purple0, refLineColor = dark0,
     width = 390, height = 300, barSize = 25, y = 0,
   } = props;
   return (

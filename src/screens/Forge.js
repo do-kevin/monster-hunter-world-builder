@@ -13,14 +13,20 @@ import { Formik } from "formik";
 import { retrieveAllArmors, retrieveAllWeapons } from "store/ducks/Warehouse";
 import { createLoadout } from "store/ducks/Loadouts";
 import {
-  ChildGrid, ExtendedView, rTable, ArmorsTable, armorsStyles,
-  TextButton, armorCells, extendedTopbar, extendedToolbar,
-} from "screens/Styles";
+  ChildGrid, ExtendedView, ArmorsTable, TextButton,
+} from "components/StyledComponents";
+import {
+  rTable, armorsStyles,
+  armorCells, extendedTopbar, extendedToolbar,
+} from "Styles";
 import { ArmorModal, WeaponModal } from "components/modals";
 import _ from "lodash";
+import {
+  grey0, grey5, lightGrey, darkishGrey, primary2,
+} from "Colors";
 
 const scrollToBtns = {
-  color: "hsl(205,11%,80%)",
+  color: grey5,
   textTransform: "none",
   fontWeight: 600,
 };
@@ -72,7 +78,6 @@ class Forge extends Component {
   generateArmorSlot = (id, type = "") => {
     const { classes, armors } = this.props;
     const { swapImage } = this.state;
-    console.log(id);
     if (id) {
       return (
         <div className={classes.panel}>
@@ -261,7 +266,7 @@ class Forge extends Component {
             style={extendedToolbar}
           >
             <IconButton
-              style={{ color: "hsl(0, 0%, 77%)" }}
+              style={{ color: lightGrey }}
               onClick={() => this.setState({ searchingWeapon: !searchingWeapon })}
             >
               {!searchingWeapon ? <i className="fas fa-shield-alt" /> : <i className="fas fa-gavel" />}
@@ -291,7 +296,7 @@ class Forge extends Component {
           <Toolbar
             style={{
               paddingLeft: "120px",
-              backgroundColor: "hsl(207, 11%, 29%)",
+              backgroundColor: darkishGrey,
               display: "flex",
               justifyContent: "space-between",
             }}
@@ -331,7 +336,7 @@ class Forge extends Component {
                         margin: "18px 0 0 8px",
                         textTransform: "none",
                         fontWeight: 600,
-                        color: "hsl(0, 0%, 100%)",
+                        color: grey0,
                       }}
                     >
                     Create loadout
@@ -424,8 +429,8 @@ class Forge extends Component {
                 <IconButton
                   style={{
                     padding: "0",
-                    color: "hsl(205,11%,80%)",
-                    background: "hsl(249, 9%, 15%)",
+                    color: grey5,
+                    background: primary2,
                   }}
                   onClick={() => this.setState({ swapImage: !swapImage })}
                   type="button"
@@ -453,6 +458,11 @@ class Forge extends Component {
                   this.generateWeaponSlot(_.get(builds[selectedLoadout], "weapon_set.primary"))
                 }
               </section>
+            </main>
+            <main className={classes.loadoutBlock}>
+              <header className={classes.panelHeader}>
+                Overall Stats
+              </header>
             </main>
           </div>
         </ExtendedView>

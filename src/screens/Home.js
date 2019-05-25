@@ -17,7 +17,7 @@ import { getProfile, userLogout } from "store/ducks/Profile";
 import { clearUserList } from "store/ducks/List";
 import { clearLoadouts } from "store/ducks/Loadouts";
 import { clearWarehouse } from "store/ducks/Warehouse";
-import { ParentGrid } from "screens/Styles";
+import { ParentGrid } from "components/StyledComponents";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
 import { Dashboard, Forge } from "screens";
 import { SidebarBtn } from "components/buttons";
@@ -45,16 +45,16 @@ class Home extends Component {
     }
   }
 
-  clearAllOnLogout = async () => {
+  clearAllOnLogout = () => {
     const {
       history, userLogout, clearUserList,
       clearLoadouts, clearWarehouse,
     } = this.props;
 
-    await clearUserList();
-    await clearLoadouts();
-    await clearWarehouse();
-    await userLogout();
+    clearUserList();
+    clearLoadouts();
+    clearWarehouse();
+    userLogout();
     logout(history.push("/"));
   }
 

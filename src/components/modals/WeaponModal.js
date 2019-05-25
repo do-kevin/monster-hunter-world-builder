@@ -12,10 +12,11 @@ import {
 import { Close } from "@material-ui/icons";
 import inflection from "inflection";
 import _ from "lodash";
-import { modalStyles } from "screens/Styles";
+import { modalStyles } from "Styles";
 import CustomBarChart from "components/charts/CustomBarChart";
 import { weaponToLoadout } from "store/ducks/Loadouts";
 import { Formik } from "formik";
+import { grey4 } from "Colors";
 
 function WeaponModal(props) {
   const {
@@ -59,7 +60,7 @@ function WeaponModal(props) {
           title={name}
           subheader={newType}
           style={{
-            background: "hsl(207, 11%, 31%)",
+            background: grey4,
           }}
           classes={{
             title: classes.newTitle,
@@ -145,7 +146,7 @@ function WeaponModal(props) {
           </TableTwoCellsPanel>
         </CardContent>
         <CardActions
-          style={{ backgroundColor: "hsl(207, 11%, 31%)" }}
+          style={{ backgroundColor: grey4 }}
         >
           <Formik
             initialValues={{ selectedLoadout: "" }}

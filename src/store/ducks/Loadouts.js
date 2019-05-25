@@ -7,6 +7,7 @@ const CREATE_LOADOUT = "CREATE_LOADOUT";
 const CLEAR_LOADOUTS = "CLEAR_LOADOUTS";
 const ARMOR_TO_LOADOUT = "ARMOR_TO_LOADOUT";
 const WEAPON_TO_LOADOUT = "WEAPON_TO_LOADOUT";
+const UPDATE_ARMOR_META_DATA = "UPDATE_ARMOR_META_DATA";
 
 // ==== Actions ==== //
 export const createLoadout = loadoutName => (dispatch, getState) => {
@@ -36,6 +37,46 @@ export const armorToLoadout = (loadoutName, armorData) => async (dispatch) => {
 
   dispatch({
     type: ARMOR_TO_LOADOUT,
+    payload: action,
+  });
+};
+
+export const updateArmorMetaData = (loadoutName, type) => (dispatch, getState) => {
+  const { loadouts, warehouse } = getState();
+  const { armors } = warehouse;
+  const armorMeta = loadouts.builds[loadoutName].armor_meta;
+  const armorId = loadouts.builds[loadoutName].armor_set[type];
+  const newArmor = armors[armorId];
+  console.log(newArmor);
+
+  const newArmorMeta = Object.assign({}, armorMeta);
+  let newBase,
+    newMax,
+    newAugmented;
+
+  if (armorId) {
+    newBase = newArmorMeta.base - newArmor.defense.base;
+    newMax = newArmorMeta.max - newArmor.defense.max;
+    newAugmented = newArmorMeta.augmented - newArmor.defense.augmented;
+    console.log(newBase, newMax, newAugmented);
+  }
+
+  newBase = newArmorMeta.base + newArmor.defense.base;
+  newMax = newArmorMeta.max + newArmor.defense.max;
+  newAugmented = newArmorMeta.augmented + newArmor.defense.augmented;
+  console.log(newBase, newMax, newAugmented);
+
+  const action = {
+    key: loadoutName,
+    armor_meta: {
+      base: newBase,
+      max: newMax,
+      augmented: newAugmented,
+    },
+  };
+
+  dispatch({
+    type: UPDATE_ARMOR_META_DATA,
     payload: action,
   });
 };
@@ -75,6 +116,11 @@ function loadouts(state = initialState, action) {
         armor_set: { ...initialStateForArmor },
         weapon: null,
         id: uuidv4(),
+        armor_meta: {
+          base: 0,
+          max: 0,
+          augmented: 0,
+        },
       };
       toast.success("Loadout created.");
       return newState;
@@ -93,7 +139,15 @@ function loadouts(state = initialState, action) {
       toast.success(`Saved to ${loadoutName}`);
       return newState;
     }
+    case UPDATE_ARMOR_META_DATA: {
+      const { key: loadoutName, armor_meta } = action.payload;
+      const newState = Object.assign({}, state);
+      _.set(newState, `builds.${loadoutName}.armor_meta`, armor_meta);
+      return newState;
+    }
     case CLEAR_LOADOUTS:
+      console.log("hit");
+      console.log(initialState);
       return initialState;
     default:
       return state;

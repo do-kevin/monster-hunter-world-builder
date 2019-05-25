@@ -1,10 +1,11 @@
 import React from "react";
 import { withStyles, Paper, CardHeader } from "@material-ui/core";
+import { grey2, grey5 } from "Colors";
 
 const styles = () => ({
   panel: {
     textAlign: "center",
-    background: "hsl(204, 12%, 17%)",
+    background: grey2,
     borderTopLeftRadius: "4px",
     borderTopRightRadius: "4px",
   },
@@ -14,7 +15,7 @@ const styles = () => ({
     paddingBottom: "2px",
   },
   titleColor: {
-    color: "hsl(205,11%,80%)",
+    color: grey5,
   },
 });
 

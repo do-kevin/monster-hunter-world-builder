@@ -1,4 +1,3 @@
-/* eslint-disable react/prefer-stateless-function */
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -10,6 +9,7 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { primary0, secondary0 } from "Colors";
 import { PrivateRoute } from "services/auth/PrivateRoute";
 
 import {
@@ -22,10 +22,10 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: "hsl(247, 9%, 15%)",
+      main: primary0,
     },
     secondary: {
-      main: "hsl(214, 100%, 30%)",
+      main: secondary0,
     },
   },
 });

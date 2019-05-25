@@ -2,7 +2,7 @@ import React from "react";
 import {
   Typography, withStyles, Card, CardMedia, Avatar, CardContent,
 } from "@material-ui/core";
-import { dashboardStyles } from "screens/Styles";
+import { dashboardStyles } from "Styles";
 import { SlidingModal } from "components/modals";
 
 function ProfileModal(props) {

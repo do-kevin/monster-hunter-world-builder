@@ -13,9 +13,12 @@ import inflection from "inflection";
 
 import { retrieveUserList } from "store/ducks/List";
 import {
-  dashboardStyles, StyledTable, TextButton, toolbar, topbar, ChildGrid, rTable, View,
+  ChildGrid, View, StyledTable, TextButton,
+} from "components/StyledComponents";
+import {
+  dashboardStyles, toolbar, topbar, rTable,
   cellStyles,
-} from "screens/Styles";
+} from "Styles";
 import { ProfileModal } from "components/modals";
 
 const defaultState = {
