@@ -14,7 +14,7 @@ import _ from "lodash";
 import { Formik } from "formik";
 import { modalStyles } from "Styles";
 import CustomBarChart from "components/charts/CustomBarChart";
-import { armorToLoadout, updateArmorMetaData } from "store/ducks/Loadouts";
+import { armorToLoadout } from "store/ducks/Loadouts";
 import { SlidingModal } from "components/modals";
 import { Panel, TableTwoCellsPanel } from "components/panels";
 import { grey4 } from "Colors";
@@ -42,7 +42,7 @@ class ArmorModal extends Component {
 
     const {
       classes, isArmorModalOpen, onClose, armorData, loadouts,
-      armorToLoadout, updateArmorMetaData,
+      armorToLoadout,
     } = this.props;
 
     const { builds } = loadouts;
@@ -193,8 +193,7 @@ class ArmorModal extends Component {
             <Formik
               initialValues={{ selectedLoadout: "" }}
               onSubmit={async (values) => {
-                await armorToLoadout(values.selectedLoadout, armorData);
-                updateArmorMetaData(values.selectedLoadout, type);
+                await armorToLoadout(values.selectedLoadout, armorData, type);
               }}
               render={({ values, handleSubmit, handleChange }) => (
                 <div className={classes.footer}>
@@ -267,7 +266,6 @@ const mapStateToProps = state => ({ loadouts: state.loadouts });
 
 const mapDispatchToProps = dispatch => ({
   armorToLoadout: bindActionCreators(armorToLoadout, dispatch),
-  updateArmorMetaData: bindActionCreators(updateArmorMetaData, dispatch),
 });
 
 export default connect(

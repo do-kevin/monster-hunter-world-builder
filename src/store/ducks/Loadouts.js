@@ -7,7 +7,6 @@ const CREATE_LOADOUT = "CREATE_LOADOUT";
 const CLEAR_LOADOUTS = "CLEAR_LOADOUTS";
 const ARMOR_TO_LOADOUT = "ARMOR_TO_LOADOUT";
 const WEAPON_TO_LOADOUT = "WEAPON_TO_LOADOUT";
-const UPDATE_ARMOR_META_DATA = "UPDATE_ARMOR_META_DATA";
 
 // ==== Actions ==== //
 export const createLoadout = loadoutName => (dispatch, getState) => {
@@ -29,54 +28,56 @@ export const createLoadout = loadoutName => (dispatch, getState) => {
   });
 };
 
-export const armorToLoadout = (loadoutName, armorData) => async (dispatch) => {
+export const armorToLoadout = (loadoutName, armorData, type) => async (dispatch, getState) => {
+  const { loadouts, warehouse } = getState();
+  const { armors } = warehouse;
+  const {
+    head, chest, waist, legs, gloves,
+  } = loadouts.builds[loadoutName].armor_set;
+  const armorMeta = loadouts.builds[loadoutName].armor_meta;
+  const newArmorMeta = Object.assign({}, armorMeta);
+  console.log(newArmorMeta);
+  const previousArmors = {
+    head,
+    chest,
+    waist,
+    legs,
+    gloves,
+  };
+
+  const selectedArmorId = armorData.id;
+
+  console.log(armorData);
+  const currentArmorId = loadouts.builds[loadoutName].armor_set[type];
+
+  if (currentArmorId === null) {
+    _.set(newArmorMeta, `defense.base`, newArmorMeta.defense.base + armorData.defense.base);
+    _.set(newArmorMeta, `defense.max`, newArmorMeta.defense.max + armorData.defense.max);
+    _.set(newArmorMeta, `defense.augmented`, newArmorMeta.defense.augmented + armorData.defense.augmented);
+  } else if (currentArmorId !== selectedArmorId) {
+    console.log("2nd check:", currentArmorId !== selectedArmorId);
+    _.set(newArmorMeta, `defense.base`, armorMeta.defense.base - armors[previousArmors[type]].defense.base);
+    _.set(newArmorMeta, `defense.max`, armorMeta.defense.max - armors[previousArmors[type]].defense.max);
+    _.set(newArmorMeta, `defense.augmented`, armorMeta.defense.augmented - armors[previousArmors[type]].defense.augmented);
+
+    _.set(newArmorMeta, `defense.base`, newArmorMeta.defense.base + armorData.defense.base);
+    _.set(newArmorMeta, `defense.max`, newArmorMeta.defense.max + armorData.defense.max);
+    _.set(newArmorMeta, `defense.augmented`, newArmorMeta.defense.augmented + armorData.defense.augmented);
+  }
+
+  _.set(previousArmors, type, selectedArmorId);
+
   const action = {
     key: loadoutName,
     armor: armorData,
+    previousArmors,
+    newArmorMeta,
   };
+
+  console.log("action", action);
 
   dispatch({
     type: ARMOR_TO_LOADOUT,
-    payload: action,
-  });
-};
-
-export const updateArmorMetaData = (loadoutName, type) => (dispatch, getState) => {
-  const { loadouts, warehouse } = getState();
-  const { armors } = warehouse;
-  const armorMeta = loadouts.builds[loadoutName].armor_meta;
-  const armorId = loadouts.builds[loadoutName].armor_set[type];
-  const newArmor = armors[armorId];
-  console.log(newArmor);
-
-  const newArmorMeta = Object.assign({}, armorMeta);
-  let newBase,
-    newMax,
-    newAugmented;
-
-  if (armorId) {
-    newBase = newArmorMeta.base - newArmor.defense.base;
-    newMax = newArmorMeta.max - newArmor.defense.max;
-    newAugmented = newArmorMeta.augmented - newArmor.defense.augmented;
-    console.log(newBase, newMax, newAugmented);
-  }
-
-  newBase = newArmorMeta.base + newArmor.defense.base;
-  newMax = newArmorMeta.max + newArmor.defense.max;
-  newAugmented = newArmorMeta.augmented + newArmor.defense.augmented;
-  console.log(newBase, newMax, newAugmented);
-
-  const action = {
-    key: loadoutName,
-    armor_meta: {
-      base: newBase,
-      max: newMax,
-      augmented: newAugmented,
-    },
-  };
-
-  dispatch({
-    type: UPDATE_ARMOR_META_DATA,
     payload: action,
   });
 };
@@ -117,18 +118,31 @@ function loadouts(state = initialState, action) {
         weapon: null,
         id: uuidv4(),
         armor_meta: {
-          base: 0,
-          max: 0,
-          augmented: 0,
+          defense: {
+            base: 0,
+            max: 0,
+            augmented: 0,
+          },
+          previousArmors: {
+            head: null,
+            chest: null,
+            waist: null,
+            legs: null,
+            gloves: null,
+          },
         },
-      };
+      }; 
       toast.success("Loadout created.");
       return newState;
     }
     case ARMOR_TO_LOADOUT: {
       const newState = Object.assign({}, state);
-      const { key: loadoutName, armor } = action.payload;
+      const {
+        key: loadoutName, armor, previousArmors, newArmorMeta,
+      } = action.payload;
       _.set(newState, `builds.${loadoutName}.armor_set.${armor.type}`, armor.id);
+      _.set(newState, `builds.${loadoutName}.armor_meta.previousArmors`, previousArmors);
+      _.set(newState, `builds.${loadoutName}.armor_meta.defense`, newArmorMeta.defense);
       toast.success(`Saved to ${loadoutName}`);
       return newState;
     }
@@ -139,15 +153,7 @@ function loadouts(state = initialState, action) {
       toast.success(`Saved to ${loadoutName}`);
       return newState;
     }
-    case UPDATE_ARMOR_META_DATA: {
-      const { key: loadoutName, armor_meta } = action.payload;
-      const newState = Object.assign({}, state);
-      _.set(newState, `builds.${loadoutName}.armor_meta`, armor_meta);
-      return newState;
-    }
     case CLEAR_LOADOUTS:
-      console.log("hit");
-      console.log(initialState);
       return initialState;
     default:
       return state;
