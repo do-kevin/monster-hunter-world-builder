@@ -6,7 +6,7 @@ import {
   withStyles, AppBar, Toolbar, Typography, Button, Avatar,
   TextField, InputAdornment,
 } from "@material-ui/core";
-import { Refresh, Search } from "@material-ui/icons";
+import { Refresh, Search } from "components/icons/MuiIconsDx";
 import ReactTable from "react-table";
 import matchSorter from "match-sorter";
 import inflection from "inflection";

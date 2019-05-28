@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import {
   AppBar, Toolbar, TextField, withStyles, IconButton, Typography, Button,
 } from "@material-ui/core";
-import { Cached } from "@material-ui/icons";
+import { Cached } from "components/icons/MuiIconsDx";
+import { ShieldAlt, Gavel } from "components/icons/FontAwesomeIcons";
 import { Link as Scroll } from "react-scroll";
 import ReactTable from "react-table";
 import matchSorter from "match-sorter";
@@ -269,7 +270,7 @@ class Forge extends Component {
               style={{ color: lightGrey }}
               onClick={() => this.setState({ searchingWeapon: !searchingWeapon })}
             >
-              {!searchingWeapon ? <i className="fas fa-shield-alt" /> : <i className="fas fa-gavel" />}
+              {!searchingWeapon ? <ShieldAlt /> : <Gavel/>}
             </IconButton>
             <TextField
               id={!searchingWeapon ? "armorpiece" : "weaponpiece"}

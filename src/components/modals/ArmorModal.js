@@ -8,7 +8,8 @@ import {
   FormControl, Select, MenuItem, InputLabel, OutlinedInput,
   IconButton,
 } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
+import { Close } from "components/icons/MuiIconsDx";
+import { MaleIcon, FemaleIcon } from "components/icons/FontAwesomeIcons";
 import inflection from "inflection";
 import _ from "lodash";
 import { Formik } from "formik";
@@ -95,8 +96,8 @@ class ArmorModal extends Component {
             <Panel
               title={
                 swapImage
-                  ? <i className="fas fa-female" />
-                  : <i className="fas fa-male" />
+                  ? <FemaleIcon />
+                  : <MaleIcon />
               }
               onClick={() => this.setState({ swapImage: !swapImage })}
               CardHeaderProps={panelBtn}

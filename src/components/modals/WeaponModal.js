@@ -9,7 +9,7 @@ import {
   TableRow, TableCell, Tooltip, FormControl, InputLabel,
   Select, OutlinedInput, Button, MenuItem, Typography,
 } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
+import { Close } from "components/icons/MuiIconsDx";
 import inflection from "inflection";
 import _ from "lodash";
 import { modalStyles } from "Styles";

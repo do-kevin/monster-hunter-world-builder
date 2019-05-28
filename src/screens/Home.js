@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Switch } from "react-router-dom";
-import { PrivateRoute } from "services/auth/PrivateRoute";
+import PrivateRoute from "services/auth/PrivateRoute";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
@@ -8,9 +8,9 @@ import {
 } from "@material-ui/core";
 import {
   PowerSettingsNew, Settings,
-  Dashboard as DashboardIcon,
+  DashboardIcon,
   Build,
-} from "@material-ui/icons";
+} from "components/icons/MuiIconsDx";
 
 import { logout } from "services/auth/RegistrationApi";
 import { getProfile, userLogout } from "store/ducks/Profile";

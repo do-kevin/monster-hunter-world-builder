@@ -10,7 +10,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { primary0, secondary0 } from "Colors";
-import { PrivateRoute } from "services/auth/PrivateRoute";
+import PrivateRoute from "services/auth/PrivateRoute";
 
 import {
   Home, NotFound, Authentication,

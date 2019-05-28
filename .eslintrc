@@ -41,5 +41,6 @@
 		"react/jsx-boolean-value": "warn",
 		"react/jsx-one-expression-per-line": "warn",
 		"react/prefer-stateless-function": "warn",
+		"linebreak-style": "warn"
 	}
 }
