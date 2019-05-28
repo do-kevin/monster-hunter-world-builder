@@ -36,7 +36,6 @@ export const armorToLoadout = (loadoutName, armorData, type) => async (dispatch,
   } = loadouts.builds[loadoutName].armor_set;
   const armorMeta = loadouts.builds[loadoutName].armor_meta;
   const newArmorMeta = Object.assign({}, armorMeta);
-  console.log(newArmorMeta);
   const previousArmors = {
     head,
     chest,
@@ -46,23 +45,38 @@ export const armorToLoadout = (loadoutName, armorData, type) => async (dispatch,
   };
 
   const selectedArmorId = armorData.id;
-
-  console.log(armorData);
   const currentArmorId = loadouts.builds[loadoutName].armor_set[type];
 
   if (currentArmorId === null) {
     _.set(newArmorMeta, `defense.base`, newArmorMeta.defense.base + armorData.defense.base);
     _.set(newArmorMeta, `defense.max`, newArmorMeta.defense.max + armorData.defense.max);
     _.set(newArmorMeta, `defense.augmented`, newArmorMeta.defense.augmented + armorData.defense.augmented);
+    
+    _.set(newArmorMeta, `resistances.fire`, newArmorMeta.resistances.fire + armorData.resistances.fire);
+    _.set(newArmorMeta, `resistances.water`, newArmorMeta.resistances.water + armorData.resistances.water);
+    _.set(newArmorMeta, `resistances.dragon`, newArmorMeta.resistances.dragon + armorData.resistances.dragon);
+    _.set(newArmorMeta, `resistances.thunder`, newArmorMeta.resistances.thunder + armorData.resistances.thunder);
+    _.set(newArmorMeta, `resistances.ice`, newArmorMeta.resistances.ice + armorData.resistances.ice);
   } else if (currentArmorId !== selectedArmorId) {
-    console.log("2nd check:", currentArmorId !== selectedArmorId);
     _.set(newArmorMeta, `defense.base`, armorMeta.defense.base - armors[previousArmors[type]].defense.base);
     _.set(newArmorMeta, `defense.max`, armorMeta.defense.max - armors[previousArmors[type]].defense.max);
     _.set(newArmorMeta, `defense.augmented`, armorMeta.defense.augmented - armors[previousArmors[type]].defense.augmented);
 
+    _.set(newArmorMeta, `resistances.fire`, armorMeta.resistances.fire - armors[previousArmors[type]].resistances.fire);
+    _.set(newArmorMeta, `resistances.water`, armorMeta.resistances.water - armors[previousArmors[type]].resistances.water);
+    _.set(newArmorMeta, `resistances.dragon`, armorMeta.resistances.dragon - armors[previousArmors[type]].resistances.dragon);
+    _.set(newArmorMeta, `resistances.thunder`, armorMeta.resistances.thunder - armors[previousArmors[type]].resistances.thunder);
+    _.set(newArmorMeta, `resistances.ice`, armorMeta.resistances.ice - armors[previousArmors[type]].resistances.ice);
+
     _.set(newArmorMeta, `defense.base`, newArmorMeta.defense.base + armorData.defense.base);
     _.set(newArmorMeta, `defense.max`, newArmorMeta.defense.max + armorData.defense.max);
     _.set(newArmorMeta, `defense.augmented`, newArmorMeta.defense.augmented + armorData.defense.augmented);
+
+    _.set(newArmorMeta, `resistances.fire`, newArmorMeta.resistances.fire + armorData.resistances.fire);
+    _.set(newArmorMeta, `resistances.water`, newArmorMeta.resistances.water + armorData.resistances.water);
+    _.set(newArmorMeta, `resistances.dragon`, newArmorMeta.resistances.dragon + armorData.resistances.dragon);
+    _.set(newArmorMeta, `resistances.thunder`, newArmorMeta.resistances.thunder + armorData.resistances.thunder);
+    _.set(newArmorMeta, `resistances.ice`, newArmorMeta.resistances.ice + armorData.resistances.ice);
   }
 
   _.set(previousArmors, type, selectedArmorId);
@@ -122,6 +136,13 @@ function loadouts(state = initialState, action) {
             base: 0,
             max: 0,
             augmented: 0,
+          },
+          resistances: {
+            fire: 0,
+            water: 0,
+            ice: 0,
+            thunder: 0,
+            dragon: 0,
           },
           previousArmors: {
             head: null,
