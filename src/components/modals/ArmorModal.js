@@ -19,19 +19,11 @@ import { armorToLoadout } from "store/ducks/Loadouts";
 import { SlidingModal } from "components/modals";
 import { Panel, TableTwoCellsPanel } from "components/panels";
 import { grey4 } from "Colors";
-import styled from "styled-components";
 
 const panelBtn = {
   cursor: "pointer",
   padding: "8px",
 };
-
-const StyledCardHeader = styled(CardHeader)`
-  @media (max-width: 1430px) {
-    padding-top: 81px;
-    background-color: red;
-  }
-`;
 
 class ArmorModal extends Component {
   state = {
@@ -82,8 +74,11 @@ class ArmorModal extends Component {
         isModalOpen={isArmorModalOpen}
         onClose={onClose}
       >
-        <Card className={`${classes.card} ${classes.customCard}`}>
-          <StyledCardHeader
+        <Card
+          className={`${classes.card} ${classes.customCard}`}
+          classes={{ root: "responsive-card" }}
+        >
+          <CardHeader
             title={name}
             subheader={newType}
             style={{ background: grey4 }}
@@ -92,7 +87,10 @@ class ArmorModal extends Component {
               subheader: classes.newTitle,
             }}
           />
-          <CardContent className={classes.centerContent}>
+          <CardContent
+            className={classes.centerContent}
+            classes={{ root: "responsive-card__content" }}
+          >
             <Panel
               title={
                 swapImage
@@ -189,6 +187,7 @@ class ArmorModal extends Component {
             </TableTwoCellsPanel>
           </CardContent>
           <CardActions
+            className="responsive-card__actions"
             style={{ backgroundColor: grey4 }}
           >
             <Formik

@@ -1,4 +1,4 @@
-const grey0 = "hsl(0, 0%, 98%)",
+export const grey0 = "hsl(0, 0%, 98%)",
   grey1 = "hsl(175, 5%, 75%)",
   grey2 = "hsl(204, 12%, 15%)",
   grey3 = "hsl(205, 11%, 31%)",
@@ -7,34 +7,18 @@ const grey0 = "hsl(0, 0%, 98%)",
   lightGrey = "hsl(0, 0%, 77%)",
   darkishGrey = "hsl(207, 11%, 29%)";
 
-const danger0 = "hsl(355, 70%, 46%)";
+export const danger0 = "hsl(355, 70%, 46%)";
 
-const dark0 = "hsl(0, 0%, 0%)",
+export const darkBlue0 = "hsl(207, 13%, 17%)",
+  darkBlue1 = "hsl(202.1, 26.4%, 28.2%)";
+
+export const dark0 = "hsl(0, 0%, 0%)",
   dark1 = "hsl(60, 3%, 25%)";
 
-const purple0 = "hsl(330, 49%, 55%)";
+export const purple0 = "hsl(330, 49%, 55%)";
 
-const primary0 = "hsl(247, 9%, 15%)",
+export const primary0 = "hsl(247, 9%, 15%)",
   primary1 = "hsl(247, 9%, 21%)",
   primary2 = "hsl(249, 9%, 15%)";
 
-const secondary0 = "hsl(214, 100%, 30%)";
-
-export {
-  lightGrey,
-  grey0,
-  grey1,
-  grey2,
-  grey3,
-  darkishGrey,
-  grey4,
-  grey5,
-  danger0,
-  dark0,
-  dark1,
-  primary0,
-  primary1,
-  primary2,
-  secondary0,
-  purple0,
-};
+export const secondary0 = "hsl(214, 100%, 30%)";

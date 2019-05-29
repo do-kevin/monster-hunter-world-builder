@@ -55,6 +55,7 @@ function WeaponModal(props) {
     >
       <Card
         className={`${classes.card} ${classes.customCard}`}
+        classes={{ root: "responsive-card" }}
       >
         <CardHeader
           title={name}
@@ -67,7 +68,10 @@ function WeaponModal(props) {
             subheader: classes.newTitle,
           }}
         />
-        <CardContent className={`${classes.centerContent}`}>
+        <CardContent
+          className={`${classes.centerContent}`}
+          classes={{ root: "responsive-card__content" }}
+        >
           <Panel
             title={`Rarity ${rarity}`}
           >
@@ -146,6 +150,7 @@ function WeaponModal(props) {
           </TableTwoCellsPanel>
         </CardContent>
         <CardActions
+          className="responsive-card__actions"
           style={{ backgroundColor: grey4 }}
         >
           <Formik

@@ -1,4 +1,4 @@
-import { grey2, grey3 } from "Colors";
+import { grey2, grey3, darkBlue0 } from "Colors";
 
 const gridAreaTop = "Topbar";
 
@@ -130,7 +130,7 @@ export const armorsStyles = () => ({
   armorsBlock: {
     minWidth: "600px",
     margin: "auto auto 18px auto",
-    background: "hsl(207, 13%, 17%)",
+    background: darkBlue0,
     borderRadius: "5px",
     boxSizing: "border-box",
     boxShadow: "0px 4px 10px hsl(204, 12%, 15%)",
@@ -146,6 +146,19 @@ export const armorsStyles = () => ({
     return Object.assign({}, this.armorsBlock, {
       height: "400px",
     });
+  },
+  get overallStatsBlock() {
+    return Object.assign({}, this.armorsBlock, {
+      width: "100%",
+    });
+  },
+  overallStatsElems: {
+    display: "flex",
+    flexWrap: "wrap",
+    margin: "auto",
+    justifyContent: "center",
+    padding: "15px",
+    boxSizing: "border-box",
   },
 });
 
@@ -193,7 +206,6 @@ export const modalStyles = () => ({
   customCard: {
     outline: "none",
     background: "hsl(0, 0%, 41%)",
-    minWidth: "755px",
   },
   closeModalBtn: {
     background: "hsl(207, 11%, 25%)",

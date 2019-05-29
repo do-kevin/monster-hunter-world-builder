@@ -16,6 +16,8 @@ import { createLoadout } from "store/ducks/Loadouts";
 import {
   ChildGrid, ExtendedView, ArmorsTable, TextButton,
 } from "components/StyledComponents";
+import { Panel } from "components/panels";
+import CustomBarChart from "components/charts/CustomBarChart";
 import {
   rTable, armorsStyles,
   armorCells, extendedTopbar, extendedToolbar,
@@ -23,7 +25,7 @@ import {
 import { ArmorModal, WeaponModal } from "components/modals";
 import _ from "lodash";
 import {
-  grey0, grey5, lightGrey, darkishGrey, primary2,
+  grey0, grey5, lightGrey, darkishGrey, primary2, darkBlue1,
 } from "Colors";
 
 const scrollToBtns = {
@@ -114,6 +116,107 @@ class Forge extends Component {
         <p> Empty {type} slot</p>
       </div>
     );
+  };
+
+  watchDefData = () => {
+    const { loadouts } = this.props;
+    const { selectedLoadout } = this.state;
+    const { builds } = loadouts;
+
+    const defaultData = [
+      {
+        Defense: "Base", Rating: 0,
+      },
+      {
+        Defense: "Max", Rating: 0,
+      },
+      {
+        Defense: "Augmented", Rating: 0,
+      },
+    ];
+
+    if (builds[selectedLoadout]) {
+      const loadout = builds[selectedLoadout];
+      const { base, max, augmented } = loadout.armor_meta.defense;
+      const updatedData = [
+        Object.assign({}, defaultData[0], { Rating: base }),
+        Object.assign({}, defaultData[1], { Rating: max }),
+        Object.assign({}, defaultData[2], { Rating: augmented }),
+      ];
+      return updatedData;
+    }
+    return defaultData;
+  }
+
+  watchResistData = () => {
+    const { loadouts } = this.props;
+    const { selectedLoadout } = this.state;
+    const { builds } = loadouts;
+
+    const defaultData = [
+      {
+        Resistance: "Dragon", Rating: 0,
+      },
+      {
+        Resistance: "Water", Rating: 0,
+      },
+      {
+        Resistance: "Fire", Rating: 0,
+      },
+      {
+        Resistance: "Ice", Rating: 0,
+      },
+      {
+        Resistance: "Thunder", Rating: 0,
+      },
+    ];
+
+    if (builds[selectedLoadout]) {
+      const loadout = builds[selectedLoadout];
+      const {
+        fire, water, ice, thunder, dragon,
+      } = loadout.armor_meta.resistances;
+      const updatedData = [
+        Object.assign({}, defaultData[0], { Rating: dragon }),
+        Object.assign({}, defaultData[1], { Rating: water }),
+        Object.assign({}, defaultData[2], { Rating: fire }),
+        Object.assign({}, defaultData[3], { Rating: ice }),
+        Object.assign({}, defaultData[4], { Rating: thunder }),
+      ];
+      return updatedData;
+    }
+    return defaultData;
+  }
+
+  watchAttackData = () => {
+    const { loadouts, weapons } = this.props;
+    const { selectedLoadout } = this.state;
+    const { builds } = loadouts;
+
+    const weaponCheck = _.get(builds[selectedLoadout], "weapon_set.primary");
+
+    if (weaponCheck) {
+      const loadout = builds[selectedLoadout];
+      const { primary } = loadout.weapon_set;
+      const { attack, elements = [] } = weapons[primary];
+      const attackPower = attack.display;
+      const updatedData = [
+        { Name: "Attack Power", Damage: attackPower },
+      ];
+      _.map(elements, (elem) => {
+        updatedData.push({
+          Name: inflection.capitalize(elem.type), Damage: elem.damage,
+        });
+      });
+
+      return updatedData;
+    }
+
+    const defaultData = [
+      { Name: "Attack Power", Damage: 0 },
+    ];
+
+    return defaultData;
   };
 
   generateWeaponSlot = (id) => {
@@ -270,7 +373,7 @@ class Forge extends Component {
               style={{ color: lightGrey }}
               onClick={() => this.setState({ searchingWeapon: !searchingWeapon })}
             >
-              {!searchingWeapon ? <ShieldAlt /> : <Gavel/>}
+              {!searchingWeapon ? <ShieldAlt /> : <Gavel />}
             </IconButton>
             <TextField
               id={!searchingWeapon ? "armorpiece" : "weaponpiece"}
@@ -359,6 +462,12 @@ class Forge extends Component {
               >
                 <Button style={scrollToBtns}>Inventory</Button>
               </Scroll>
+              <Scroll
+                to="stats"
+                smooth="true"
+              >
+                <Button style={scrollToBtns}>Stats</Button>
+              </Scroll>
             </section>
           </Toolbar>
         </AppBar>
@@ -390,7 +499,11 @@ class Forge extends Component {
               ref={this.reactTable}
             />
           </ArmorsTable>
-          <div className={classes.loadoutInventoryBlock}>
+          <div
+            className={
+              `${classes.loadoutInventoryBlock} ${"forge-content"}`
+            }
+          >
             <main
               className={classes.loadoutBlock}
               id="loadouts"
@@ -460,10 +573,58 @@ class Forge extends Component {
                 }
               </section>
             </main>
-            <main className={classes.loadoutBlock}>
-              <header className={classes.panelHeader}>
-                Overall Stats
-              </header>
+            <main
+              className={classes.overallStatsBlock}
+              id="stats"
+            >
+              <header className={classes.panelHeader}>Overall Stats</header>
+              <div className={classes.overallStatsElems}>
+                <Panel
+                  title="Defense ratings"
+                  classesProp={{ root: "custom-panel" }}
+                  CardHeaderProps={{ backgroundColor: darkBlue1 }}
+                  whiteHeaderText
+                  spaceBetweenPanels
+                >
+                  <CustomBarChart
+                    data={this.watchDefData()}
+                    XAxisLabel="Defense"
+                    YAxisLabel="Rating"
+                    dataKey="Rating"
+                    style={{ padding: "29px 0 12px 0" }}
+                  />
+                </Panel>
+                <Panel
+                  title="Elemental resistances"
+                  classesProp={{ root: "custom-panel" }}
+                  CardHeaderProps={{ backgroundColor: darkBlue1 }}
+                  whiteHeaderText
+                  spaceBetweenPanels
+                >
+                  <CustomBarChart
+                    data={this.watchResistData()}
+                    XAxisLabel="Resistance"
+                    YAxisLabel="Rating"
+                    dataKey="Rating"
+                    style={{ padding: "29px 0 12px 0" }}
+                  />
+                </Panel>
+                <Panel
+                  title="Damage ratings"
+                  classesProp={{ root: "custom-panel" }}
+                  CardHeaderProps={{ backgroundColor: darkBlue1 }}
+                  whiteHeaderText
+                  spaceBetweenPanels
+                >
+                  <CustomBarChart
+                    data={this.watchAttackData()}
+                    XAxisLabel="Name"
+                    YAxisLabel="Damage"
+                    dataKey="Damage"
+                    style={{ padding: "29px 0 12px 0" }}
+                  />
+                </Panel>
+              </div>
             </main>
           </div>
         </ExtendedView>
