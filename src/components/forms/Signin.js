@@ -39,7 +39,7 @@ function Signin(props) {
           <form onSubmit={handleSubmit}>
             <TextField
               label="Email"
-              className={classes.TextField}
+              className={classes.textField}
               style={{ width: "100%" }}
               type="email"
               name="email"
@@ -50,7 +50,7 @@ function Signin(props) {
             />
             <TextField
               label="Password"
-              className={classes.TextField}
+              className={classes.textField}
               style={{ width: "100%" }}
               type="password"
               name="password"

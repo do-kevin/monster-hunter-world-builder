@@ -2,16 +2,17 @@ import React from "react";
 import { withStyles, Button, Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { primary1, grey0 } from "Colors";
 
 const styles = () => ({
   sidebarBtn: {
     margin: "3px 0",
-    color: "hsl(0, 0%, 98%)",
+    color: `${grey0}`,
     width: "110px",
     padding: "25px 5px",
   },
   gridDivider: {
-    borderBottom: "1px ridge hsl(247, 9%, 21%)",
+    borderBottom: `1px ridge ${primary1}`,
   },
 });
 

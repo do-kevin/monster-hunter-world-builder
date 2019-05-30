@@ -1,18 +1,25 @@
 import React, { Component } from "react";
 import { Switch } from "react-router-dom";
-import { PrivateRoute } from "services/auth/PrivateRoute";
+import PrivateRoute from "services/auth/PrivateRoute";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
   withStyles, Toolbar, AppBar, Grid,
 } from "@material-ui/core";
-import { PowerSettingsNew, Settings, Dashboard as DashboardIcon } from "@material-ui/icons";
+import {
+  PowerSettingsNew, Settings,
+  DashboardIcon,
+  Build,
+} from "components/icons/MuiIconsDx";
 
 import { logout } from "services/auth/RegistrationApi";
 import { getProfile, userLogout } from "store/ducks/Profile";
 import { clearUserList } from "store/ducks/List";
+import { clearLoadouts } from "store/ducks/Loadouts";
+import { clearWarehouse } from "store/ducks/Warehouse";
+import { ParentGrid } from "components/StyledComponents";
 import { ProfileUpdateForm, ProfileCreationForm } from "components/forms";
-import { Dashboard } from "screens";
+import { Dashboard, Forge } from "screens";
 import { SidebarBtn } from "components/buttons";
 
 const styles = () => ({
@@ -38,14 +45,27 @@ class Home extends Component {
     }
   }
 
+  clearAllOnLogout = () => {
+    const {
+      history, userLogout, clearUserList,
+      clearLoadouts, clearWarehouse,
+    } = this.props;
+
+    clearUserList();
+    clearLoadouts();
+    clearWarehouse();
+    userLogout();
+    logout(history.push("/"));
+  }
+
   render() {
     const {
-      history, classes, userLogout, clearUserList, location,
+      classes, location,
     } = this.props;
     const { pathname } = location;
 
     return (
-      <main className="home-grid">
+      <ParentGrid>
         <AppBar
           className={classes.sidebar}
         >
@@ -67,6 +87,13 @@ class Home extends Component {
                 />
                 <SidebarBtn
                   color="secondary"
+                  icon={<Build />}
+                  to="/app/forge"
+                  disabled={pathname === "/app/create-profile"}
+                  divider
+                />
+                <SidebarBtn
+                  color="secondary"
                   icon={<Settings />}
                   to="/app/settings"
                   disabled={pathname === "/app/create-profile"}
@@ -76,30 +103,30 @@ class Home extends Component {
                 color="secondary"
                 icon={<PowerSettingsNew />}
                 to=""
-                onClick={() => {
-                  clearUserList();
-                  userLogout();
-                  logout(history.push("/"));
-                }}
+                onClick={this.clearAllOnLogout}
               />
             </Grid>
           </Toolbar>
         </AppBar>
         <Switch>
           <PrivateRoute
-            path="/app/create-profile"
-            component={ProfileCreationForm}
-          />
-          <PrivateRoute
             path="/app/dashboard"
             component={Dashboard}
+          />
+          <PrivateRoute
+            path="/app/forge"
+            component={Forge}
           />
           <PrivateRoute
             path="/app/settings"
             component={ProfileUpdateForm}
           />
+          <PrivateRoute
+            path="/app/create-profile"
+            component={ProfileCreationForm}
+          />
         </Switch>
-      </main>
+      </ParentGrid>
     );
   }
 }
@@ -112,6 +139,8 @@ const mapDispatchToProps = dispatch => ({
   getProfile: bindActionCreators(getProfile, dispatch),
   userLogout: bindActionCreators(userLogout, dispatch),
   clearUserList: bindActionCreators(clearUserList, dispatch),
+  clearLoadouts: bindActionCreators(clearLoadouts, dispatch),
+  clearWarehouse: bindActionCreators(clearWarehouse, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

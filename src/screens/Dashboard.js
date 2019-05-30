@@ -6,14 +6,20 @@ import {
   withStyles, AppBar, Toolbar, Typography, Button, Avatar,
   TextField, InputAdornment,
 } from "@material-ui/core";
-import { Refresh, Search } from "@material-ui/icons";
+import { Refresh, Search } from "components/icons/MuiIconsDx";
 import ReactTable from "react-table";
 import matchSorter from "match-sorter";
 import inflection from "inflection";
 
 import { retrieveUserList } from "store/ducks/List";
-import { bigStyles, StyledTable, TextButton } from "screens/DashboardStyles";
-import ModalCard from "components/ModalCard";
+import {
+  ChildGrid, View, StyledTable, TextButton,
+} from "components/StyledComponents";
+import {
+  dashboardStyles, toolbar, topbar, rTable,
+  cellStyles,
+} from "Styles";
+import { ProfileModal } from "components/modals";
 
 const defaultState = {
   selectedUser: [
@@ -45,7 +51,6 @@ class Dashboard extends Component {
   }
 
   generateColumn = (key = "", filterable = false, show = true) => {
-    const { classes } = this.props;
     const newCell = {
       id: inflection.camelize(key, key.charAt(0)),
       Header: inflection.humanize(key),
@@ -55,7 +60,7 @@ class Dashboard extends Component {
       Cell: d => (
         <Typography
           variant="body1"
-          className={classes.cellStyles}
+          style={cellStyles}
         >
           {d.value}
         </Typography>
@@ -113,10 +118,9 @@ class Dashboard extends Component {
     ];
 
     return (
-      <div className="dashboard-grid">
-        <div style={{ gridArea: "nav" }} />
-        <AppBar className={classes.topbar}>
-          <Toolbar className={classes.toolbar}>
+      <ChildGrid>
+        <AppBar style={topbar}>
+          <Toolbar style={toolbar}>
             <Button
               onClick={() => this.refreshList()}
               color="secondary"
@@ -129,7 +133,7 @@ class Dashboard extends Component {
             <TextField
               id="fullName"
               type="text"
-              className={`${classes.TextField} name-filter`}
+              className={`${classes.textField} name-filter`}
               autoComplete="off"
               onChange={event => (
                 this.reactTable.current.filterColumn(columns[1], event.target.value)
@@ -147,8 +151,8 @@ class Dashboard extends Component {
             />
           </Toolbar>
         </AppBar>
-        <main className={classes.rtWrapper}>
-          <ModalCard
+        <View>
+          <ProfileModal
             modalData={this.state.selectedUser}
             openModal={this.state.openModal}
             onClose={() => this.setState({ openModal: false })}
@@ -156,18 +160,19 @@ class Dashboard extends Component {
           <StyledTable>
             <ReactTable
               ref={this.reactTable}
-              className={`${classes.table} -highlight`}
+              className="-hightlight"
+              style={rTable}
               data={list}
               columns={columns}
             />
           </StyledTable>
-        </main>
-      </div>
+        </View>
+      </ChildGrid>
     );
   }
 }
 
-const componentWithStyles = withStyles(bigStyles)(Dashboard);
+const componentWithStyles = withStyles(dashboardStyles)(Dashboard);
 
 const mapStateToProps = state => ({ list: state.list });
 

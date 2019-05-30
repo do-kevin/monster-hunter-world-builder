@@ -36,6 +36,11 @@
 		"quotes": 0,
 		"no-underscore-dangle": "off",
 		"no-shadow": "warn",
-		"react/destructuring-assignment": "warn"
+		"react/destructuring-assignment": "warn",
+		"one-var":"off",
+		"react/jsx-boolean-value": "warn",
+		"react/jsx-one-expression-per-line": "warn",
+		"react/prefer-stateless-function": "warn",
+		"linebreak-style": "warn"
 	}
 }

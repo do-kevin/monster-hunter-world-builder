@@ -27,7 +27,7 @@ function ResetPassword(props) {
           <form onSubmit={handleSubmit}>
             <TextField
               label="Email"
-              className={classes.TextField}
+              className={classes.textField}
               style={{ width: "100%" }}
               type="email"
               name="email"

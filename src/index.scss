@@ -1,3 +1,6 @@
+$material-design-icons-font-directory-path: "~material-design-icons-iconfont/dist/fonts/";
+@import "~material-design-icons-iconfont/src/material-design-icons";
+
 $grey0: hsl(0, 0%, 98%);
 $grey1: hsl(175, 5%, 75%);
 $danger0: hsl(355, 70%, 46%);
@@ -43,23 +46,6 @@ body {
   align-items: center;
 }
 
-.home-grid {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  grid-template-areas: "Menu Content";
-}
-
-.dashboard-grid {
-  @extend .home-grid;
-  grid-template-rows: 70px 1fr;
-  grid-template-areas: 
-    "nav Topbar" 
-    "nav List";
-  grid-gap: 0;
-  z-index: 2;
-  height: 100%;
-}
-
 .NotFound {
   @extend .flexCenter;
   border-radius: 7px;
@@ -86,4 +72,41 @@ body {
       font-size: 72px;
     }
   }
+}
+
+.responsive-card {
+  $mediaCardWidth: 760px;
+  min-width: 755px;
+  @media (max-width: $mediaCardWidth) {
+    height: 100% !important;
+    overflow-y: scroll;
+    min-width: 0;
+  }
+
+  &__actions {
+    @media (max-width: $mediaCardWidth) {
+      bottom: 0;
+      position: absolute;
+      width: 100%;
+    }
+  }
+
+  &__content {
+    @media (max-width: 760px) {
+      height: 100%;
+      overflow-y: scroll;
+    }
+  }
+}
+
+.forge-content {
+  padding-bottom: 50px;
+  @media (min-width: 1376px) {
+    width: 1245px !important;
+    margin: auto;
+  }
+}
+
+.custom-panel {
+  width: 400px;
 }

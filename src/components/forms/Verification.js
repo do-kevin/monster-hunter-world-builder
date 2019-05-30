@@ -7,6 +7,7 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 
+import { dark0 } from "Colors";
 import { setPassword, verifyEmail } from "services/auth/RegistrationApi";
 
 const styles = () => ({
@@ -20,7 +21,7 @@ const styles = () => ({
     textTransform: "none",
     margin: "5px auto",
     fontWeight: "600",
-    color: "hsl(0, 0%, 0%)",
+    color: dark0,
   },
 });
 
@@ -54,7 +55,7 @@ class Verification extends Component {
   };
 
   render() {
-    const { classes } = this.props; // eslint-disable-line react/prop-types
+    const { classes } = this.props;
     return (
       <Formik
         initialValues={{

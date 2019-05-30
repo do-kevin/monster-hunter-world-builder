@@ -49,7 +49,7 @@ function ProfileCreationForm(props) {
               <TextField
                 id="fname"
                 label="First name"
-                className={classes.TextField}
+                className={classes.textField}
                 style={{ width: "100%" }}
                 type="text"
                 name="fname"
@@ -61,7 +61,7 @@ function ProfileCreationForm(props) {
               <TextField
                 id="lname"
                 label="Last name"
-                className={classes.TextField}
+                className={classes.textField}
                 style={{ width: "100%" }}
                 type="text"
                 name="lname"
@@ -73,7 +73,7 @@ function ProfileCreationForm(props) {
               <TextField
                 id="birthdate"
                 label="Birthday"
-                className={classes.TextField}
+                className={classes.textField}
                 style={{ width: "100%" }}
                 type="date"
                 name="birthdate"
@@ -86,7 +86,7 @@ function ProfileCreationForm(props) {
               <TextField
                 id="phonenum"
                 label="Phone number"
-                className={classes.TextField}
+                className={classes.textField}
                 style={{ width: "100%" }}
                 type="text"
                 name="phonenum"
