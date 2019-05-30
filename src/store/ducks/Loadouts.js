@@ -44,6 +44,7 @@ export const armorToLoadout = (loadoutName, armorData, type) => async (dispatch,
     gloves,
   };
 
+  const prevArmorByType = previousArmors[type];
   const selectedArmorId = armorData.id;
   const currentArmorId = loadouts.builds[loadoutName].armor_set[type];
 
@@ -62,19 +63,19 @@ export const armorToLoadout = (loadoutName, armorData, type) => async (dispatch,
   }
 
   function updateDefRatings() {
-    _.set(newArmorMeta, `defense.base`, armorMeta.defense.base - armors[previousArmors[type]].defense.base);
-    _.set(newArmorMeta, `defense.max`, armorMeta.defense.max - armors[previousArmors[type]].defense.max);
-    _.set(newArmorMeta, `defense.augmented`, armorMeta.defense.augmented - armors[previousArmors[type]].defense.augmented);
+    _.set(newArmorMeta, `defense.base`, armorMeta.defense.base - armors[prevArmorByType].defense.base);
+    _.set(newArmorMeta, `defense.max`, armorMeta.defense.max - armors[prevArmorByType].defense.max);
+    _.set(newArmorMeta, `defense.augmented`, armorMeta.defense.augmented - armors[prevArmorByType].defense.augmented);
 
     addDefRatings();
   }
 
   function updateResistances() {
-    _.set(newArmorMeta, `resistances.fire`, armorMeta.resistances.fire - armors[previousArmors[type]].resistances.fire);
-    _.set(newArmorMeta, `resistances.water`, armorMeta.resistances.water - armors[previousArmors[type]].resistances.water);
-    _.set(newArmorMeta, `resistances.dragon`, armorMeta.resistances.dragon - armors[previousArmors[type]].resistances.dragon);
-    _.set(newArmorMeta, `resistances.thunder`, armorMeta.resistances.thunder - armors[previousArmors[type]].resistances.thunder);
-    _.set(newArmorMeta, `resistances.ice`, armorMeta.resistances.ice - armors[previousArmors[type]].resistances.ice);
+    _.set(newArmorMeta, `resistances.fire`, armorMeta.resistances.fire - armors[prevArmorByType].resistances.fire);
+    _.set(newArmorMeta, `resistances.water`, armorMeta.resistances.water - armors[prevArmorByType].resistances.water);
+    _.set(newArmorMeta, `resistances.dragon`, armorMeta.resistances.dragon - armors[prevArmorByType].resistances.dragon);
+    _.set(newArmorMeta, `resistances.thunder`, armorMeta.resistances.thunder - armors[prevArmorByType].resistances.thunder);
+    _.set(newArmorMeta, `resistances.ice`, armorMeta.resistances.ice - armors[prevArmorByType].resistances.ice);
 
     addResistances();
   }
@@ -82,7 +83,7 @@ export const armorToLoadout = (loadoutName, armorData, type) => async (dispatch,
   if (currentArmorId === null) {
     addDefRatings();
     addResistances();
-  } else if (currentArmorId !== selectedArmorId) {
+  } else if ((currentArmorId !== selectedArmorId) && prevArmorByType) {
     updateDefRatings();
     updateResistances();
   }
