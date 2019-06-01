@@ -8,6 +8,7 @@ const CLEAR_USER_LIST = "CLEAR_USER_LIST";
 
 export const retrieveUserList = () => async (dispatch) => {
   const data = await listAllProfiles();
+  console.log(data);
   dispatch({
     type: RETRIEVE_USER_LIST,
     payload: data,

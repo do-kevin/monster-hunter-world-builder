@@ -23,6 +23,7 @@ class Api {
   })
 
   setToken(token) {
+    console.log("Token", token);
     this.instance = axios.create({
       baseURL: process.env.REACT_APP_API_SERVER_URL,
       headers: {

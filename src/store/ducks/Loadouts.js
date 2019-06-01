@@ -136,7 +136,9 @@ function loadouts(state = initialState, action) {
       const newState = Object.assign({}, state);
       newState.builds[action.payload] = {
         armor_set: { ...initialStateForArmor },
-        weapon: null,
+        weapon_set: {
+          primary: null,
+        },
         id: uuidv4(),
         armor_meta: {
           defense: {

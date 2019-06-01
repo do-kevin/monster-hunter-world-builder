@@ -27,6 +27,8 @@ import _ from "lodash";
 import {
   grey0, grey5, lightGrey, darkishGrey, primary2, darkBlue1,
 } from "Colors";
+import { postLoadoutsToDb, getMyLoadouts, putUpdatedLoadoutsToDb } from "services/MonsterHunterWorldApi";
+import { toast } from "react-toastify";
 
 const scrollToBtns = {
   color: grey5,
@@ -256,6 +258,24 @@ class Forge extends Component {
       </div>
     );
   };
+
+  uploadLoadoutsToDb = async (builds) => {
+    const request = await postLoadoutsToDb(builds);
+    console.log("Forge request", request);
+
+    if (!request) {
+      const dbUserLoadoutInfo = await getMyLoadouts();
+
+      const { id } = dbUserLoadoutInfo;
+
+      const newRequest = await putUpdatedLoadoutsToDb(builds, id);
+      console.log("newRequest", newRequest);
+      
+      return newRequest;
+    }
+
+    return request;
+  }
 
   render() {
     const {
@@ -507,6 +527,7 @@ class Forge extends Component {
             <main
               className={classes.loadoutBlock}
               id="loadouts"
+              style={{ height: "453px" }}
             >
               <header className={classes.panelHeader}>
                 Loadouts
@@ -532,6 +553,23 @@ class Forge extends Component {
                   ))
                 }
               </section>
+              <footer
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Button
+                  onClick={async () => {
+                    await this.uploadLoadoutsToDb(builds);
+                  }}
+                  color="secondary"
+                  variant="contained"
+                  style={{ textTransform: "none" }}
+                >
+                  Save all loadouts to database
+                </Button>
+              </footer>
             </main>
             <main
               className={classes.loadoutBlock}
