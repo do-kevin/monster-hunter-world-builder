@@ -12,7 +12,7 @@ import matchSorter from "match-sorter";
 import inflection from "inflection";
 import { Formik } from "formik";
 import { retrieveAllArmors, retrieveAllWeapons } from "store/ducks/Warehouse";
-import { createLoadout } from "store/ducks/Loadouts";
+import { createLoadout, retrieveMyLoadouts } from "store/ducks/Loadouts";
 import {
   ChildGrid, ExtendedView, ArmorsTable, TextButton,
 } from "components/StyledComponents";
@@ -28,7 +28,6 @@ import {
   grey0, grey5, lightGrey, darkishGrey, primary2, darkBlue1,
 } from "Colors";
 import { postLoadoutsToDb, getMyLoadouts, putUpdatedLoadoutsToDb } from "services/MonsterHunterWorldApi";
-import { toast } from "react-toastify";
 
 const scrollToBtns = {
   color: grey5,
@@ -52,7 +51,8 @@ class Forge extends Component {
   }
 
   async componentDidMount() {
-    const { retrieveAllArmors, retrieveAllWeapons } = this.props;
+    const { retrieveAllArmors, retrieveAllWeapons, retrieveMyLoadouts } = this.props;
+    await retrieveMyLoadouts();
     await retrieveAllArmors();
     await retrieveAllWeapons();
   }
@@ -261,7 +261,6 @@ class Forge extends Component {
 
   uploadLoadoutsToDb = async (builds) => {
     const request = await postLoadoutsToDb(builds);
-    console.log("Forge request", request);
 
     if (!request) {
       const dbUserLoadoutInfo = await getMyLoadouts();
@@ -269,7 +268,6 @@ class Forge extends Component {
       const { id } = dbUserLoadoutInfo;
 
       const newRequest = await putUpdatedLoadoutsToDb(builds, id);
-      console.log("newRequest", newRequest);
       
       return newRequest;
     }
@@ -527,7 +525,6 @@ class Forge extends Component {
             <main
               className={classes.loadoutBlock}
               id="loadouts"
-              style={{ height: "453px" }}
             >
               <header className={classes.panelHeader}>
                 Loadouts
@@ -683,6 +680,7 @@ const mapDispatchToProps = dispatch => ({
   retrieveAllArmors: bindActionCreators(retrieveAllArmors, dispatch),
   retrieveAllWeapons: bindActionCreators(retrieveAllWeapons, dispatch),
   createLoadout: bindActionCreators(createLoadout, dispatch),
+  retrieveMyLoadouts: bindActionCreators(retrieveMyLoadouts, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

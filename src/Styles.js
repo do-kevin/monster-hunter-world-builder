@@ -144,7 +144,7 @@ export const armorsStyles = () => ({
   },
   get loadoutBlock() {
     return Object.assign({}, this.armorsBlock, {
-      height: "400px",
+      height: "453px",
     });
   },
   get overallStatsBlock() {

@@ -1,12 +1,14 @@
 import _ from "lodash";
 import { toast } from "react-toastify";
 import uuidv4 from "uuid/v4";
+import { getMyLoadouts } from "services/MonsterHunterWorldApi";
 
 // ==== Types ==== //
 const CREATE_LOADOUT = "CREATE_LOADOUT";
 const CLEAR_LOADOUTS = "CLEAR_LOADOUTS";
 const ARMOR_TO_LOADOUT = "ARMOR_TO_LOADOUT";
 const WEAPON_TO_LOADOUT = "WEAPON_TO_LOADOUT";
+const RETRIEVE_MY_LOADOUTS = "RETRIEVE_MY_LOADOUTS";
 
 // ==== Actions ==== //
 export const createLoadout = loadoutName => (dispatch, getState) => {
@@ -115,6 +117,14 @@ export const weaponToLoadout = (loadoutName, weaponData) => async (dispatch) => 
   });
 };
 
+export const retrieveMyLoadouts = () => async (dispatch) => {
+  const myLoadoutsFromDb = await getMyLoadouts();
+  dispatch({
+    type: RETRIEVE_MY_LOADOUTS,
+    payload: myLoadoutsFromDb,
+  });
+};
+
 export const clearLoadouts = () => dispatch => dispatch({ type: CLEAR_LOADOUTS });
 
 // ======================= Reducers ======================= //
@@ -181,6 +191,14 @@ function loadouts(state = initialState, action) {
       const { key: loadoutName, weapon } = action.payload;
       _.set(newState, `builds.${loadoutName}.weapon_set.primary`, weapon.id);
       toast.success(`Saved to ${loadoutName}`);
+      return newState;
+    }
+    case RETRIEVE_MY_LOADOUTS: {
+      const newState = Object.assign({}, state);
+      const { builds } = action.payload.data;
+      Object.keys(builds).map((loadoutNames) => {
+        newState.builds[loadoutNames] = builds[loadoutNames];
+      });
       return newState;
     }
     case CLEAR_LOADOUTS:
