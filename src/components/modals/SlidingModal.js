@@ -3,7 +3,9 @@ import { Modal, Slide } from "@material-ui/core";
 import PropTypes from "prop-types";
 
 function SlidingModal(props) {
-  const { children, isModalOpen, onClose } = props;
+  const {
+    classes, children, isModalOpen, onClose, classesProp,
+  } = props;
   return (
     <Modal
       className="flexCenter"
@@ -14,6 +16,7 @@ function SlidingModal(props) {
       <Slide
         direction="up"
         in={isModalOpen}
+        classes={classesProp}
         mountOnEnter
         unmountOnExit
       >

@@ -35,12 +35,7 @@ export const rTable = {
   borderRadius: "5px",
 };
 
-export const dashboardStyles = () => ({
-  smallAvatar: {
-    height: "50px",
-    width: "50px",
-    borderRadius: "50%",
-  },
+export const slidingModalStyles = () => ({
   innerAvatar: {
     position: "relative",
     height: "130px",
@@ -51,12 +46,21 @@ export const dashboardStyles = () => ({
     boxShadow: "0 2px 10px hsl(219, 61%, 26%)",
   },
   card: {
-    width: "300px",
+    height: "100%",
+    width: "100%",
     outline: "none",
   },
   media: {
     height: "200px",
     background: "linear-gradient(to bottom right, hsl(161, 100%, 61%), hsl(219, 61%, 53%), hsl(235, 100%, 50%))",
+  },
+});
+
+export const dashboardStyles = () => ({
+  smallAvatar: {
+    height: "50px",
+    width: "50px",
+    borderRadius: "50%",
   },
   fullNameFilter: {
     background: "hsl(205, 11%, 42%)",

@@ -52,9 +52,10 @@ class Forge extends Component {
 
   async componentDidMount() {
     const { retrieveAllArmors, retrieveAllWeapons, retrieveMyLoadouts } = this.props;
-    await retrieveMyLoadouts();
     await retrieveAllArmors();
     await retrieveAllWeapons();
+    
+    retrieveMyLoadouts();
   }
 
   generateColumn = (key = "", capitalize = false, filterable = false, show = true) => {

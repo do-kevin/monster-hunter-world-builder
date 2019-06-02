@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { toast } from "react-toastify";
 import uuidv4 from "uuid/v4";
-import { getMyLoadouts } from "services/MonsterHunterWorldApi";
+import { getMyLoadouts, getAllLoadouts } from "services/MonsterHunterWorldApi";
 
 // ==== Types ==== //
 const CREATE_LOADOUT = "CREATE_LOADOUT";
@@ -9,6 +9,7 @@ const CLEAR_LOADOUTS = "CLEAR_LOADOUTS";
 const ARMOR_TO_LOADOUT = "ARMOR_TO_LOADOUT";
 const WEAPON_TO_LOADOUT = "WEAPON_TO_LOADOUT";
 const RETRIEVE_MY_LOADOUTS = "RETRIEVE_MY_LOADOUTS";
+const RETRIEVE_DB_LOADOUTS = "RETRIEVE_DB_LOADOUTS";
 
 // ==== Actions ==== //
 export const createLoadout = loadoutName => (dispatch, getState) => {
@@ -125,11 +126,21 @@ export const retrieveMyLoadouts = () => async (dispatch) => {
   });
 };
 
+export const retrieveDbLoadouts = () => async (dispatch) => {
+  const dbLoadouts = await getAllLoadouts();
+  const normalizedData = _.keyBy(dbLoadouts, "user");
+  dispatch({
+    type: RETRIEVE_DB_LOADOUTS,
+    payload: normalizedData,
+  });
+};
+
 export const clearLoadouts = () => dispatch => dispatch({ type: CLEAR_LOADOUTS });
 
 // ======================= Reducers ======================= //
 const initialState = {
   builds: {},
+  database: {},
 };
 
 const initialStateForArmor = {
@@ -201,9 +212,15 @@ function loadouts(state = initialState, action) {
       });
       return newState;
     }
+    case RETRIEVE_DB_LOADOUTS: {
+      const newState = Object.assign({}, state);
+      _.set(newState, "database", action.payload);
+      return newState;
+    }
     case CLEAR_LOADOUTS:
       return {
         builds: {},
+        database: {},
       };
     default:
       return state;

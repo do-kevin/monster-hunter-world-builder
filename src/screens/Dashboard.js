@@ -12,6 +12,7 @@ import matchSorter from "match-sorter";
 import inflection from "inflection";
 
 import { retrieveUserList } from "store/ducks/List";
+import { retrieveDbLoadouts } from "store/ducks/Loadouts";
 import {
   ChildGrid, View, StyledTable, TextButton,
 } from "components/StyledComponents";
@@ -29,6 +30,7 @@ const defaultState = {
       phone_number: "",
     },
   ],
+  selectedUserLoadouts: {},
   openModal: false,
 };
 
@@ -45,9 +47,10 @@ class Dashboard extends Component {
   }
 
   refreshList = () => {
-    const { retrieveUserList } = this.props;
+    const { retrieveUserList, retrieveDbLoadouts } = this.props;
     this.setState(defaultState);
     retrieveUserList();
+    retrieveDbLoadouts();
   }
 
   generateColumn = (key = "", filterable = false, show = true) => {
@@ -70,7 +73,10 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { classes, list } = this.props;
+    const { classes, list, usersLoadouts } = this.props;
+    const {
+      selectedUserLoadouts, selectedUser, openModal,
+    } = this.state;
     const columns = [
       {
         Header: "",
@@ -88,10 +94,16 @@ class Dashboard extends Component {
         Header: "Full name",
         accessor: d => `${d.first_name} ${d.last_name}`,
         Cell: (props) => {
+          const { user } = props.original;
           const userData = [
             props.value,
             props.original,
           ];
+          let myLoadouts = usersLoadouts[user];
+
+          if (myLoadouts === undefined) {
+            myLoadouts = {};
+          }
 
           return (
             <TextButton>
@@ -100,6 +112,7 @@ class Dashboard extends Component {
                   this.setState({
                     selectedUser: userData,
                     openModal: true,
+                    selectedUserLoadouts: myLoadouts,
                   });
                 }}
                 variant="body1"
@@ -153,9 +166,11 @@ class Dashboard extends Component {
         </AppBar>
         <View>
           <ProfileModal
-            modalData={this.state.selectedUser}
-            openModal={this.state.openModal}
+            modalData={selectedUser}
+            openModal={openModal}
             onClose={() => this.setState({ openModal: false })}
+            onClickClose={() => this.setState({ openModal: false })}
+            myLoadoutsData={selectedUserLoadouts}
           />
           <StyledTable>
             <ReactTable
@@ -174,10 +189,14 @@ class Dashboard extends Component {
 
 const componentWithStyles = withStyles(dashboardStyles)(Dashboard);
 
-const mapStateToProps = state => ({ list: state.list });
+const mapStateToProps = state => ({
+  list: state.list,
+  usersLoadouts: state.loadouts.database,
+});
 
 const mapDispatchToProps = dispatch => ({
   retrieveUserList: bindActionCreators(retrieveUserList, dispatch),
+  retrieveDbLoadouts: bindActionCreators(retrieveDbLoadouts, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

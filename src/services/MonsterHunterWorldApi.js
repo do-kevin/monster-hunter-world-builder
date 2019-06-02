@@ -37,7 +37,6 @@ async function getMyLoadouts() {
   return request;
 }
 
-
 async function putUpdatedLoadoutsToDb(builds, databaseSetId) {
   const { user } = await getProfile();
 
@@ -57,6 +56,11 @@ async function getUserLoadoutsById(databaseSetId) {
   return request;
 }
 
+async function getAllLoadouts() {
+  const request = await api.get("/mh_data/");
+  return request;
+}
+
 export {
   requestAllArmors,
   requestAllWeapons,
@@ -64,4 +68,5 @@ export {
   getMyLoadouts,
   putUpdatedLoadoutsToDb,
   getUserLoadoutsById,
+  getAllLoadouts,
 };
