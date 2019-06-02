@@ -8,11 +8,13 @@ import {
 
 const UPDATE_PROFILE = "UPDATE_PROFILE";
 const USER_LOGOUT = "USER_LOGOUT";
+const GET_PROFILE = "GET_PROFILE";
+const SET_TOKEN_ID = "SET_TOKEN_ID";
 
 // ======================= Actions ======================= //
 
 export const setTokenUserId = (token, userId) => dispatch => dispatch({
-  type: UPDATE_PROFILE,
+  type: SET_TOKEN_ID,
   payload: {
     token,
     user: userId,
@@ -52,7 +54,7 @@ export const getProfile = () => async (dispatch) => {
   const response = await getProfileReq();
   if (response) {
     dispatch({
-      type: UPDATE_PROFILE,
+      type: GET_PROFILE,
       payload: response,
     });
     return true;
@@ -93,7 +95,11 @@ const profileState = {
 
 function profile(state = profileState, action) {
   switch (action.type) {
+    case SET_TOKEN_ID:
+      return Object.assign({}, state, action.payload);
     case UPDATE_PROFILE:
+      return Object.assign({}, state, action.payload);
+    case GET_PROFILE:
       return Object.assign({}, state, action.payload);
     case USER_LOGOUT:
       return profileState;

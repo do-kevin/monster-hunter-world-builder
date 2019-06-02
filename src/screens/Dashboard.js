@@ -1,4 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -21,6 +20,7 @@ import {
   cellStyles,
 } from "Styles";
 import { ProfileModal } from "components/modals";
+import { retrieveAllWeapons, retrieveAllArmors } from "store/ducks/Warehouse";
 
 const defaultState = {
   selectedUser: [
@@ -43,12 +43,13 @@ class Dashboard extends Component {
   state = defaultState;
 
   async componentDidMount() {
-    this.refreshList();
+    await this.props.retrieveAllArmors();
+    await this.props.retrieveAllWeapons();
+    await this.refreshList();
   }
 
   refreshList = () => {
     const { retrieveUserList, retrieveDbLoadouts } = this.props;
-    this.setState(defaultState);
     retrieveUserList();
     retrieveDbLoadouts();
   }
@@ -197,6 +198,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   retrieveUserList: bindActionCreators(retrieveUserList, dispatch),
   retrieveDbLoadouts: bindActionCreators(retrieveDbLoadouts, dispatch),
+  retrieveAllWeapons: bindActionCreators(retrieveAllWeapons, dispatch),
+  retrieveAllArmors: bindActionCreators(retrieveAllArmors, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

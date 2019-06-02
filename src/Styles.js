@@ -49,6 +49,7 @@ export const slidingModalStyles = () => ({
     height: "100%",
     width: "100%",
     outline: "none",
+    overflowY: "auto",
   },
   media: {
     height: "200px",

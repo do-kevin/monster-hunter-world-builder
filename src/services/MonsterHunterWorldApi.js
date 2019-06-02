@@ -1,6 +1,7 @@
 import axios from "axios";
 import api from "services/Api";
 import { getProfile } from "services/ProfileApi";
+import _ from "lodash";
 
 async function requestAllArmors() {
   const request = await axios({
@@ -18,18 +19,27 @@ async function requestAllWeapons() {
   return request;
 }
 
-async function postLoadoutsToDb(builds) {
+async function postLoadoutsToDb(builds = {}) {
   const { user } = await getProfile();
+
+  const newBuilds = Object.keys(builds).map((name) => {
+    const loadout = Object.assign({}, builds[name]);
+    const pickedProps = _.pick(loadout, ["name", "armor_set", "weapon_set", "armor_meta.previousArmors"]);
+    return pickedProps;
+  });
+
+  const normalized = _.keyBy(newBuilds, "name");
 
   const data = {
     user,
     data: {
-      builds,
+      builds: normalized,
     },
   };
 
   const request = await api.post("/mh_data/", data);
   return request;
+  // Loadouts.js's retrieveMyLoadouts receives this request
 }
 
 async function getMyLoadouts() {

@@ -28,7 +28,7 @@ function SidebarBtn(props) {
     >
       <Link
         to={to}
-        style={disabled ? { pointerEvents: "none" } : null}
+        style={disabled ? { pointerEvents: "none", textDecoration: "none" } : { textDecoration: "none" }}
       >
         <Button
           className={classes.sidebarBtn}

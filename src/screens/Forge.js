@@ -12,7 +12,7 @@ import matchSorter from "match-sorter";
 import inflection from "inflection";
 import { Formik } from "formik";
 import { retrieveAllArmors, retrieveAllWeapons } from "store/ducks/Warehouse";
-import { createLoadout, retrieveMyLoadouts } from "store/ducks/Loadouts";
+import { createLoadout, retrieveMyLoadouts, retrieveDbLoadouts } from "store/ducks/Loadouts";
 import {
   ChildGrid, ExtendedView, ArmorsTable, TextButton,
 } from "components/StyledComponents";
@@ -51,11 +51,13 @@ class Forge extends Component {
   }
 
   async componentDidMount() {
-    const { retrieveAllArmors, retrieveAllWeapons, retrieveMyLoadouts } = this.props;
+    const {
+      retrieveAllArmors, retrieveAllWeapons, retrieveMyLoadouts, retrieveDbLoadouts,
+    } = this.props;
     await retrieveAllArmors();
     await retrieveAllWeapons();
-    
-    retrieveMyLoadouts();
+    await retrieveDbLoadouts();
+    await retrieveMyLoadouts();
   }
 
   generateColumn = (key = "", capitalize = false, filterable = false, show = true) => {
@@ -682,6 +684,7 @@ const mapDispatchToProps = dispatch => ({
   retrieveAllWeapons: bindActionCreators(retrieveAllWeapons, dispatch),
   createLoadout: bindActionCreators(createLoadout, dispatch),
   retrieveMyLoadouts: bindActionCreators(retrieveMyLoadouts, dispatch),
+  retrieveDbLoadouts: bindActionCreators(retrieveDbLoadouts, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

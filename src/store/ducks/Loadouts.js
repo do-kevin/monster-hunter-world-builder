@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { toast } from "react-toastify";
-import uuidv4 from "uuid/v4";
 import { getMyLoadouts, getAllLoadouts } from "services/MonsterHunterWorldApi";
 
 // ==== Types ==== //
@@ -118,20 +117,126 @@ export const weaponToLoadout = (loadoutName, weaponData) => async (dispatch) => 
   });
 };
 
-export const retrieveMyLoadouts = () => async (dispatch) => {
-  const myLoadoutsFromDb = await getMyLoadouts();
-  dispatch({
-    type: RETRIEVE_MY_LOADOUTS,
-    payload: myLoadoutsFromDb,
+const updateLoadoutArmorMeta = (
+  data = {},
+  armorTypeAndId = null,
+  armorsList = {},
+) => {
+  _.set(data, "armor_meta", {
+    defense: {
+      base: data.armor_meta.defense.base + armorsList[armorTypeAndId].defense.base,
+      max: data.armor_meta.defense.max + armorsList[armorTypeAndId].defense.max,
+      augmented: data.armor_meta.defense.augmented + armorsList[armorTypeAndId].defense.augmented,
+    },
+    resistances: {
+      fire: data.armor_meta.resistances.fire + armorsList[armorTypeAndId].resistances.fire,
+      water: data.armor_meta.resistances.water + armorsList[armorTypeAndId].resistances.water,
+      thunder: data.armor_meta.resistances.thunder + armorsList[armorTypeAndId].resistances.thunder,
+      dragon: data.armor_meta.resistances.dragon + armorsList[armorTypeAndId].resistances.dragon,
+      ice: data.armor_meta.resistances.ice + armorsList[armorTypeAndId].resistances.ice,
+    },
   });
 };
 
-export const retrieveDbLoadouts = () => async (dispatch) => {
+export const retrieveMyLoadouts = () => async (dispatch, getState) => {
+  const { armors } = getState().warehouse;
+  const myLoadoutsFromDb = await getMyLoadouts();
+  const returnedData = Object.assign({}, myLoadoutsFromDb);
+  const { builds } = returnedData.data;
+
+  if (myLoadoutsFromDb && armors) {
+    const updatedBuilds = Object.keys(builds).map((result) => {
+      const loadout = Object.assign({}, builds[result]);
+      _.set(loadout, "armor_meta", {
+        defense: {
+          base: 0,
+          max: 0,
+          augmented: 0,
+        },
+        resistances: {
+          fire: 0,
+          water: 0,
+          thunder: 0,
+          dragon: 0,
+          ice: 0,
+        },
+      });
+
+      const {
+        head, chest, waist, gloves, legs,
+      } = loadout.armor_set;
+
+      updateLoadoutArmorMeta(loadout, head, armors);
+      updateLoadoutArmorMeta(loadout, chest, armors);
+      updateLoadoutArmorMeta(loadout, gloves, armors);
+      updateLoadoutArmorMeta(loadout, waist, armors);
+      updateLoadoutArmorMeta(loadout, legs, armors);
+
+      return loadout;
+    });
+
+    const updatedLoadoutsData = _.keyBy(updatedBuilds, "name");
+
+    _.set(returnedData, "data.builds", updatedLoadoutsData);
+
+    dispatch({
+      type: RETRIEVE_MY_LOADOUTS,
+      payload: myLoadoutsFromDb,
+    });
+  }
+
+  return false;
+};
+
+export const retrieveDbLoadouts = () => async (dispatch, getState) => {
+  const { armors } = getState().warehouse;
   const dbLoadouts = await getAllLoadouts();
   const normalizedData = _.keyBy(dbLoadouts, "user");
+  const loadouts = Object.assign({}, normalizedData);
+
+  const updatedUsersLoadouts = Object.keys(loadouts).map((userId) => {
+    const theirLoadouts = loadouts[userId].data.builds;
+    const updatedBuilds = Object.keys(theirLoadouts).map((loadoutName) => {
+      const loadout = Object.assign({}, theirLoadouts[loadoutName]);
+      _.set(loadout, "armor_meta", {
+        defense: {
+          base: 0,
+          max: 0,
+          augmented: 0,
+        },
+        resistances: {
+          fire: 0,
+          water: 0,
+          thunder: 0,
+          dragon: 0,
+          ice: 0,
+        },
+      });
+
+      const {
+        head, chest, waist, gloves, legs,
+      } = loadout.armor_set;
+
+      updateLoadoutArmorMeta(loadout, head, armors);
+      updateLoadoutArmorMeta(loadout, chest, armors);
+      updateLoadoutArmorMeta(loadout, gloves, armors);
+      updateLoadoutArmorMeta(loadout, waist, armors);
+      updateLoadoutArmorMeta(loadout, legs, armors);
+
+      return loadout;
+    });
+    const normalizedBuilds = _.keyBy(updatedBuilds, "name");
+    _.set(loadouts[userId].data, "builds", normalizedBuilds);
+
+    const result = loadouts[userId];
+    return result;
+  });
+
+  const finalLoadouts = _.keyBy(updatedUsersLoadouts, "user");
+
   dispatch({
     type: RETRIEVE_DB_LOADOUTS,
-    payload: normalizedData,
+    payload: finalLoadouts,
   });
 };
 
@@ -156,11 +261,11 @@ function loadouts(state = initialState, action) {
     case CREATE_LOADOUT: {
       const newState = Object.assign({}, state);
       newState.builds[action.payload] = {
+        name: action.payload,
         armor_set: { ...initialStateForArmor },
         weapon_set: {
           primary: null,
         },
-        id: uuidv4(),
         armor_meta: {
           defense: {
             base: 0,
@@ -206,11 +311,14 @@ function loadouts(state = initialState, action) {
     }
     case RETRIEVE_MY_LOADOUTS: {
       const newState = Object.assign({}, state);
-      const { builds } = action.payload.data;
-      Object.keys(builds).map((loadoutNames) => {
-        newState.builds[loadoutNames] = builds[loadoutNames];
-      });
-      return newState;
+      const { builds = {} } = action.payload.data;
+      if (builds) {
+        Object.keys(builds).map((loadoutNames) => {
+          newState.builds[loadoutNames] = builds[loadoutNames];
+        });
+        return newState;
+      }
+      return state;
     }
     case RETRIEVE_DB_LOADOUTS: {
       const newState = Object.assign({}, state);
