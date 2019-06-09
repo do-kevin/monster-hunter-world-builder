@@ -117,25 +117,45 @@ export const weaponToLoadout = (loadoutName, weaponData) => async (dispatch) => 
   });
 };
 
+const defaultLoadoutArmorMeta = (data = {}) => {
+  _.set(data, "armor_meta", {
+    defense: {
+      base: 0,
+      max: 0,
+      augmented: 0,
+    },
+    resistances: {
+      fire: 0,
+      water: 0,
+      thunder: 0,
+      dragon: 0,
+      ice: 0,
+    },
+  });
+};
+
 const updateLoadoutArmorMeta = (
   data = {},
   armorTypeAndId = null,
   armorsList = {},
 ) => {
-  _.set(data, "armor_meta", {
-    defense: {
-      base: data.armor_meta.defense.base + armorsList[armorTypeAndId].defense.base,
-      max: data.armor_meta.defense.max + armorsList[armorTypeAndId].defense.max,
-      augmented: data.armor_meta.defense.augmented + armorsList[armorTypeAndId].defense.augmented,
-    },
-    resistances: {
-      fire: data.armor_meta.resistances.fire + armorsList[armorTypeAndId].resistances.fire,
-      water: data.armor_meta.resistances.water + armorsList[armorTypeAndId].resistances.water,
-      thunder: data.armor_meta.resistances.thunder + armorsList[armorTypeAndId].resistances.thunder,
-      dragon: data.armor_meta.resistances.dragon + armorsList[armorTypeAndId].resistances.dragon,
-      ice: data.armor_meta.resistances.ice + armorsList[armorTypeAndId].resistances.ice,
-    },
-  });
+  if (armorTypeAndId) {
+    _.set(data, "armor_meta", {
+      defense: {
+        base: data.armor_meta.defense.base + armorsList[armorTypeAndId].defense.base,
+        max: data.armor_meta.defense.max + armorsList[armorTypeAndId].defense.max,
+        augmented: data.armor_meta.defense.augmented + armorsList[armorTypeAndId].defense.augmented,
+      },
+      resistances: {
+        fire: data.armor_meta.resistances.fire + armorsList[armorTypeAndId].resistances.fire,
+        water: data.armor_meta.resistances.water + armorsList[armorTypeAndId].resistances.water,
+        thunder: data.armor_meta.resistances.thunder + armorsList[armorTypeAndId].resistances.thunder,
+        dragon: data.armor_meta.resistances.dragon + armorsList[armorTypeAndId].resistances.dragon,
+        ice: data.armor_meta.resistances.ice + armorsList[armorTypeAndId].resistances.ice,
+      },
+    });
+  }
+  return false;
 };
 
 export const retrieveMyLoadouts = () => async (dispatch, getState) => {
@@ -147,20 +167,7 @@ export const retrieveMyLoadouts = () => async (dispatch, getState) => {
   if (myLoadoutsFromDb && armors) {
     const updatedBuilds = Object.keys(builds).map((result) => {
       const loadout = Object.assign({}, builds[result]);
-      _.set(loadout, "armor_meta", {
-        defense: {
-          base: 0,
-          max: 0,
-          augmented: 0,
-        },
-        resistances: {
-          fire: 0,
-          water: 0,
-          thunder: 0,
-          dragon: 0,
-          ice: 0,
-        },
-      });
+      defaultLoadoutArmorMeta(loadout);
 
       const {
         head, chest, waist, gloves, legs,
@@ -189,7 +196,7 @@ export const retrieveMyLoadouts = () => async (dispatch, getState) => {
 };
 
 export const retrieveDbLoadouts = () => async (dispatch, getState) => {
-  const { armors } = getState().warehouse;
+  const { armors } = await getState().warehouse;
   const dbLoadouts = await getAllLoadouts();
   const normalizedData = _.keyBy(dbLoadouts, "user");
   const loadouts = Object.assign({}, normalizedData);
@@ -198,20 +205,7 @@ export const retrieveDbLoadouts = () => async (dispatch, getState) => {
     const theirLoadouts = loadouts[userId].data.builds;
     const updatedBuilds = Object.keys(theirLoadouts).map((loadoutName) => {
       const loadout = Object.assign({}, theirLoadouts[loadoutName]);
-      _.set(loadout, "armor_meta", {
-        defense: {
-          base: 0,
-          max: 0,
-          augmented: 0,
-        },
-        resistances: {
-          fire: 0,
-          water: 0,
-          thunder: 0,
-          dragon: 0,
-          ice: 0,
-        },
-      });
+      defaultLoadoutArmorMeta(loadout);
 
       const {
         head, chest, waist, gloves, legs,
@@ -233,7 +227,6 @@ export const retrieveDbLoadouts = () => async (dispatch, getState) => {
   });
 
   const finalLoadouts = _.keyBy(updatedUsersLoadouts, "user");
-
   dispatch({
     type: RETRIEVE_DB_LOADOUTS,
     payload: finalLoadouts,

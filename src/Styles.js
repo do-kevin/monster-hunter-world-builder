@@ -1,4 +1,6 @@
-import { grey2, grey3, darkBlue0 } from "Colors";
+import {
+  grey2, grey3, darkBlue0, greyCard, primary1, primary2,
+} from "Colors";
 
 const gridAreaTop = "Topbar";
 
@@ -36,24 +38,49 @@ export const rTable = {
 };
 
 export const slidingModalStyles = () => ({
-  innerAvatar: {
-    position: "relative",
-    height: "130px",
-    width: "130px",
-    left: "83px",
-    top: "34px",
-    borderRadius: "50%",
-    boxShadow: "0 2px 10px hsl(219, 61%, 26%)",
-  },
   card: {
-    height: "100%",
-    width: "100%",
     outline: "none",
     overflowY: "auto",
+    backgroundColor: greyCard,
   },
-  media: {
-    height: "200px",
-    background: "linear-gradient(to bottom right, hsl(161, 100%, 61%), hsl(219, 61%, 53%), hsl(235, 100%, 50%))",
+  get mediaQueryCard() {
+    return Object.assign({}, this.card, {
+      height: "100%",
+      width: "100%",
+    });
+  },
+  closeModalBtn: {
+    margin: "auto",
+    background: "hsl(207, 11%, 25%)",
+    color: "hsl(205,11%,80%)",
+    height: "50px",
+  },
+  panelsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    margin: "auto",
+  },
+  slotsContainer: {
+    overflowY: "auto",
+    width: "470px",
+    height: "70px",
+    margin: 7,
+    padding: 5,
+  },
+  loadoutsContainer: {
+    overflowY: "auto",
+    width: "360px",
+    height: "70px",
+    backgroundColor: primary1,
+    margin: 7,
+    padding: 5,
+  },
+  get infoBlock() {
+    return Object.assign({}, this.panelsContainer, {
+      backgroundColor: primary2,
+      margin: "none",
+    });
   },
 });
 
@@ -210,7 +237,12 @@ export const modalStyles = () => ({
   },
   customCard: {
     outline: "none",
-    background: "hsl(0, 0%, 41%)",
+    background: greyCard,
+  },
+  mediaQueryCard: {
+    width: "100%",
+    height: "100%",
+    overflowY: "auto",
   },
   closeModalBtn: {
     background: "hsl(207, 11%, 25%)",

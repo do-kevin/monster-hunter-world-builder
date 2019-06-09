@@ -20,7 +20,9 @@ import {
   cellStyles,
 } from "Styles";
 import { ProfileModal } from "components/modals";
-import { retrieveAllWeapons, retrieveAllArmors } from "store/ducks/Warehouse";
+import {
+  retrieveAllWeapons, retrieveAllArmors, setLocalArmors, setLocalWeapons,
+} from "store/ducks/Warehouse";
 
 const defaultState = {
   selectedUser: [
@@ -43,15 +45,19 @@ class Dashboard extends Component {
   state = defaultState;
 
   async componentDidMount() {
-    await this.props.retrieveAllArmors();
-    await this.props.retrieveAllWeapons();
-    await this.refreshList();
-  }
-
-  refreshList = () => {
-    const { retrieveUserList, retrieveDbLoadouts } = this.props;
-    retrieveUserList();
-    retrieveDbLoadouts();
+    const readLocalArmors = this.props.setLocalArmors();
+    const readLocalWeapons = this.props.setLocalWeapons();
+    this.props.setLocalWeapons();
+    if (!readLocalArmors) {
+      console.log("hit");
+      await this.props.retrieveAllArmors();
+    }
+    if (!readLocalWeapons) {
+      console.log("hit");
+      await this.props.retrieveAllWeapons();
+    }
+    await this.props.retrieveUserList();
+    await this.props.retrieveDbLoadouts();
   }
 
   generateColumn = (key = "", filterable = false, show = true) => {
@@ -200,6 +206,8 @@ const mapDispatchToProps = dispatch => ({
   retrieveDbLoadouts: bindActionCreators(retrieveDbLoadouts, dispatch),
   retrieveAllWeapons: bindActionCreators(retrieveAllWeapons, dispatch),
   retrieveAllArmors: bindActionCreators(retrieveAllArmors, dispatch),
+  setLocalArmors: bindActionCreators(setLocalArmors, dispatch),
+  setLocalWeapons: bindActionCreators(setLocalWeapons, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

@@ -81,12 +81,13 @@ body {
     height: 100% !important;
     overflow-y: scroll;
     min-width: 0;
+    background: red;
   }
 
   &__actions {
     @media (max-width: $mediaCardWidth) {
       bottom: 0;
-      position: absolute;
+      position: relative;
       width: 100%;
     }
   }
@@ -109,4 +110,8 @@ body {
 
 .custom-panel {
   width: 400px;
+}
+
+.responsive-card2 {
+  height: 100% !important;
 }

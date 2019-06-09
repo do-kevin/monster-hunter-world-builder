@@ -1,4 +1,5 @@
-export const grey0 = "hsl(0, 0%, 98%)",
+export const greyCard = "hsl(0, 0%, 41%)",
+  grey0 = "hsl(0, 0%, 98%)",
   grey1 = "hsl(175, 5%, 75%)",
   grey2 = "hsl(204, 12%, 15%)",
   grey3 = "hsl(205, 11%, 31%)",
@@ -16,6 +17,8 @@ export const dark0 = "hsl(0, 0%, 0%)",
   dark1 = "hsl(60, 3%, 25%)";
 
 export const purple0 = "hsl(330, 49%, 55%)";
+
+export const warning0 = "hsl(48, 100%, 50%)";
 
 export const primary0 = "hsl(247, 9%, 15%)",
   primary1 = "hsl(247, 9%, 21%)",
