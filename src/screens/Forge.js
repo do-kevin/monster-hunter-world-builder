@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {
   AppBar, Toolbar, TextField, withStyles, IconButton, Typography, Button,
 } from "@material-ui/core";
-import { Cached } from "components/icons/MuiIconsDx";
+import { Cached, Refresh } from "components/icons/MuiIconsDx";
 import { ShieldAlt, Gavel } from "components/icons/FontAwesomeIcons";
 import { Link as Scroll } from "react-scroll";
 import ReactTable from "react-table";
@@ -12,7 +12,9 @@ import matchSorter from "match-sorter";
 import inflection from "inflection";
 import { Formik } from "formik";
 import { retrieveAllArmors, retrieveAllWeapons } from "store/ducks/Warehouse";
-import { createLoadout, retrieveMyLoadouts, retrieveDbLoadouts } from "store/ducks/Loadouts";
+import {
+  createLoadout, retrieveMyLoadouts, retrieveDbLoadouts,
+} from "store/ducks/Loadouts";
 import {
   ChildGrid, ExtendedView, ArmorsTable, TextButton,
 } from "components/StyledComponents";
@@ -22,10 +24,11 @@ import {
   rTable, armorsStyles,
   armorCells, extendedTopbar, extendedToolbar,
 } from "Styles";
-import { ArmorModal, WeaponModal } from "components/modals";
+import { ArmorModal, WeaponModal, DeleteLoadoutModal } from "components/modals";
 import _ from "lodash";
 import {
   grey0, grey5, lightGrey, darkishGrey, primary2, darkBlue1,
+  danger1,
 } from "Colors";
 import { postLoadoutsToDb, getMyLoadouts, putUpdatedLoadoutsToDb } from "services/MonsterHunterWorldApi";
 
@@ -47,6 +50,7 @@ class Forge extends Component {
       selectedWeapon: {},
       selectedLoadout: undefined,
       swapImage: false,
+      openConfirmation: false,
     };
   }
 
@@ -271,7 +275,7 @@ class Forge extends Component {
       const { id } = dbUserLoadoutInfo;
 
       const newRequest = await putUpdatedLoadoutsToDb(builds, id);
-      
+
       return newRequest;
     }
 
@@ -280,8 +284,7 @@ class Forge extends Component {
 
   render() {
     const {
-      classes, armors, createLoadout, loadouts,
-      weapons,
+      classes, armors, loadouts, weapons,
     } = this.props;
     const { builds } = loadouts;
 
@@ -293,6 +296,7 @@ class Forge extends Component {
       swapImage,
       openWeaponModal,
       selectedWeapon,
+      openConfirmation,
     } = this.state;
 
     const armorColumns = [
@@ -437,7 +441,7 @@ class Forge extends Component {
             >
               <Formik
                 initialValues={{ name: "" }}
-                onSubmit={values => createLoadout(values.name)}
+                onSubmit={values => this.props.createLoadout(values.name)}
                 render={({ values, handleChange, handleSubmit }) => (
                   <form onSubmit={handleSubmit}>
                     <TextField
@@ -493,6 +497,11 @@ class Forge extends Component {
           </Toolbar>
         </AppBar>
         <ExtendedView>
+          <DeleteLoadoutModal
+            openModal={openConfirmation}
+            onClose={() => this.setState({ openConfirmation: false })}
+            loadoutName={selectedLoadout}
+          />
           <ArmorModal
             isArmorModalOpen={openArmorModal}
             onClose={() => this.setState({ openArmorModal: false })}
@@ -531,6 +540,18 @@ class Forge extends Component {
             >
               <header className={classes.panelHeader}>
                 Loadouts
+                {" "}
+                <IconButton
+                  style={{
+                    padding: "0",
+                    color: grey5,
+                    background: primary2,
+                  }}
+                  onClick={() => this.props.retrieveMyLoadouts()}
+                  type="button"
+                >
+                  <Refresh />
+                </IconButton>
               </header>
               <section className={classes.loadoutElements}>
                 {
@@ -540,15 +561,28 @@ class Forge extends Component {
                       className={classes.panel}
                     >
                       <p>{loadout}</p>
-                      <Button
-                        onClick={async () => {
-                          await this.setState({ selectedLoadout: loadout });
-                        }}
-                        color="secondary"
-                        variant="contained"
-                      >
-                        Select
-                      </Button>
+                      <div style={{ height: "min-content", marginTop: "6px" }}>
+                        <Button
+                          style={{ color: danger1, textTransform: "none" }}
+                          onClick={async () => {
+                            await this.setState({ selectedLoadout: loadout });
+                            this.setState({ openConfirmation: true });
+                          }}
+                        >
+                          Delete
+                        </Button>
+                        {" "}
+                        <Button
+                          style={{ textTransform: "none" }}
+                          onClick={async () => {
+                            await this.setState({ selectedLoadout: loadout });
+                          }}
+                          color="secondary"
+                          variant="contained"
+                        >
+                          Select
+                        </Button>
+                      </div>
                     </div>
                   ))
                 }

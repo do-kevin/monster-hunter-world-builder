@@ -2,6 +2,7 @@ import axios from "axios";
 import api from "services/Api";
 import { getProfile } from "services/ProfileApi";
 import _ from "lodash";
+import { toast } from "react-toastify";
 
 async function requestAllArmors() {
   const request = await axios({
@@ -58,6 +59,9 @@ async function putUpdatedLoadoutsToDb(builds, databaseSetId) {
   };
 
   const request = await api.put(`/mh_data/${databaseSetId}/`, data);
+  if (request) {
+    toast.success("Current list of loadouts saved.");
+  }
   return request;
 }
 

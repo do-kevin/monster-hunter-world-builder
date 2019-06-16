@@ -8,7 +8,8 @@ export const greyCard = "hsl(0, 0%, 41%)",
   lightGrey = "hsl(0, 0%, 77%)",
   darkishGrey = "hsl(207, 11%, 29%)";
 
-export const danger0 = "hsl(355, 70%, 46%)";
+export const danger0 = "hsl(355, 70%, 46%)",
+  danger1 = "hsl(346, 89%, 44%)";
 
 export const darkBlue0 = "hsl(207, 13%, 17%)",
   darkBlue1 = "hsl(202.1, 26.4%, 28.2%)";
@@ -19,6 +20,8 @@ export const dark0 = "hsl(0, 0%, 0%)",
 export const purple0 = "hsl(330, 49%, 55%)";
 
 export const warning0 = "hsl(48, 100%, 50%)";
+
+export const success0 = "hsl(86, 76%, 52%)";
 
 export const primary0 = "hsl(247, 9%, 15%)",
   primary1 = "hsl(247, 9%, 21%)",

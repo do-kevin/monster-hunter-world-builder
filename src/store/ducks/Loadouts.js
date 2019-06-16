@@ -9,6 +9,7 @@ const ARMOR_TO_LOADOUT = "ARMOR_TO_LOADOUT";
 const WEAPON_TO_LOADOUT = "WEAPON_TO_LOADOUT";
 const RETRIEVE_MY_LOADOUTS = "RETRIEVE_MY_LOADOUTS";
 const RETRIEVE_DB_LOADOUTS = "RETRIEVE_DB_LOADOUTS";
+const REMOVE_LOADOUT = "REMOVE_LOADOUT";
 
 // ==== Actions ==== //
 export const createLoadout = loadoutName => (dispatch, getState) => {
@@ -27,6 +28,21 @@ export const createLoadout = loadoutName => (dispatch, getState) => {
   return dispatch({
     type: CREATE_LOADOUT,
     payload: loadoutName,
+  });
+};
+
+export const removeLoadout = loadoutName => (dispatch, getState) => {
+  console.log(loadoutName);
+  const { builds } = getState().loadouts;
+  const loadouts = Object.assign({}, builds);
+
+  delete loadouts[loadoutName];
+
+  console.log(loadouts);
+
+  return dispatch({
+    type: REMOVE_LOADOUT,
+    payload: loadouts,
   });
 };
 
@@ -282,6 +298,13 @@ function loadouts(state = initialState, action) {
         },
       };
       toast.success("Loadout created.");
+      return newState;
+    }
+    case REMOVE_LOADOUT: {
+      const newState = Object.assign({}, state);
+      const updatedLoadouts = action.payload;
+      _.set(newState, "builds", updatedLoadouts);
+      console.log(newState);
       return newState;
     }
     case ARMOR_TO_LOADOUT: {

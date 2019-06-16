@@ -16,6 +16,8 @@ const Search = () => <i className="material-icons">search</i>;
 
 const Refresh = () => <i className="material-icons">refresh</i>;
 
+const Swap = () => <i className="material-icons">swap_horiz</i>;
+
 export {
   PowerSettingsNew,
   Settings,
@@ -25,4 +27,5 @@ export {
   Cached,
   Search,
   Refresh,
+  Swap,
 };

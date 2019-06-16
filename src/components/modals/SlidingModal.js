@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 function SlidingModal(props) {
   const {
-    classes, children, isModalOpen, onClose, classesProp,
+    children, isModalOpen, onClose, classesProp,
   } = props;
   return (
     <Modal
