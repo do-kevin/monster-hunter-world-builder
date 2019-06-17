@@ -4,7 +4,7 @@
 		"es6": true
 	},
 	"parser": "babel-eslint",
-  "extends": [ "airbnb" ],
+  "extends": [ "airbnb", "plugin:jest/recommended" ],
 	"globals": {
 		"Atomics": "readonly",
 		"SharedArrayBuffer": "readonly"
@@ -16,7 +16,7 @@
 		"ecmaVersion": 2018,
 		"sourceType": "module"
 	},
-	"plugins": [ "react", "jsx-a11y", "import" ],
+	"plugins": [ "react", "jsx-a11y", "import", "jest" ],
 	"rules": {
 		"react/jsx-filename-extension": [ 1, { "extensions": [ ".js", ".jsx" ] } ],
 		"import/no-unresolved": "off",
@@ -41,7 +41,8 @@
 		"react/jsx-boolean-value": "warn",
 		"react/jsx-one-expression-per-line": "warn",
 		"react/prefer-stateless-function": "warn",
-		"linebreak-style": "warn",
-		"react/no-unused-state": "warn"
+		"linebreak-style": "off",
+		"react/no-unused-state": "warn",
+		"import/no-extraneous-dependencies": "warn"
 	}
 }

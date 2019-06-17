@@ -43,11 +43,15 @@
 		"not op_mini all"
 	],
 	"devDependencies": {
+		"@testing-library/react": "^8.0.1",
 		"babel-eslint": "9.0.0",
 		"eslint": "5.12.0",
 		"eslint-config-airbnb": "^17.1.0",
 		"eslint-plugin-import": "^2.14.0",
+		"eslint-plugin-jest": "^22.6.4",
 		"eslint-plugin-jsx-a11y": "^6.1.1",
-		"eslint-plugin-react": "^7.12.4"
+		"eslint-plugin-react": "^7.12.4",
+		"jest-dom": "^3.5.0",
+		"redux-devtools-extension": "^2.13.8"
 	}
 }
