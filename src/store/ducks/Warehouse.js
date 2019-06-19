@@ -30,7 +30,7 @@ export const retrieveAllWeapons = () => async (dispatch) => {
 };
 
 export const setLocalArmors = () => (dispatch) => {
-  const localArmors = JSON.parse(localStorage.getItem("armors"));
+  const localArmors = JSON.parse(localStorage.getItem("armors") || {});
 
   if (localArmors) {
     dispatch({
@@ -43,7 +43,7 @@ export const setLocalArmors = () => (dispatch) => {
 };
 
 export const setLocalWeapons = () => (dispatch) => {
-  const localWeapons = JSON.parse(localStorage.getItem("weapons"));
+  const localWeapons = JSON.parse(localStorage.getItem("weapons") || {});
   if (localWeapons) {
     dispatch({
       type: SET_LOCAL_WEAPONS,

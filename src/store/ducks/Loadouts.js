@@ -32,13 +32,10 @@ export const createLoadout = loadoutName => (dispatch, getState) => {
 };
 
 export const removeLoadout = loadoutName => (dispatch, getState) => {
-  console.log(loadoutName);
   const { builds } = getState().loadouts;
   const loadouts = Object.assign({}, builds);
 
   delete loadouts[loadoutName];
-
-  console.log(loadouts);
 
   return dispatch({
     type: REMOVE_LOADOUT,
@@ -304,7 +301,6 @@ function loadouts(state = initialState, action) {
       const newState = Object.assign({}, state);
       const updatedLoadouts = action.payload;
       _.set(newState, "builds", updatedLoadouts);
-      console.log(newState);
       return newState;
     }
     case ARMOR_TO_LOADOUT: {

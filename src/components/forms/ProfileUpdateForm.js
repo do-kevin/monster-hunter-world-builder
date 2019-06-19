@@ -6,7 +6,7 @@ import {
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { fullProfileUpdate } from "store/ducks/Profile";
+import { fullProfileUpdate, enhanceProfile } from "store/ducks/Profile";
 import CenterPaper from "components/layout/CenterPaper";
 
 const styles = () => ({
@@ -130,7 +130,7 @@ function ProfileUpdateForm(props) {
 
 const componentWithStyles = withStyles(styles)(ProfileUpdateForm);
 
-const mapStateToProps = state => ({ profile: state.profile });
+const mapStateToProps = state => ({ profile: enhanceProfile(state) });
 
 const mapDispatchToProps = dispatch => ({
   fullProfileUpdate: bindActionCreators(fullProfileUpdate, dispatch),

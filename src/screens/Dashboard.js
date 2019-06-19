@@ -12,6 +12,7 @@ import inflection from "inflection";
 
 import { retrieveUserList } from "store/ducks/List";
 import { retrieveDbLoadouts } from "store/ducks/Loadouts";
+import { enhanceProfile } from "store/ducks/Profile";
 import {
   ChildGrid, View, StyledTable, TextButton,
 } from "components/StyledComponents";
@@ -45,19 +46,16 @@ class Dashboard extends Component {
   state = defaultState;
 
   async componentDidMount() {
-    const readLocalArmors = this.props.setLocalArmors();
-    const readLocalWeapons = this.props.setLocalWeapons();
+    this.refreshList();
+  }
+
+  refreshList = async () => {
+    this.props.setLocalArmors();
     this.props.setLocalWeapons();
-    if (!readLocalArmors) {
-      console.log("hit");
-      await this.props.retrieveAllArmors();
-    }
-    if (!readLocalWeapons) {
-      console.log("hit");
-      await this.props.retrieveAllWeapons();
-    }
     await this.props.retrieveUserList();
     await this.props.retrieveDbLoadouts();
+    await this.props.retrieveAllArmors();
+    await this.props.retrieveAllWeapons();
   }
 
   generateColumn = (key = "", filterable = false, show = true) => {

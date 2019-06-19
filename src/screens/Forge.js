@@ -443,12 +443,14 @@ class Forge extends Component {
                 initialValues={{ name: "" }}
                 onSubmit={values => this.props.createLoadout(values.name)}
                 render={({ values, handleChange, handleSubmit }) => (
-                  <form onSubmit={handleSubmit}>
+                  <form
+                    onSubmit={handleSubmit}
+                  >
                     <TextField
                       className={`${classes.textField} name-filter`}
                       type="text"
                       name="name"
-                      placeholer="Name"
+                      placeholder="Name"
                       value={values.name}
                       onChange={handleChange}
                       margin="normal"
@@ -456,8 +458,12 @@ class Forge extends Component {
                       InputProps={{
                         className: `${classes.field} ${classes.loadoutField}`,
                       }}
+                      inputProps={{
+                        "data-testid": "create-loadout-input",
+                      }}
                     />
                     <Button
+                      data-testid="create-loadout-submit-btn"
                       type="submit"
                       variant="contained"
                       color="secondary"
@@ -468,7 +474,7 @@ class Forge extends Component {
                         color: grey0,
                       }}
                     >
-                    Create loadout
+                      Create loadout
                     </Button>
                   </form>
                 )}

@@ -3,6 +3,7 @@ import {
   updateProfile as updateProfileReq,
   getProfile as getProfileReq,
 } from "services/ProfileApi";
+import { createSelector } from "reselect";
 
 // ======================= Constants ======================= //
 
@@ -109,3 +110,9 @@ function profile(state = profileState, action) {
 }
 
 export default profile;
+
+const profileSelector = state => state.profile;
+
+export const enhanceProfile = createSelector(profileSelector, (profile) => {
+  return { ...profile, full_name: profile.first_name + " " + profile.last_name };
+});

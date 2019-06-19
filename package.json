@@ -1,10 +1,15 @@
 {
 	"name": "basic-cms-company",
+	"homepage": "https://github.com/do-kevin/basic-cms-company",
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
 		"@material-ui/core": "^3.9.3",
 		"axios": "^0.19.0",
+		"eslint-plugin-import": "^2.17.3",
+		"eslint-plugin-jest": "^22.6.4",
+		"eslint-plugin-jsx-a11y": "^6.2.1",
+		"eslint-plugin-react": "^7.13.0",
 		"formik": "^1.5.1",
 		"inflection": "^1.12.0",
 		"lodash": "^4.17.11",
@@ -24,7 +29,9 @@
 		"react-toastify": "^5.1.0",
 		"recharts": "^1.5.0",
 		"redux": "^4.0.1",
+		"redux-devtools-extension": "^2.13.8",
 		"redux-thunk": "^2.3.0",
+		"reselect": "^4.0.0",
 		"styled-components": "^4.2.0",
 		"uuid": "^3.3.2",
 		"yup": "^0.27.0"
@@ -33,8 +40,8 @@
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
-		"eject": "react-scripts eject",
-		"lint": "eslint src"
+		"test:dumb": "react-scripts test --env=jsdom --verbose=false",
+		"eject": "react-scripts eject"
 	},
 	"browserslist": [
 		">0.2%",
@@ -44,14 +51,9 @@
 	],
 	"devDependencies": {
 		"@testing-library/react": "^8.0.1",
-		"babel-eslint": "9.0.0",
+		"axios-mock-adapter": "^1.16.0",
 		"eslint": "5.12.0",
 		"eslint-config-airbnb": "^17.1.0",
-		"eslint-plugin-import": "^2.14.0",
-		"eslint-plugin-jest": "^22.6.4",
-		"eslint-plugin-jsx-a11y": "^6.1.1",
-		"eslint-plugin-react": "^7.12.4",
-		"jest-dom": "^3.5.0",
-		"redux-devtools-extension": "^2.13.8"
+		"jest-dom": "^3.5.0"
 	}
 }

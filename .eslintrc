@@ -43,6 +43,7 @@
 		"react/prefer-stateless-function": "warn",
 		"linebreak-style": "off",
 		"react/no-unused-state": "warn",
-		"import/no-extraneous-dependencies": "warn"
+		"import/no-extraneous-dependencies": "warn",
+		"react/jsx-no-duplicate-props": "warn,"
 	}
 }
