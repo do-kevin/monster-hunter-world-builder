@@ -11,7 +11,7 @@ import ReactTable from "react-table";
 import matchSorter from "match-sorter";
 import inflection from "inflection";
 import { Formik } from "formik";
-import { retrieveAllArmors, retrieveAllWeapons } from "store/ducks/Warehouse";
+import { retrieveAllArmors, retrieveAllWeapons, setLocalArmors, setLocalWeapons } from "store/ducks/Warehouse";
 import {
   createLoadout, retrieveMyLoadouts, retrieveDbLoadouts,
 } from "store/ducks/Loadouts";
@@ -55,13 +55,23 @@ class Forge extends Component {
   }
 
   async componentDidMount() {
-    const {
-      retrieveAllArmors, retrieveAllWeapons, retrieveMyLoadouts, retrieveDbLoadouts,
-    } = this.props;
-    await retrieveAllArmors();
-    await retrieveAllWeapons();
-    await retrieveDbLoadouts();
-    await retrieveMyLoadouts();
+    // this.props.setLocalArmors();
+    // this.props.setLocalWeapons();
+    // await this.props.retrieveDbLoadouts();
+    // await this.props.retrieveMyLoadouts();
+    // this.props.retrieveAllArmors();
+    // this.props.retrieveAllWeapons();
+
+    const readLocalArmors = this.props.setLocalArmors();
+    const readLocalWeapons = this.props.setLocalWeapons();
+    if (!readLocalArmors) {
+      this.props.retrieveAllArmors();
+    }
+    if (!readLocalWeapons) {
+      this.props.retrieveAllWeapons();
+    }
+    this.props.retrieveMyLoadouts();
+    this.props.retrieveDbLoadouts();
   }
 
   generateColumn = (key = "", capitalize = false, filterable = false, show = true) => {
@@ -725,6 +735,8 @@ const mapDispatchToProps = dispatch => ({
   createLoadout: bindActionCreators(createLoadout, dispatch),
   retrieveMyLoadouts: bindActionCreators(retrieveMyLoadouts, dispatch),
   retrieveDbLoadouts: bindActionCreators(retrieveDbLoadouts, dispatch),
+  setLocalArmors: bindActionCreators(setLocalArmors, dispatch),
+  setLocalWeapons: bindActionCreators(setLocalWeapons, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

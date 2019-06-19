@@ -175,7 +175,8 @@ export const retrieveMyLoadouts = () => async (dispatch, getState) => {
   const { armors } = getState().warehouse;
   const myLoadoutsFromDb = await getMyLoadouts();
   const returnedData = Object.assign({}, myLoadoutsFromDb);
-  const { builds } = returnedData.data;
+  const { data = {} } = returnedData;
+  const { builds = {} } = data;
 
   if (myLoadoutsFromDb && armors) {
     const updatedBuilds = Object.keys(builds).map((result) => {
