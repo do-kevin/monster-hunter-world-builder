@@ -172,6 +172,8 @@ export const armorsStyles = () => ({
       height: "328px",
       overflowY: "auto",
       color: "hsl(205,11%,80%)",
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
     });
   },
   get loadoutBlock() {

@@ -49,22 +49,11 @@ class Dashboard extends Component {
   }
 
   refreshList = async () => {
-    // this.props.setLocalArmors();
-    // this.props.setLocalWeapons();
-    // await this.props.retrieveUserList();
-    // await this.props.retrieveDbLoadouts();
-    // this.props.retrieveAllArmors();
-    // this.props.retrieveAllWeapons();
-
-    const readLocalArmors = this.props.setLocalArmors();
-    const readLocalWeapons = this.props.setLocalWeapons();
-    if (!readLocalArmors) {
-      this.props.retrieveAllArmors();
-    }
-    if (!readLocalWeapons) {
-      this.props.retrieveAllWeapons();
-    }
+    this.props.setLocalArmors();
+    this.props.setLocalWeapons();
     this.props.retrieveUserList();
+    await this.props.retrieveAllArmors();
+    await this.props.retrieveAllWeapons();
     this.props.retrieveDbLoadouts();
   }
 

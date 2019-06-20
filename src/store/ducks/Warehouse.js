@@ -32,32 +32,26 @@ export const retrieveAllWeapons = () => async (dispatch) => {
 export const setLocalArmors = () => (dispatch) => {
   const localArmors = JSON.parse(
     localStorage.getItem("armors")
-    // || "{}"
+    || "{}"
   );
 
-  if (localArmors) {
-    dispatch({
-      type: SET_LOCAL_ARMORS,
-      payload: localArmors,
-    });
-    return true;
-  }
-  return false;
+  dispatch({
+    type: SET_LOCAL_ARMORS,
+    payload: localArmors,
+  });
+
 };
 
 export const setLocalWeapons = () => (dispatch) => {
   const localWeapons = JSON.parse(
     localStorage.getItem("weapons")
-    // || "{}"
+    || "{}"
   );
-  if (localWeapons) {
-    dispatch({
-      type: SET_LOCAL_WEAPONS,
-      payload: localWeapons,
-    });
-    return true;
-  }
-  return false;
+
+  dispatch({
+    type: SET_LOCAL_WEAPONS,
+    payload: localWeapons,
+  });
 };
 
 export const clearWarehouse = () => dispatch => dispatch({ type: CLEAR_WAREHOUSE });

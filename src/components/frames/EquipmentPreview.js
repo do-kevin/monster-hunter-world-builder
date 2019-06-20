@@ -46,17 +46,13 @@ class EquipmentPreview extends Component {
             key={id}
             classes={{ tooltip: classes.tooltip }}
             title={
-              _.get(weapons[id.primary], "name")
-                ? _.get(weapons[id.primary], "name")
-                : " "
+              _.get(weapons[id.primary], "name") || " "
             }
           >
             <CardMedia
               className={`${classes.media} ${classes.slot}`}
               image={
-                _.get(weapons[id.primary], "assets.image")
-                  ? _.get(weapons[id.primary], "assets.image")
-                  : " "
+                _.get(weapons[id.primary], "assets.image") || " "
               }
             />
           </Tooltip>
@@ -69,17 +65,13 @@ class EquipmentPreview extends Component {
             key={id}
             classes={{ tooltip: classes.tooltip }}
             title={
-              _.get(armors[id], "name")
-                ? _.get(armors[id], "name")
-                : " "
-              }
+              _.get(armors[id], "name") || " "
+            }
           >
             <CardMedia
               className={`${classes.media} ${classes.slot}`}
               image={
-              _.get(armors[id], `assets.${swapImage ? "imageFemale" : "imageMale"}`)
-                ? _.get(armors[id], `assets.${swapImage ? "imageFemale" : "imageMale"}`)
-                : " "
+                _.get(armors[id], `assets.${swapImage ? "imageFemale" : "imageMale"}`) || " "
               }
             />
           </Tooltip>

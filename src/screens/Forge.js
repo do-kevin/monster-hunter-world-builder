@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
-  AppBar, Toolbar, TextField, withStyles, IconButton, Typography, Button,
+  AppBar, Toolbar, TextField, withStyles, IconButton, Typography, Button, LinearProgress,
 } from "@material-ui/core";
 import { Cached, Refresh } from "components/icons/MuiIconsDx";
 import { ShieldAlt, Gavel } from "components/icons/FontAwesomeIcons";
@@ -27,8 +27,7 @@ import {
 import { ArmorModal, WeaponModal, DeleteLoadoutModal } from "components/modals";
 import _ from "lodash";
 import {
-  grey0, grey5, lightGrey, darkishGrey, primary2, darkBlue1,
-  danger1,
+  grey0, grey5, lightGrey, darkishGrey, primary2, darkBlue1, greyCard, danger1,
 } from "Colors";
 import { postLoadoutsToDb, getMyLoadouts, putUpdatedLoadoutsToDb } from "services/MonsterHunterWorldApi";
 
@@ -55,23 +54,11 @@ class Forge extends Component {
   }
 
   async componentDidMount() {
-    // this.props.setLocalArmors();
-    // this.props.setLocalWeapons();
-    // await this.props.retrieveDbLoadouts();
-    // await this.props.retrieveMyLoadouts();
-    // this.props.retrieveAllArmors();
-    // this.props.retrieveAllWeapons();
-
-    const readLocalArmors = this.props.setLocalArmors();
-    const readLocalWeapons = this.props.setLocalWeapons();
-    if (!readLocalArmors) {
-      this.props.retrieveAllArmors();
-    }
-    if (!readLocalWeapons) {
-      this.props.retrieveAllWeapons();
-    }
+    this.props.setLocalArmors();
+    this.props.setLocalWeapons();
+    await this.props.retrieveAllArmors();
+    await this.props.retrieveAllWeapons();
     this.props.retrieveMyLoadouts();
-    this.props.retrieveDbLoadouts();
   }
 
   generateColumn = (key = "", capitalize = false, filterable = false, show = true) => {
@@ -277,14 +264,20 @@ class Forge extends Component {
   };
 
   uploadLoadoutsToDb = async (builds) => {
-    const request = await postLoadoutsToDb(builds);
+    const clonedBuilds = Object.assign({}, builds);
+    Object.keys(clonedBuilds).map(loadoutName => {
+      delete clonedBuilds[loadoutName].armor_meta.defense;
+      delete clonedBuilds[loadoutName].armor_meta.resistances;
+    });
+
+    const request = await postLoadoutsToDb(clonedBuilds);
 
     if (!request) {
       const dbUserLoadoutInfo = await getMyLoadouts();
 
       const { id } = dbUserLoadoutInfo;
 
-      const newRequest = await putUpdatedLoadoutsToDb(builds, id);
+      const newRequest = await putUpdatedLoadoutsToDb(clonedBuilds, id);
 
       return newRequest;
     }
@@ -571,36 +564,55 @@ class Forge extends Component {
               </header>
               <section className={classes.loadoutElements}>
                 {
-                  Object.keys(builds).map(loadout => (
-                    <div
-                      key={loadout}
-                      className={classes.panel}
-                    >
-                      <p>{loadout}</p>
-                      <div style={{ height: "min-content", marginTop: "6px" }}>
-                        <Button
-                          style={{ color: danger1, textTransform: "none" }}
-                          onClick={async () => {
-                            await this.setState({ selectedLoadout: loadout });
-                            this.setState({ openConfirmation: true });
-                          }}
-                        >
-                          Delete
-                        </Button>
-                        {" "}
-                        <Button
-                          style={{ textTransform: "none" }}
-                          onClick={async () => {
-                            await this.setState({ selectedLoadout: loadout });
-                          }}
-                          color="secondary"
-                          variant="contained"
-                        >
-                          Select
-                        </Button>
-                      </div>
+                  Object.entries(builds).length === 0
+                    ? <div style={{ textAlign: "center" }}>
+                      <LinearProgress style={{ background: "hsl(207, 13%, 18%)" }} />
+                      <Typography
+                        variant="body1"
+                        className="flexCenter"
+                        style={{
+                          height: "324px",
+                          display: "flex",
+                          fontWeight: 600,
+                          color: greyCard,
+                        }}
+                      >
+                        Retrieving any loadouts
+                        </Typography>
                     </div>
-                  ))
+                    : Object.keys(builds).map(loadout => (
+                      <div
+                        key={loadout}
+                        className={classes.panel}
+                      >
+                        <p>{loadout}</p>
+                        <div style={{ height: "min-content", marginTop: "6px" }}>
+                          <Button
+                            style={{ color: danger1, textTransform: "none" }}
+                            onClick={async () => {
+                              await this.setState({ selectedLoadout: loadout });
+
+                              if (this.state.selectedLoadout === loadout) {
+                                this.setState({ openConfirmation: true });
+                              }
+                            }}
+                          >
+                            Delete
+                          </Button>
+                          {" "}
+                          <Button
+                            style={{ textTransform: "none" }}
+                            onClick={async () => {
+                              await this.setState({ selectedLoadout: loadout });
+                            }}
+                            color="secondary"
+                            variant="contained"
+                          >
+                            Select
+                          </Button>
+                        </div>
+                      </div>
+                    ))
                 }
               </section>
               <footer
