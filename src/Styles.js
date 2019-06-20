@@ -1,4 +1,6 @@
-import { grey2, grey3, darkBlue0 } from "Colors";
+import {
+  grey2, grey3, darkBlue0, greyCard, primary1, primary2,
+} from "Colors";
 
 const gridAreaTop = "Topbar";
 
@@ -35,28 +37,58 @@ export const rTable = {
   borderRadius: "5px",
 };
 
+export const slidingModalStyles = () => ({
+  card: {
+    outline: "none",
+    overflowY: "auto",
+    backgroundColor: greyCard,
+  },
+  get mediaQueryCard() {
+    return Object.assign({}, this.card, {
+      height: "100%",
+      width: "100%",
+    });
+  },
+  closeModalBtn: {
+    margin: "auto",
+    background: "hsl(207, 11%, 25%)",
+    color: "hsl(205,11%,80%)",
+    height: "50px",
+  },
+  panelsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    margin: "auto",
+  },
+  slotsContainer: {
+    overflowY: "auto",
+    width: "470px",
+    height: "70px",
+    margin: 7,
+    padding: 5,
+  },
+  loadoutsContainer: {
+    overflowY: "auto",
+    width: "360px",
+    height: "70px",
+    backgroundColor: primary1,
+    margin: 7,
+    padding: 5,
+  },
+  get infoBlock() {
+    return Object.assign({}, this.panelsContainer, {
+      backgroundColor: primary2,
+      margin: "none",
+    });
+  },
+});
+
 export const dashboardStyles = () => ({
   smallAvatar: {
     height: "50px",
     width: "50px",
     borderRadius: "50%",
-  },
-  innerAvatar: {
-    position: "relative",
-    height: "130px",
-    width: "130px",
-    left: "83px",
-    top: "34px",
-    borderRadius: "50%",
-    boxShadow: "0 2px 10px hsl(219, 61%, 26%)",
-  },
-  card: {
-    width: "300px",
-    outline: "none",
-  },
-  media: {
-    height: "200px",
-    background: "linear-gradient(to bottom right, hsl(161, 100%, 61%), hsl(219, 61%, 53%), hsl(235, 100%, 50%))",
   },
   fullNameFilter: {
     background: "hsl(205, 11%, 42%)",
@@ -140,11 +172,13 @@ export const armorsStyles = () => ({
       height: "328px",
       overflowY: "auto",
       color: "hsl(205,11%,80%)",
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
     });
   },
   get loadoutBlock() {
     return Object.assign({}, this.armorsBlock, {
-      height: "400px",
+      height: "453px",
     });
   },
   get overallStatsBlock() {
@@ -205,7 +239,12 @@ export const modalStyles = () => ({
   },
   customCard: {
     outline: "none",
-    background: "hsl(0, 0%, 41%)",
+    background: greyCard,
+  },
+  mediaQueryCard: {
+    width: "100%",
+    height: "100%",
+    overflowY: "auto",
   },
   closeModalBtn: {
     background: "hsl(207, 11%, 25%)",

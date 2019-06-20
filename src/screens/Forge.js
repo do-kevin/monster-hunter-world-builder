@@ -2,17 +2,19 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
-  AppBar, Toolbar, TextField, withStyles, IconButton, Typography, Button,
+  AppBar, Toolbar, TextField, withStyles, IconButton, Typography, Button, LinearProgress,
 } from "@material-ui/core";
-import { Cached } from "components/icons/MuiIconsDx";
+import { Cached, Refresh } from "components/icons/MuiIconsDx";
 import { ShieldAlt, Gavel } from "components/icons/FontAwesomeIcons";
 import { Link as Scroll } from "react-scroll";
 import ReactTable from "react-table";
 import matchSorter from "match-sorter";
 import inflection from "inflection";
 import { Formik } from "formik";
-import { retrieveAllArmors, retrieveAllWeapons } from "store/ducks/Warehouse";
-import { createLoadout } from "store/ducks/Loadouts";
+import { retrieveAllArmors, retrieveAllWeapons, setLocalArmors, setLocalWeapons } from "store/ducks/Warehouse";
+import {
+  createLoadout, retrieveMyLoadouts, retrieveDbLoadouts,
+} from "store/ducks/Loadouts";
 import {
   ChildGrid, ExtendedView, ArmorsTable, TextButton,
 } from "components/StyledComponents";
@@ -22,11 +24,12 @@ import {
   rTable, armorsStyles,
   armorCells, extendedTopbar, extendedToolbar,
 } from "Styles";
-import { ArmorModal, WeaponModal } from "components/modals";
+import { ArmorModal, WeaponModal, DeleteLoadoutModal } from "components/modals";
 import _ from "lodash";
 import {
-  grey0, grey5, lightGrey, darkishGrey, primary2, darkBlue1,
+  grey0, grey5, lightGrey, darkishGrey, primary2, darkBlue1, greyCard, danger1,
 } from "Colors";
+import { postLoadoutsToDb, getMyLoadouts, putUpdatedLoadoutsToDb } from "services/MonsterHunterWorldApi";
 
 const scrollToBtns = {
   color: grey5,
@@ -46,13 +49,16 @@ class Forge extends Component {
       selectedWeapon: {},
       selectedLoadout: undefined,
       swapImage: false,
+      openConfirmation: false,
     };
   }
 
   async componentDidMount() {
-    const { retrieveAllArmors, retrieveAllWeapons } = this.props;
-    await retrieveAllArmors();
-    await retrieveAllWeapons();
+    this.props.setLocalArmors();
+    this.props.setLocalWeapons();
+    await this.props.retrieveAllArmors();
+    await this.props.retrieveAllWeapons();
+    this.props.retrieveMyLoadouts();
   }
 
   generateColumn = (key = "", capitalize = false, filterable = false, show = true) => {
@@ -257,10 +263,31 @@ class Forge extends Component {
     );
   };
 
+  uploadLoadoutsToDb = async (builds) => {
+    const clonedBuilds = Object.assign({}, builds);
+    Object.keys(clonedBuilds).map(loadoutName => {
+      delete clonedBuilds[loadoutName].armor_meta.defense;
+      delete clonedBuilds[loadoutName].armor_meta.resistances;
+    });
+
+    const request = await postLoadoutsToDb(clonedBuilds);
+
+    if (!request) {
+      const dbUserLoadoutInfo = await getMyLoadouts();
+
+      const { id } = dbUserLoadoutInfo;
+
+      const newRequest = await putUpdatedLoadoutsToDb(clonedBuilds, id);
+
+      return newRequest;
+    }
+
+    return request;
+  }
+
   render() {
     const {
-      classes, armors, createLoadout, loadouts,
-      weapons,
+      classes, armors, loadouts, weapons,
     } = this.props;
     const { builds } = loadouts;
 
@@ -272,6 +299,7 @@ class Forge extends Component {
       swapImage,
       openWeaponModal,
       selectedWeapon,
+      openConfirmation,
     } = this.state;
 
     const armorColumns = [
@@ -416,14 +444,16 @@ class Forge extends Component {
             >
               <Formik
                 initialValues={{ name: "" }}
-                onSubmit={values => createLoadout(values.name)}
+                onSubmit={values => this.props.createLoadout(values.name)}
                 render={({ values, handleChange, handleSubmit }) => (
-                  <form onSubmit={handleSubmit}>
+                  <form
+                    onSubmit={handleSubmit}
+                  >
                     <TextField
                       className={`${classes.textField} name-filter`}
                       type="text"
                       name="name"
-                      placeholer="Name"
+                      placeholder="Name"
                       value={values.name}
                       onChange={handleChange}
                       margin="normal"
@@ -431,8 +461,12 @@ class Forge extends Component {
                       InputProps={{
                         className: `${classes.field} ${classes.loadoutField}`,
                       }}
+                      inputProps={{
+                        "data-testid": "create-loadout-input",
+                      }}
                     />
                     <Button
+                      data-testid="create-loadout-submit-btn"
                       type="submit"
                       variant="contained"
                       color="secondary"
@@ -443,7 +477,7 @@ class Forge extends Component {
                         color: grey0,
                       }}
                     >
-                    Create loadout
+                      Create loadout
                     </Button>
                   </form>
                 )}
@@ -472,6 +506,11 @@ class Forge extends Component {
           </Toolbar>
         </AppBar>
         <ExtendedView>
+          <DeleteLoadoutModal
+            openModal={openConfirmation}
+            onClose={() => this.setState({ openConfirmation: false })}
+            loadoutName={selectedLoadout}
+          />
           <ArmorModal
             isArmorModalOpen={openArmorModal}
             onClose={() => this.setState({ openArmorModal: false })}
@@ -510,28 +549,89 @@ class Forge extends Component {
             >
               <header className={classes.panelHeader}>
                 Loadouts
+                {" "}
+                <IconButton
+                  style={{
+                    padding: "0",
+                    color: grey5,
+                    background: primary2,
+                  }}
+                  onClick={() => this.props.retrieveMyLoadouts()}
+                  type="button"
+                >
+                  <Refresh />
+                </IconButton>
               </header>
               <section className={classes.loadoutElements}>
                 {
-                  Object.keys(builds).map(loadout => (
-                    <div
-                      key={loadout}
-                      className={classes.panel}
-                    >
-                      <p>{loadout}</p>
-                      <Button
-                        onClick={async () => {
-                          await this.setState({ selectedLoadout: loadout });
+                  Object.entries(builds).length === 0
+                    ? <div style={{ textAlign: "center" }}>
+                      <LinearProgress style={{ background: "hsl(207, 13%, 18%)" }} />
+                      <Typography
+                        variant="body1"
+                        className="flexCenter"
+                        style={{
+                          height: "324px",
+                          display: "flex",
+                          fontWeight: 600,
+                          color: greyCard,
                         }}
-                        color="secondary"
-                        variant="contained"
                       >
-                        Select
-                      </Button>
+                        Retrieving any loadouts
+                        </Typography>
                     </div>
-                  ))
+                    : Object.keys(builds).map(loadout => (
+                      <div
+                        key={loadout}
+                        className={classes.panel}
+                      >
+                        <p>{loadout}</p>
+                        <div style={{ height: "min-content", marginTop: "6px" }}>
+                          <Button
+                            style={{ color: danger1, textTransform: "none" }}
+                            onClick={async () => {
+                              await this.setState({ selectedLoadout: loadout });
+
+                              if (this.state.selectedLoadout === loadout) {
+                                this.setState({ openConfirmation: true });
+                              }
+                            }}
+                          >
+                            Delete
+                          </Button>
+                          {" "}
+                          <Button
+                            style={{ textTransform: "none" }}
+                            onClick={async () => {
+                              await this.setState({ selectedLoadout: loadout });
+                            }}
+                            color="secondary"
+                            variant="contained"
+                          >
+                            Select
+                          </Button>
+                        </div>
+                      </div>
+                    ))
                 }
               </section>
+              <footer
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Button
+                  onClick={async () => {
+                    await this.uploadLoadoutsToDb(builds);
+                  }}
+                  color="secondary"
+                  variant="contained"
+                  style={{ textTransform: "none" }}
+                >
+                  Save all loadouts to database
+                </Button>
+              </footer>
             </main>
             <main
               className={classes.loadoutBlock}
@@ -645,6 +745,10 @@ const mapDispatchToProps = dispatch => ({
   retrieveAllArmors: bindActionCreators(retrieveAllArmors, dispatch),
   retrieveAllWeapons: bindActionCreators(retrieveAllWeapons, dispatch),
   createLoadout: bindActionCreators(createLoadout, dispatch),
+  retrieveMyLoadouts: bindActionCreators(retrieveMyLoadouts, dispatch),
+  retrieveDbLoadouts: bindActionCreators(retrieveDbLoadouts, dispatch),
+  setLocalArmors: bindActionCreators(setLocalArmors, dispatch),
+  setLocalWeapons: bindActionCreators(setLocalWeapons, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);

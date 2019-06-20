@@ -2,19 +2,20 @@ import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
-  TextField, withStyles, Button, Grid,
+  TextField, withStyles, Button, Grid, Typography,
 } from "@material-ui/core";
 import { Formik } from "formik";
 
-import { fullProfileUpdate } from "store/ducks/Profile";
+import { fullProfileUpdate, enhanceProfile } from "store/ducks/Profile";
 import CenterPaper from "components/layout/CenterPaper";
+import { grey2 } from "Colors";
 
 const styles = () => ({
   picture: {
     width: "128px",
     height: "128px",
     borderRadius: "50%",
-    border: "3px solid black",
+    boxShadow: `0 1px 4px ${grey2}`,
   },
 });
 
@@ -26,7 +27,7 @@ const txtfields = {
 function ProfileUpdateForm(props) {
   const { classes, profile, fullProfileUpdate } = props;
   const {
-    first_name, last_name, birth_date, phone_number, id, user,
+    first_name, last_name, birth_date, phone_number, id, user, full_name,
   } = profile;
 
   return (
@@ -67,6 +68,9 @@ function ProfileUpdateForm(props) {
                 alt="avatar"
                 className={classes.picture}
               />
+              <Typography variant="h5">
+                {full_name}
+              </Typography>
               <TextField
                 id="fname"
                 label="First name"
@@ -130,7 +134,7 @@ function ProfileUpdateForm(props) {
 
 const componentWithStyles = withStyles(styles)(ProfileUpdateForm);
 
-const mapStateToProps = state => ({ profile: state.profile });
+const mapStateToProps = state => ({ profile: enhanceProfile(state) });
 
 const mapDispatchToProps = dispatch => ({
   fullProfileUpdate: bindActionCreators(fullProfileUpdate, dispatch),

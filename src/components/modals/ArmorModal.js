@@ -28,14 +28,30 @@ const panelBtn = {
 class ArmorModal extends Component {
   state = {
     swapImage: false,
+    mediaQuery: false,
+  }
+
+  componentDidMount() {
+    window.addEventListener("resize", this.handleMediaQuery);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleMediaQuery);
+  }
+
+  handleMediaQuery = () => {
+    if (window.innerWidth <= 609) {
+      this.setState({ mediaQuery: true });
+    } else {
+      this.setState({ mediaQuery: false });
+    }
   }
 
   render() {
-    const { swapImage } = this.state;
+    const { swapImage, mediaQuery } = this.state;
 
     const {
       classes, isArmorModalOpen, onClose, armorData, loadouts,
-      armorToLoadout,
     } = this.props;
 
     const { builds } = loadouts;
@@ -75,8 +91,15 @@ class ArmorModal extends Component {
         onClose={onClose}
       >
         <Card
-          className={`${classes.card} ${classes.customCard}`}
-          classes={{ root: "responsive-card" }}
+          className={`
+            ${classes.card}
+            ${classes.customCard}
+            ${
+              mediaQuery
+                ? classes.mediaQueryCard
+                : ""
+            }
+          `}
         >
           <CardHeader
             title={name}
@@ -193,7 +216,7 @@ class ArmorModal extends Component {
             <Formik
               initialValues={{ selectedLoadout: "" }}
               onSubmit={async (values) => {
-                await armorToLoadout(values.selectedLoadout, armorData, type);
+                await this.props.armorToLoadout(values.selectedLoadout, armorData, type);
               }}
               render={({ values, handleSubmit, handleChange }) => (
                 <div className={classes.footer}>
