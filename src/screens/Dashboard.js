@@ -12,6 +12,7 @@ import inflection from "inflection";
 
 import { retrieveUserList } from "store/ducks/List";
 import { retrieveDbLoadouts } from "store/ducks/Loadouts";
+import { enhanceProfile } from "store/ducks/Profile";
 import {
   ChildGrid, View, StyledTable, TextButton,
 } from "components/StyledComponents";
@@ -23,6 +24,7 @@ import { ProfileModal } from "components/modals";
 import {
   retrieveAllWeapons, retrieveAllArmors, setLocalArmors, setLocalWeapons,
 } from "store/ducks/Warehouse";
+import LogRocket from "logrocket";
 
 const defaultState = {
   selectedUser: [
@@ -77,10 +79,18 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { classes, list, usersLoadouts } = this.props;
+    const { classes, list, usersLoadouts, profile } = this.props;
     const {
       selectedUserLoadouts, selectedUser, openModal,
     } = this.state;
+
+    const { id, user, full_name } = profile;
+
+    LogRocket.identify(full_name, {
+      id,
+      user,
+    });
+
     const columns = [
       {
         Header: "",
@@ -196,6 +206,7 @@ const componentWithStyles = withStyles(dashboardStyles)(Dashboard);
 const mapStateToProps = state => ({
   list: state.list,
   usersLoadouts: state.loadouts.database,
+  profile: enhanceProfile(state),
 });
 
 const mapDispatchToProps = dispatch => ({

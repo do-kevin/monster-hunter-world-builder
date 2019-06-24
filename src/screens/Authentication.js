@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import queryString from "query-string";
 
 import CenterPaper from "components/layout/CenterPaper";
 import {
   Signin, Signup, ResetPassword, Verification,
 } from "components/forms";
+import { toast } from "react-toastify";
 
 function LoginRegistration(props) {
+  useEffect(() => {
+    toast.info("This website is using LogRocket to watch any errors that appear during your visit", {
+      autoClose: false,
+      position: toast.POSITION.BOTTOM_RIGHT,
+      draggable: true,
+    });
+  }, []);
+
   const { match, location } = props;
   const { auth_type } = match.params;
+
   let form;
   switch (auth_type) {
     case "reset_password":
@@ -18,7 +28,6 @@ function LoginRegistration(props) {
       form = <Signup />;
       break;
     case "account_verification":
-      // eslint-disable-next-line no-case-declarations
       const { user_id = null, token = null } = queryString.parse(
         location.state.credentials,
       );
@@ -27,7 +36,12 @@ function LoginRegistration(props) {
     default:
       form = <Signin />;
   }
-  return <CenterPaper>{form}</CenterPaper>;
+
+  return (
+    <CenterPaper>
+      {form}
+    </CenterPaper>
+  );
 }
 
 export default LoginRegistration;

@@ -16,6 +16,9 @@ import {
   Home, NotFound, Authentication,
 } from "screens";
 
+import LogRocket from "logrocket";
+LogRocket.init(process.env.REACT_APP_LOGROCKET_ID);
+
 const theme = createMuiTheme({
   typography: {
     useNextVariants: true,
