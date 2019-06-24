@@ -5,12 +5,13 @@ import {
 import thunk from "redux-thunk";
 import rootReducer from "store/RootReducer";
 import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
+import LogRocket from "logrocket";
 
 const configureStore = () => {
   const store = createStore(
     rootReducer,
     composeWithDevTools(
-      applyMiddleware(thunk),
+      applyMiddleware(thunk, LogRocket.reduxMiddleware()),
     ),
   );
 
