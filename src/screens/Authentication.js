@@ -1,21 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import queryString from "query-string";
 
 import CenterPaper from "components/layout/CenterPaper";
 import {
   Signin, Signup, ResetPassword, Verification,
 } from "components/forms";
-import { toast } from "react-toastify";
+import { Popup } from "components/modals";
 
 function LoginRegistration(props) {
-  useEffect(() => {
-    toast.info("This website is using LogRocket to watch any errors that appear during your visit", {
-      autoClose: false,
-      position: toast.POSITION.BOTTOM_RIGHT,
-      draggable: true,
-    });
-  }, []);
-
   const { match, location } = props;
   const { auth_type } = match.params;
 
@@ -40,6 +32,7 @@ function LoginRegistration(props) {
   return (
     <CenterPaper>
       {form}
+      <Popup />
     </CenterPaper>
   );
 }
