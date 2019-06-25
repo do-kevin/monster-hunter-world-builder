@@ -143,7 +143,9 @@ class Forge extends Component {
 
     if (builds[selectedLoadout]) {
       const loadout = builds[selectedLoadout];
-      const { base, max, augmented } = loadout.armor_meta.defense;
+      const { armor_meta = {} } = loadout;
+      const { defense = {} } = armor_meta;
+      const { base, max, augmented } = defense;
       const updatedData = [
         Object.assign({}, defaultData[0], { Rating: base }),
         Object.assign({}, defaultData[1], { Rating: max }),
@@ -270,6 +272,7 @@ class Forge extends Component {
       delete clonedBuilds[loadoutName].armor_meta.resistances;
     });
 
+    await this.props.retrieveMyLoadouts();
     const request = await postLoadoutsToDb(clonedBuilds);
 
     if (!request) {
@@ -278,7 +281,7 @@ class Forge extends Component {
       const { id } = dbUserLoadoutInfo;
 
       const newRequest = await putUpdatedLoadoutsToDb(clonedBuilds, id);
-
+      this.props.retrieveMyLoadouts();
       return newRequest;
     }
 
@@ -605,6 +608,7 @@ class Forge extends Component {
                             onClick={async () => {
                               await this.setState({ selectedLoadout: loadout });
                             }}
+                            // disabled
                             color="secondary"
                             variant="contained"
                           >
