@@ -3,6 +3,7 @@ import ProfileModal from "./ProfileModal";
 import ArmorModal from "./ArmorModal";
 import WeaponModal from "./WeaponModal";
 import DeleteLoadoutModal from "./DeleteLoadoutModal";
+import Popup from "./Popup";
 
 export {
   SlidingModal,
@@ -10,4 +11,5 @@ export {
   ArmorModal,
   WeaponModal,
   DeleteLoadoutModal,
+  Popup,
 };

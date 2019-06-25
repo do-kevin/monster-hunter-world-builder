@@ -8,6 +8,8 @@ export const greyCard = "hsl(0, 0%, 41%)",
   lightGrey = "hsl(0, 0%, 77%)",
   darkishGrey = "hsl(207, 11%, 29%)";
 
+export const toastInfo = "hsl(204, 70%, 53%)";
+
 export const danger0 = "hsl(355, 70%, 46%)",
   danger1 = "hsl(346, 89%, 44%)";
 
