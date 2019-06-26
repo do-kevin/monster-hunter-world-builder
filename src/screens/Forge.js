@@ -58,7 +58,7 @@ class Forge extends Component {
     this.props.setLocalWeapons();
     await this.props.retrieveAllArmors();
     await this.props.retrieveAllWeapons();
-    this.props.retrieveMyLoadouts();
+    await this.props.retrieveMyLoadouts();
   }
 
   generateColumn = (key = "", capitalize = false, filterable = false, show = true) => {
@@ -124,10 +124,32 @@ class Forge extends Component {
     );
   };
 
+  getSelectedLoadoutResist = (element = "") => {
+    const { loadouts } = this.props;
+    const { selectedLoadout } = this.state;
+    const { builds } = loadouts;
+
+    const getSelectedLoadout = _.get(builds, selectedLoadout);
+
+    return _.get(getSelectedLoadout, `armor_meta.resistances.${element}`);
+  }
+
+  getSelectedLoadoutDefType = (type = "") => {
+    const { loadouts } = this.props;
+    const { selectedLoadout } = this.state;
+    const { builds } = loadouts;
+
+    const getSelectedLoadout = _.get(builds, selectedLoadout);
+
+    return _.get(getSelectedLoadout, `armor_meta.defense.${type}`);
+  }
+
   watchDefData = () => {
     const { loadouts } = this.props;
     const { selectedLoadout } = this.state;
     const { builds } = loadouts;
+
+    const getSelectedLoadout = _.get(builds, selectedLoadout);
 
     const defaultData = [
       {
@@ -141,11 +163,11 @@ class Forge extends Component {
       },
     ];
 
-    if (builds[selectedLoadout]) {
-      const loadout = builds[selectedLoadout];
-      const { armor_meta = {} } = loadout;
-      const { defense = {} } = armor_meta;
-      const { base, max, augmented } = defense;
+    if (getSelectedLoadout) {
+      const base = this.getSelectedLoadoutDefType("base");
+      const max = this.getSelectedLoadoutDefType("max");
+      const augmented = this.getSelectedLoadoutDefType("augmented");
+
       const updatedData = [
         Object.assign({}, defaultData[0], { Rating: base }),
         Object.assign({}, defaultData[1], { Rating: max }),
@@ -160,6 +182,8 @@ class Forge extends Component {
     const { loadouts } = this.props;
     const { selectedLoadout } = this.state;
     const { builds } = loadouts;
+
+    const getSelectedLoadout = _.get(builds, selectedLoadout);
 
     const defaultData = [
       {
@@ -179,11 +203,13 @@ class Forge extends Component {
       },
     ];
 
-    if (builds[selectedLoadout]) {
-      const loadout = builds[selectedLoadout];
-      const {
-        fire, water, ice, thunder, dragon,
-      } = loadout.armor_meta.resistances;
+    if (getSelectedLoadout) {
+      const fire = this.getSelectedLoadoutResist("fire");
+      const water = this.getSelectedLoadoutResist("water");
+      const thunder = this.getSelectedLoadoutResist("thunder");
+      const ice = this.getSelectedLoadoutResist("ice");
+      const dragon = this.getSelectedLoadoutResist("dragon");
+
       const updatedData = [
         Object.assign({}, defaultData[0], { Rating: dragon }),
         Object.assign({}, defaultData[1], { Rating: water }),
@@ -272,7 +298,6 @@ class Forge extends Component {
       delete clonedBuilds[loadoutName].armor_meta.resistances;
     });
 
-    await this.props.retrieveMyLoadouts();
     const request = await postLoadoutsToDb(clonedBuilds);
 
     if (!request) {
@@ -281,7 +306,6 @@ class Forge extends Component {
       const { id } = dbUserLoadoutInfo;
 
       const newRequest = await putUpdatedLoadoutsToDb(clonedBuilds, id);
-      this.props.retrieveMyLoadouts();
       return newRequest;
     }
 
