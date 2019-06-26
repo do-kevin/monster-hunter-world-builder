@@ -652,6 +652,7 @@ class Forge extends Component {
                 <Button
                   onClick={async () => {
                     await this.uploadLoadoutsToDb(builds);
+                    this.props.retrieveMyLoadouts();
                   }}
                   color="secondary"
                   variant="contained"
