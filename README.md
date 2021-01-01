@@ -1,4 +1,4 @@
-# monster-hunter-world-builder
+# Monster Hunter World Builder
 
 Website:
 [Monster Hunter World Builder](https://monster-hunter-world-builder.herokuapp.com)

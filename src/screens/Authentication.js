@@ -2,9 +2,7 @@ import React from "react";
 import queryString from "query-string";
 
 import CenterPaper from "components/layout/CenterPaper";
-import {
-  Signin, Signup, ResetPassword, Verification,
-} from "components/forms";
+import { Signin, Signup, ResetPassword, Verification } from "components/forms";
 import { Popup } from "components/modals";
 
 function LoginRegistration(props) {
@@ -21,7 +19,7 @@ function LoginRegistration(props) {
       break;
     case "account_verification":
       const { user_id = null, token = null } = queryString.parse(
-        location.state.credentials,
+        location.state.credentials
       );
       form = <Verification user_id={user_id} token={token} />;
       break;
@@ -32,7 +30,7 @@ function LoginRegistration(props) {
   return (
     <CenterPaper>
       {form}
-      <Popup />
+      {/* <Popup /> */}
     </CenterPaper>
   );
 }

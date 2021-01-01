@@ -12,12 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { primary0, secondary0 } from "Colors";
 import PrivateRoute from "services/auth/PrivateRoute";
 
-import {
-  Home, NotFound, Authentication,
-} from "screens";
-
-import LogRocket from "logrocket";
-LogRocket.init(process.env.REACT_APP_LOGROCKET_ID);
+import { Home, NotFound, Authentication } from "screens";
 
 const theme = createMuiTheme({
   typography: {
@@ -47,7 +42,7 @@ class App extends React.Component {
             />
             <Route
               path="/account_verification"
-              component={props => (
+              component={(props) => (
                 <Redirect
                   to={{
                     pathname: "/auth/account_verification",

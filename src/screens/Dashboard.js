@@ -2,8 +2,14 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
-  withStyles, AppBar, Toolbar, Typography, Button, Avatar,
-  TextField, InputAdornment,
+  withStyles,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Avatar,
+  TextField,
+  InputAdornment,
 } from "@material-ui/core";
 import { Refresh, Search } from "components/icons/MuiIconsDx";
 import ReactTable from "react-table";
@@ -14,17 +20,19 @@ import { retrieveUserList } from "store/ducks/List";
 import { retrieveDbLoadouts } from "store/ducks/Loadouts";
 import { enhanceProfile } from "store/ducks/Profile";
 import {
-  ChildGrid, View, StyledTable, TextButton,
+  ChildGrid,
+  View,
+  StyledTable,
+  TextButton,
 } from "components/StyledComponents";
-import {
-  dashboardStyles, toolbar, topbar, rTable,
-  cellStyles,
-} from "Styles";
+import { dashboardStyles, toolbar, topbar, rTable, cellStyles } from "Styles";
 import { ProfileModal } from "components/modals";
 import {
-  retrieveAllWeapons, retrieveAllArmors, setLocalArmors, setLocalWeapons,
+  retrieveAllWeapons,
+  retrieveAllArmors,
+  setLocalArmors,
+  setLocalWeapons,
 } from "store/ducks/Warehouse";
-import LogRocket from "logrocket";
 
 const defaultState = {
   selectedUser: [
@@ -57,7 +65,7 @@ class Dashboard extends Component {
     await this.props.retrieveAllArmors();
     await this.props.retrieveAllWeapons();
     this.props.retrieveDbLoadouts();
-  }
+  };
 
   generateColumn = (key = "", filterable = false, show = true) => {
     const newCell = {
@@ -66,30 +74,20 @@ class Dashboard extends Component {
       accessor: key,
       filterable,
       show,
-      Cell: d => (
-        <Typography
-          variant="body1"
-          style={cellStyles}
-        >
+      Cell: (d) => (
+        <Typography variant="body1" style={cellStyles}>
           {d.value}
         </Typography>
       ),
     };
     return newCell;
-  }
+  };
 
   render() {
     const { classes, list, usersLoadouts, profile } = this.props;
-    const {
-      selectedUserLoadouts, selectedUser, openModal,
-    } = this.state;
+    const { selectedUserLoadouts, selectedUser, openModal } = this.state;
 
     const { id, user, full_name } = profile;
-
-    LogRocket.identify(full_name, {
-      id,
-      user,
-    });
 
     const columns = [
       {
@@ -97,7 +95,9 @@ class Dashboard extends Component {
         Cell: () => (
           <Avatar
             className={classes.smallAvatar}
-            src={`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 100)}.jpg`}
+            src={`https://randomuser.me/api/portraits/men/${Math.floor(
+              Math.random() * 100
+            )}.jpg`}
             alt="avatar placeholder"
           />
         ),
@@ -106,13 +106,10 @@ class Dashboard extends Component {
       {
         id: "fullName",
         Header: "Full name",
-        accessor: d => `${d.first_name} ${d.last_name}`,
+        accessor: (d) => `${d.first_name} ${d.last_name}`,
         Cell: (props) => {
           const { user } = props.original;
-          const userData = [
-            props.value,
-            props.original,
-          ];
+          const userData = [props.value, props.original];
           let myLoadouts = usersLoadouts[user];
 
           if (myLoadouts === undefined) {
@@ -136,7 +133,8 @@ class Dashboard extends Component {
             </TextButton>
           );
         },
-        filterMethod: (filter, row) => matchSorter([row[filter.id]], filter.value).length !== 0,
+        filterMethod: (filter, row) =>
+          matchSorter([row[filter.id]], filter.value).length !== 0,
       },
       this.generateColumn("first_name", false, false),
       this.generateColumn("last_name", false, false),
@@ -153,18 +151,19 @@ class Dashboard extends Component {
               color="secondary"
               className={classes.refreshBtn}
             >
-              <Refresh />
-              {" "}
-              Refresh list
+              <Refresh /> Refresh list
             </Button>
             <TextField
               id="fullName"
               type="text"
               className={`${classes.textField} name-filter`}
               autoComplete="off"
-              onChange={event => (
-                this.reactTable.current.filterColumn(columns[1], event.target.value)
-              )}
+              onChange={(event) =>
+                this.reactTable.current.filterColumn(
+                  columns[1],
+                  event.target.value
+                )
+              }
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -203,13 +202,13 @@ class Dashboard extends Component {
 
 const componentWithStyles = withStyles(dashboardStyles)(Dashboard);
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   list: state.list,
   usersLoadouts: state.loadouts.database,
   profile: enhanceProfile(state),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   retrieveUserList: bindActionCreators(retrieveUserList, dispatch),
   retrieveDbLoadouts: bindActionCreators(retrieveDbLoadouts, dispatch),
   retrieveAllWeapons: bindActionCreators(retrieveAllWeapons, dispatch),
@@ -218,4 +217,7 @@ const mapDispatchToProps = dispatch => ({
   setLocalWeapons: bindActionCreators(setLocalWeapons, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(componentWithStyles);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(componentWithStyles);

@@ -1,18 +1,12 @@
-import {
-  createStore,
-  applyMiddleware,
-} from "redux";
+import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import rootReducer from "store/RootReducer";
 import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
-import LogRocket from "logrocket";
 
 const configureStore = () => {
   const store = createStore(
     rootReducer,
-    composeWithDevTools(
-      applyMiddleware(thunk, LogRocket.reduxMiddleware()),
-    ),
+    composeWithDevTools(applyMiddleware(thunk))
   );
 
   if (process.env.NODE_ENV !== "production") {
